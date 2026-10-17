@@ -19,7 +19,10 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginForm form){
-        return "redirect:/home";
+        String username = form.getUsername();
+        String pwd = form.getPwd();
+
+        
     }
 
 }
