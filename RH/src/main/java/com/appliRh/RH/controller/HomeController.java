@@ -28,7 +28,7 @@ public class HomeController {
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
                 Employee employee = employeeService.findById(employeeId);
         String selectedSection = switch (section) {
-            case "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listePostes", "creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "dashboard";
         };
 

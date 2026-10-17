@@ -1,4 +1,19 @@
+<!-- Pour Manager -->
+
 <nav class="sidebar" aria-label="Navigation principale">
+    <!-- <div class="nav-heading">Espace RH</div> -->
+    <a th:classappend="${section == 'listePostes'} ? ' active' : ''" th:href="@{/home(section='listePostes')}">
+        <span class="nav-icon">⌂</span> Liste des postes
+    </a>
+    <div class="nav-footer">
+        <div class="nav-heading">Raccourcis</div>
+        <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+    </div>
+</nav>
+
+<!-- Pour RH -->
+
+<!-- <nav class="sidebar" aria-label="Navigation principale">
     <div class="nav-heading">Espace RH</div>
     <a th:classappend="${section == 'dashboard'} ? ' active' : ''" th:href="@{/home(section='dashboard')}">
         <span class="nav-icon">⌂</span> Tableau de bord
@@ -20,4 +35,30 @@
         <a href="#"><span class="nav-icon">?</span> Centre d'aide</a>
         <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
     </div>
-</nav>
+</nav> -->
+
+<!-- Pour Direction -->
+
+<!-- <nav class="sidebar" aria-label="Navigation principale">
+    <div class="nav-heading">Espace RH</div>
+    <a th:classappend="${section == 'dashboard'} ? ' active' : ''" th:href="@{/home(section='dashboard')}">
+        <span class="nav-icon">⌂</span> Tableau de bord
+    </a>
+    <a th:classappend="${section == 'employees'} ? ' active' : ''" th:href="@{/home(section='employees')}">
+        <span class="nav-icon">♙</span> Collaborateurs
+    </a>
+    <a th:classappend="${section == 'recruitment'} ? ' active' : ''" th:href="@{/home(section='recruitment')}">
+        <span class="nav-icon">+</span> Recrutement
+    </a>
+    <a th:classappend="${section == 'contracts'} ? ' active' : ''" th:href="@{/home(section='contracts')}">
+        <span class="nav-icon">▤</span> Contrats
+    </a>
+    <a th:classappend="${section == 'onboarding'} ? ' active' : ''" th:href="@{/home(section='onboarding')}">
+        <span class="nav-icon">✓</span> Onboarding
+    </a>
+    <div class="nav-footer">
+        <div class="nav-heading">Raccourcis</div>
+        <a href="#"><span class="nav-icon">?</span> Centre d'aide</a>
+        <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+    </div>
+</nav> -->
