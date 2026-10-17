@@ -1,6 +1,7 @@
 package com.appliRh.RH.repository;
 
 import com.appliRh.RH.model.Employee;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
