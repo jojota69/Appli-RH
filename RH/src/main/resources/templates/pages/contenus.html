@@ -16,30 +16,16 @@
         </div>
 
         <div class="postes">
-            <article class="poste">
-                <div class="poste-icon">IT</div>
+            
+            <article class="poste" th:each="liste : ${listeEmployee}">
+                <div class="poste-icon" th:text="${liste.nom}">IT</div>
                 <div class="poste-details">
-                    <h2>Développeur Java</h2>
-                    <p>Informatique · CDI</p>
+                    <h2 th:text="${liste.prenom}"></h2>
+                    <p></p>
                 </div>
-                <span class="poste-status">Ouvert</span>
+                <span class="poste-status" th:text="${liste.role != null ? liste.role.libelle : 'Ouvert'}">Ouvert</span>
             </article>
-            <article class="poste">
-                <div class="poste-icon poste-icon-teal">CO</div>
-                <div class="poste-details">
-                    <h2>Responsable commercial</h2>
-                    <p>Commercial · CDI</p>
-                </div>
-                <span class="poste-status poste-status-progress">En recrutement</span>
-            </article>
-            <article class="poste">
-                <div class="poste-icon poste-icon-yellow">AD</div>
-                <div class="poste-details">
-                    <h2>Assistant administratif</h2>
-                    <p>Administration · CDD</p>
-                </div>
-                <span class="poste-status poste-status-closed">Pourvu</span>
-            </article>
+
         </div>
     </section>
 </div>

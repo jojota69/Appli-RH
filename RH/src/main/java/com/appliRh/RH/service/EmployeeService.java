@@ -54,4 +54,8 @@ public class EmployeeService {
     public void deleteById(Integer id) {
         repository.delete(findById(id));
     }
+
+    public List<Employee> getEmployeesByDepartement(Integer id) {
+        return repository.findByDepartementId(id);
+    }
 }

@@ -2,7 +2,8 @@ INSERT INTO role (id_role, libelle) VALUES
 (1, 'Administrateur'),
 (2, 'Manager'),
 (3, 'Responsable RH'),
-(4, 'Recruteur');
+(4, 'Recruteur'),
+(5,'employee');
 
 INSERT INTO departement (id_dept, libelle) VALUES
 (1, 'Ressources humaines'),

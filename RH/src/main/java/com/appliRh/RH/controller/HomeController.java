@@ -1,5 +1,7 @@
 package com.appliRh.RH.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,10 @@ public class HomeController {
                        HttpSession session){
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
                 Employee employee = employeeService.findById(employeeId);
+                
+                // partie nampiko 
+                List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getDepartement().getId());
+
         String selectedSection = switch (section) {
             case "listePostes", "creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "dashboard";
@@ -34,6 +40,9 @@ public class HomeController {
 
         model.addAttribute("section", selectedSection);
         model.addAttribute("employeeConnecte", employee);
+
+        //ito lay liste 
+        model.addAttribute("listeEmployee", listeEmployee);
         return "pages/home";
     }
 
