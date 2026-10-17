@@ -22,7 +22,7 @@ public class HomeController {
         }
 
         String selectedSection = switch (section) {
-            case "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listePostes", "creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "dashboard";
         };
 

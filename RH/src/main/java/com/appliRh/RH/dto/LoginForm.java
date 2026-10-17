@@ -4,7 +4,7 @@ public class LoginForm {
 
 	private String email;
 	private String motDePasse;
-
+    
 	public LoginForm() {
 	}
 
