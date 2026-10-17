@@ -16,6 +16,12 @@ Le formulaire de connexion utilise les propriétés `email` et `motDePasse` déf
 
 La liste des postes utilise les classes `.postes` pour le conteneur et `.poste` pour chaque carte. Le conteneur contient maintenant des éléments visibles afin que les styles soient effectivement perceptibles.
 
+Dans `home.html`, le rôle est sélectionné par un `th:switch` externe, puis la section est sélectionnée dans le bloc du rôle Manager. Les `th:case` sont ainsi des branches directes de leur `th:switch` respectif.
+
+Les conditions de rôle utilisent désormais `#strings.equalsIgnoreCase` afin d'accepter les différences de casse entre la valeur en base et le template. Après une modification du chargement du rôle, il faut se déconnecter puis se reconnecter pour renouveler la session.
+
 Dans `home.html`, le cas Thymeleaf `listePostes` doit être placé avant le cas générique `*`, sinon ce dernier intercepte toutes les sections et masque la page de liste des postes.
+
+La recherche de l'employé connecté charge également son rôle avec `JOIN FETCH`, afin que Thymeleaf puisse lire `employeeConnecte.role.libelle` après la fermeture de la session Hibernate.
 
 La liste des postes possède maintenant un bouton « Créer un poste » qui ouvre la section `creerPoste` avec un formulaire dédié.
