@@ -16,8 +16,12 @@
                 </span>
             </a>
             <div class="topbar-actions">
-                <span class="status"><span class="status-dot"></span>Rakoto</span>
-                <span class="avatar">AM</span>
+                <span class="status"><span class="status-dot"></span>
+                    <span th:text="${employeeConnecte.prenom + ' ' + employeeConnecte.nom}">Utilisateur connecté</span>
+                </span>
+                <span class="avatar"
+                      th:text="${#strings.substring(employeeConnecte.prenom, 0, 1) + #strings.substring(employeeConnecte.nom, 0, 1)}">UC</span>
+                <a th:href="@{/logout}">Déconnexion</a>
             </div>
         </header>
 
