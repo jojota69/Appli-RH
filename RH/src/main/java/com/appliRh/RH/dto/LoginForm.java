@@ -1,4 +1,4 @@
-package com.appliRh.RH.modele;
+package com.appliRh.RH.dto;
 
 public class LoginForm {
 
