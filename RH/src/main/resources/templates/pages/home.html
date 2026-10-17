@@ -28,15 +28,24 @@
         <div class="workspace">
             <div th:replace="~{pages/components/navbar :: nav}"></div>
 
-            <main class="content" th:switch="${section}">
-                <div th:case="'listePostes'">
-                    <div th:replace="~{pages/contenus :: listePoste}"></div>
+            
+            <main class="content">
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager')}" th:switch="${section}">
+                    <div th:case="'listePostes'">
+                        <div th:replace="~{pages/contenus :: listePoste}"></div>
+                    </div>
+                    <div th:case="'creerPoste'">
+                        <div th:replace="~{pages/contenus :: creerPoste}"></div>
+                    </div>
+                    <div th:case="*">
+                        <div th:replace="~{pages/contenus :: *}"></div>
+                    </div>
                 </div>
-                <div th:case="'creerPoste'">
-                    <div th:replace="~{pages/contenus :: creerPoste}"></div>
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}">
+                    <p>Mety</p>
                 </div>
-                <div th:case="*">
-                    <div th:replace="~{pages/contenus :: *}"></div>
+                <div th:if="${not #strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager') and not #strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}">
+                    <p>Votre rôle ne possède pas encore de page dédiée.</p>
                 </div>
             </main>
         </div>
