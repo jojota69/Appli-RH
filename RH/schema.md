@@ -15,7 +15,7 @@ raha remplacement de meme poste fa le olona teo aloha no ovaina
 etatDemande(<b>id_etat</b>,libelle) 
 (na valide,rejete,en cours de traitement)
 
-demandeBesoin(<b>id_besoin</b>,#id_poste, #id_dept,#id_manager, effectif,motif, budget, date souhaitee,#id_etat)
+demandeBesoin(<b>id_besoin</b>,#id_poste, #id_dept,#id_manager, effectif,motif, budget, date souhaitee,#id_etat,#id_type)
 
 === Bloc 2 === 
 
