@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Tableau de bord</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" th:href="@{/home}">
+                <span class="brand-mark">RH</span>
+                <span>
+                    <strong>Appli RH</strong>
+                </span>
+            </a>
+            <div class="topbar-actions">
+                <span class="status"><span class="status-dot"></span>Rakoto</span>
+                <span class="avatar">AM</span>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <div th:replace="~{pages/components/navbar :: nav}"></div>
+
+            <main class="content">
+                <h1>Eto ny contenu</h1>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
