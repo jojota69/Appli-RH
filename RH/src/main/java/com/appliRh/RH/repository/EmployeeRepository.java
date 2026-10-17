@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+	@EntityGraph(attributePaths = "role")
+	@Override
+	Optional<Employee> findById(Integer id);
+
 	@Query("select e from Employee e join fetch e.role where e.email = :email")
 	Optional<Employee> findByEmail(@Param("email") String email);
 }

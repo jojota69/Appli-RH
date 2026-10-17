@@ -41,12 +41,15 @@
                         <div th:replace="~{pages/contenus :: *}"></div>
                     </div>
                 </div>
-                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}">
-                    <p>Mety</p>
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}" th:switch="${section}">
+                    <p>Ho an'ny Direction</p>
                 </div>
-                <div th:if="${not #strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager') and not #strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}">
-                    <p>Votre rôle ne possède pas encore de page dédiée.</p>
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Responsable RH')}" th:switch="${section}">
+                    <p>Ho an'ny Responsable RH</p>
                 </div>
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Recruteur')}">
+                    <p>Ho an'ny Recruteur</p>
+                </div> 
             </main>
         </div>
     </div>
