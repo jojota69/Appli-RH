@@ -8,6 +8,10 @@ departement(<b>id_dept</b>,libelle)
 
 poste(<b>id_poste</b>,libelle)
 
+typeDemande(<b>id_type</b>,libelle)
+(na io creation d un poste na remplacement)
+raha remplacement de meme poste fa le olona teo aloha no ovaina
+
 etatDemande(<b>id_etat</b>,libelle) 
 (na valide,rejete,en cours de traitement)
 
