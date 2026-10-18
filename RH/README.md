@@ -25,3 +25,5 @@ Dans `home.html`, le cas Thymeleaf `listePostes` doit être placé avant le cas 
 La recherche de l'employé connecté charge également son rôle avec `JOIN FETCH`, afin que Thymeleaf puisse lire `employeeConnecte.role.libelle` après la fermeture de la session Hibernate.
 
 La liste des postes possède maintenant un bouton « Créer un poste » qui ouvre la section `creerPoste` avec un formulaire dédié.
+
+Les clés primaires du script `src/main/resources/schema.sql` utilisent désormais `GENERATED ALWAYS AS IDENTITY` à la place de `SERIAL`.
