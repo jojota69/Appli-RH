@@ -28,6 +28,12 @@ public class PosteService {
                 .orElseThrow(() -> new EntityNotFoundException("Poste introuvable : " + id));
     }
 
+    @Transactional(readOnly = true)
+    public Poste findByLibelle(String libelle) {
+        return repository.findByLibelle(libelle)
+                .orElseThrow(() -> new EntityNotFoundException("Poste introuvable : " + libelle));
+    }
+
     @Transactional
     public Poste create(Poste poste) {
         return repository.save(poste);

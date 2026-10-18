@@ -249,6 +249,14 @@ h1 {
   background: var(--white);
   border: 1px solid var(--line);
 }
+.form-error {
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  color: #9b2c22;
+  background: #fff0ed;
+  border: 1px solid #f2b8ae;
+  font: 14px Arial, sans-serif;
+}
 .panel-heading {
   display: flex;
   align-items: center;

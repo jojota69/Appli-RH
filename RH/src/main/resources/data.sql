@@ -11,13 +11,6 @@ INSERT INTO departement (id_dept, libelle) VALUES
 (3, 'Finance'),
 (4, 'Marketing');
 
-INSERT INTO poste (id_poste, libelle) VALUES
-(1, 'Developpeur logiciel'),
-(2, 'Analyste RH'),
-(3, 'Comptable'),
-(4, 'Charge de recrutement'),
-(5, 'Chef de projet');
-
 INSERT INTO employee (id_emp, nom, prenom, email,mot_de_passe, id_role, id_dept) VALUES
 (1, 'Dupont', 'Alice', 'alice.dupont@rh.local', 'password123', 3, 1),
 (2, 'Martin', 'Thomas', 'thomas.martin@rh.local', 'password123', 2, 2),
@@ -25,7 +18,11 @@ INSERT INTO employee (id_emp, nom, prenom, email,mot_de_passe, id_role, id_dept)
 (4, 'Petit', 'Lucas', 'lucas.petit@rh.local', 'password123', 1, 2),
 (5, 'Robert', 'Emma', 'emma.robert@rh.local', 'password123', 1, 3);
 
-INSERT INTO etatDemande (id_etat, libelle) VALUES
+INSERT INTO etat_demande (id_etat, libelle) VALUES
 (1, 'En attente'),
 (2, 'Approuvee'),
 (3, 'Rejetee');
+
+INSERT INTO type_demande (id_type, libelle) VALUES
+(1, 'Nouveau poste'),
+(2, 'Remplacement');

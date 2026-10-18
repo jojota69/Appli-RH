@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS demandeBesoin CASCADE;
-DROP TABLE IF EXISTS typeDemande CASCADE;
-DROP TABLE IF EXISTS employee CASCADE;
-DROP TABLE IF EXISTS etatDemande CASCADE;
-DROP TABLE IF EXISTS poste CASCADE;
-DROP TABLE IF EXISTS departement CASCADE;
-DROP TABLE IF EXISTS role CASCADE;
+-- DROP TABLE IF EXISTS demande_besoin CASCADE;
+-- DROP TABLE IF EXISTS type_demande CASCADE;
+-- DROP TABLE IF EXISTS employee CASCADE;
+-- DROP TABLE IF EXISTS etat_demande CASCADE;
+-- DROP TABLE IF EXISTS poste CASCADE;
+-- DROP TABLE IF EXISTS departement CASCADE;
+-- DROP TABLE IF EXISTS role CASCADE;
 
 CREATE TABLE role (
     id_role SERIAL PRIMARY KEY,
@@ -21,7 +21,7 @@ CREATE TABLE poste (
     libelle VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE etatDemande (
+CREATE TABLE etat_demande (
     id_etat SERIAL PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL
 );
@@ -38,12 +38,12 @@ CREATE TABLE employee (
     CONSTRAINT fk_employee_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept)
 );
 
-CREATE TABLE typeDemande (
+CREATE TABLE type_demande (
     id_type SERIAL PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE demandeBesoin (
+CREATE TABLE demande_besoin (
     id_besoin SERIAL PRIMARY KEY,
     id_poste INT NOT NULL,
     id_dept INT NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE demandeBesoin (
     CONSTRAINT fk_demande_poste FOREIGN KEY (id_poste) REFERENCES poste(id_poste),
     CONSTRAINT fk_demande_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
     CONSTRAINT fk_demande_manager FOREIGN KEY (id_manager) REFERENCES employee(id_emp),
-    CONSTRAINT fk_demande_etat FOREIGN KEY (id_etat) REFERENCES etatDemande(id_etat),
-    CONSTRAINT fk_demande_typedemande FOREIGN KEY (id_typedemande) REFERENCES typeDemande(id_type)
+    CONSTRAINT fk_demande_etat FOREIGN KEY (id_etat) REFERENCES etat_demande(id_etat),
+    CONSTRAINT fk_demande_typedemande FOREIGN KEY (id_typedemande) REFERENCES type_demande(id_type)
 );
 

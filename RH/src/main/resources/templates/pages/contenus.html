@@ -41,12 +41,14 @@
         <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux postes</a>
     </div>
 
-    <form class="panel position-form" action="#" method="post">
+    <div class="form-error" th:if="${error != null}" th:text="${error}" role="alert"></div>
+
+    <form class="panel position-form" action="/demande" method="post">
         <label for="title">Intitulé du poste</label>
         <input id="title" name="title" type="text" placeholder="Ex. Développeur Java" required>
 
         <label for="department">Département</label>
-        <input id="department" name="department" type="text" placeholder="Ex. Informatique" required>
+        <input id="department" name="department" type="text" th:value="${employeeConnecte.departement.libelle}" readonly>
 
         <label for="contractType">Type de contrat</label>
         <select id="contractType" name="contractType" required>
@@ -61,6 +63,12 @@
 
         <label for="budget">Budget demandé</label>
         <input type="number" name="budget" id="budget">
+
+        <label for="startDate">Date de début souhaitée</label>
+        <input type="date" name="startDate" id="startDate" required>
+
+        <label for="effectif">Nombre d' Effectif</label>
+        <input type="number" name="effectif" id="effectif" required>
 
         <div class="form-actions">
             <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Annuler</a>

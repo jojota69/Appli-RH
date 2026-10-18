@@ -1,3 +1,5 @@
+<p>N.B: REFA MANAMBOTRA TABLE LAISANY DE RAHA MIAOTRA NY MOT IRAY NY ANARANY DE ATAOVY SOUS FORME mot1_mot2 FA RAHA TSY ZAY DE MI-CASSE NY CODE </p>
+
 === Bloc 1 ===
 
 employee(<b>id_emp</b>,nom,prenom,email,#id_role,#id_dept)
