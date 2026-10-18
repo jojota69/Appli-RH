@@ -30,9 +30,19 @@
 
             
             <main class="content">
+                <!-- MANAGER -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager')}" th:switch="${section}">
                     <div th:case="'listePostes'">
                         <div th:replace="~{pages/contenus :: listePoste}"></div>
+                    </div>
+                    <div th:case="'listeDemandes'">
+                        <div th:replace="~{pages/contenus :: listeDemandes}"></div>
+                    </div>
+                    <div th:case="'modifDemande'">
+                        <div th:replace="~{pages/contenus :: modifDemande}"></div>
+                    </div>
+                    <div th:case="'voirDemande'">
+                        <div th:replace="~{pages/contenus :: voirDemande}"></div>
                     </div>
                     <div th:case="'creerPoste'">
                         <div th:replace="~{pages/contenus :: creerPoste}"></div>
@@ -41,12 +51,18 @@
                         <div th:replace="~{pages/contenus :: *}"></div>
                     </div>
                 </div>
+
+                <!-- ADMINISTRATEUR -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}" th:switch="${section}">
                     <p>Ho an'ny Direction</p>
                 </div>
+
+                <!-- RH -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Responsable RH')}" th:switch="${section}">
                     <p>Ho an'ny Responsable RH</p>
                 </div>
+
+                <!-- RECRUTEUR -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Recruteur')}">
                     <p>Ho an'ny Recruteur</p>
                 </div> 

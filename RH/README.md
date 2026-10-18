@@ -25,3 +25,15 @@ Dans `home.html`, le cas Thymeleaf `listePostes` doit être placé avant le cas 
 La recherche de l'employé connecté charge également son rôle avec `JOIN FETCH`, afin que Thymeleaf puisse lire `employeeConnecte.role.libelle` après la fermeture de la session Hibernate.
 
 La liste des postes possède maintenant un bouton « Créer un poste » qui ouvre la section `creerPoste` avec un formulaire dédié.
+
+Les clés primaires du script `src/main/resources/schema.sql` utilisent désormais `GENERATED ALWAYS AS IDENTITY` à la place de `SERIAL`.
+
+La section `listeDemandes` affiche maintenant les demandes reçues avec le poste, le manager, l'effectif, le budget, la date souhaitée et l'état. Les associations nécessaires sont chargées avec la liste pour permettre leur rendu dans Thymeleaf.
+
+Les postes affichent désormais les initiales de chaque mot dans leur icône, par exemple `Administrateur Reseau` devient `AR`.
+
+Les sections `modifDemande` et `voirDemande` permettent respectivement de modifier et de consulter une demande sélectionnée par son identifiant.
+
+La vue détail utilise désormais `demandeSelectionnee.id` pour accéder à la modification, car la variable `liste` n'existe que dans la boucle d'affichage des demandes.
+
+Les demandes reçues disposent maintenant d'icônes SVG pour la modification et la consultation.
