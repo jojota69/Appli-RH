@@ -5,6 +5,9 @@
     <a th:classappend="${section == 'listePostes'} ? ' active' : ''" th:href="@{/home(section='listePostes')}">
         <span class="nav-icon">⌂</span> Liste des postes
     </a>
+    <a th:classappend="${section == 'listeDemandes'} ? ' active' : ''" th:href="@{/home(section='listeDemandes')}">
+        <span class="nav-icon">⌂</span> Liste des demandes
+    </a>
     <div class="nav-footer">
         <div class="nav-heading">Raccourcis</div>
         <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>

@@ -30,6 +30,7 @@
     </section>
 </div>
 
+
 <!-- Creation de poste -->
 <div th:fragment="creerPoste">
     <div class="page-heading">
@@ -75,4 +76,113 @@
             <button class="button button-primary" type="submit">Enregistrer le poste</button>
         </div>
     </form>
+</div>
+
+<!-- Liste des demandes -->
+ <div th:fragment="listeDemandes">
+    <section class="content-section">
+        <div class="page-heading">
+            <div>
+                <h1>Liste des demandes</h1>
+                <p class="intro">Consultez les demandes en attente.</p>
+            </div>
+        </div>
+
+        <div class="postes">
+            
+            <article class="poste" th:each="liste : ${listeDemandes}">
+                <div class="poste-icon" th:text="${liste.poste.initiales}">AR</div>
+                <div class="poste-details">
+                    <h2 th:text="${liste.poste.libelle}">Intitulé du poste</h2>
+                    <p th:text="${'Manager : ' + liste.manager.prenom + ' ' + liste.manager.nom}">Manager</p>
+                    <p th:text="${'Effectif : ' + liste.effectif + ' | Budget : ' + liste.budget + ' | Date souhaitée : ' + liste.dateSouhaitee}">Détails de la demande</p>
+                </div>
+                <span class="poste-status" th:text="${liste.etatDemande.libelle}">En attente</span>
+                <div class="poste-actions">
+                    <a th:classappend="${section == 'modifDemande'} ? ' active' : ''" th:href="@{/home(section='modifDemande', demandeId=${liste.id})}">
+                        <button class="icon-button" type="button" aria-label="Modifier la demande" title="Modifier la demande">
+                            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                            </svg>
+                        </button>
+                    </a>
+                    <a th:classappend="${section == 'voirDemande'} ? ' active' : ''" th:href="@{/home(section='voirDemande', demandeId=${liste.id})}">
+                        <button class="icon-button" type="button" aria-label="Voir la demande" title="Voir la demande">
+                            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+ </div>
+
+<!-- Detail demande -->
+<div th:fragment="voirDemande">
+    <section class="content-section" th:if="${demandeSelectionnee != null}">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Demande reçue</p>
+                <h1 th:text="${demandeSelectionnee.poste.libelle}">Détail de la demande</h1>
+                <p class="intro" th:text="${'Demande #' + demandeSelectionnee.id}">Demande</p>
+            </div>
+            <div>
+                <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Retour aux demandes</a>
+                <a class="button button-secondary" th:href="@{/home(section='modifDemande', demandeId=${demandeSelectionnee.id})}">Modifier demande</a>
+            </div>
+        </div>
+        <div class="panel request-details">
+            <p><strong>Manager :</strong> <span th:text="${demandeSelectionnee.manager.prenom + ' ' + demandeSelectionnee.manager.nom}">Manager</span></p>
+            <p><strong>Département :</strong> <span th:text="${demandeSelectionnee.departement.libelle}">Département</span></p>
+            <p><strong>Effectif :</strong> <span th:text="${demandeSelectionnee.effectif}">1</span></p>
+            <p><strong>Budget :</strong> <span th:text="${demandeSelectionnee.budget}">0</span></p>
+            <p><strong>Date souhaitée :</strong> <span th:text="${demandeSelectionnee.dateSouhaitee}">Date</span></p>
+            <p><strong>Motif :</strong> <span th:text="${demandeSelectionnee.motif}">Motif</span></p>
+            <p><strong>État :</strong> <span th:text="${demandeSelectionnee.etatDemande.libelle}">État</span></p>
+            <p><strong>Type :</strong> <span th:text="${demandeSelectionnee.typeDemande.libelle}">Type</span></p>
+        </div>
+    </section>
+    <section class="content-section" th:unless="${demandeSelectionnee != null}">
+        <h1>Demande introuvable</h1>
+        <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Retour aux demandes</a>
+    </section>
+</div>
+
+<!-- Modif demande -->
+<div th:fragment="modifDemande">
+    <section class="content-section" th:if="${demandeSelectionnee != null}">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Demande reçue</p>
+                <h1>Modifier la demande</h1>
+                <p class="intro" th:text="${'Demande #' + demandeSelectionnee.id}">Demande</p>
+            </div>
+            <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Annuler</a>
+        </div>
+        <form class="panel position-form" method="post" th:action="@{/demande/{id}/modifier(id=${demandeSelectionnee.id})}">
+            <label for="title">Intitulé du poste</label>
+            <input id="title" name="title" type="text" th:value="${demandeSelectionnee.poste.libelle}" required>
+            <label for="reason">Motif du recrutement</label>
+            <textarea id="reason" name="reason" rows="4" th:text="${demandeSelectionnee.motif}"></textarea>
+            <label for="budget">Budget demandé</label>
+            <input id="budget" name="budget" type="number" step="0.01" th:value="${demandeSelectionnee.budget}" required>
+            <label for="startDate">Date de début souhaitée</label>
+            <input id="startDate" name="startDate" type="date" th:value="${demandeSelectionnee.dateSouhaitee}" required>
+            <label for="effectif">Nombre d'effectifs</label>
+            <input id="effectif" name="effectif" type="number" th:value="${demandeSelectionnee.effectif}" required>
+            <div class="form-actions">
+                <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Annuler</a>
+                <button class="button button-primary" type="submit">Enregistrer les modifications</button>
+            </div>
+        </form>
+    </section>
+    <section class="content-section" th:unless="${demandeSelectionnee != null}">
+        <h1>Demande introuvable</h1>
+        <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Retour aux demandes</a>
+    </section>
 </div>

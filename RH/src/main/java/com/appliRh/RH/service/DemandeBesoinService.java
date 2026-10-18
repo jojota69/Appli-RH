@@ -28,6 +28,14 @@ public class DemandeBesoinService {
                 .orElseThrow(() -> new EntityNotFoundException("Demande de besoin introuvable : " + id));
     }
 
+    @Transactional(readOnly = true)
+    public List<DemandeBesoin> getDemandeEnAttente(){
+        return repository.findAll().stream()
+                                .filter(demande -> demande.getEtatDemande() != null
+                                                && demande.getEtatDemande().getId().equals(1))
+                                .toList();
+    }
+
     @Transactional
     public DemandeBesoin create(DemandeBesoin demandeBesoin) {
         return repository.save(demandeBesoin);

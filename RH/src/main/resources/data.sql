@@ -21,7 +21,8 @@ INSERT INTO employee (nom, prenom, email,mot_de_passe, id_role, id_dept) VALUES
 INSERT INTO etat_demande (libelle) VALUES
 ('En attente'),
 ('Approuvee'),
-('Rejetee');
+('Rejetee'),
+('Approuvee RH');
 
 INSERT INTO type_demande (libelle) VALUES
 ('Nouveau poste'),

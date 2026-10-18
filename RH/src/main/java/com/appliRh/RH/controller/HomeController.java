@@ -43,6 +43,7 @@ public class HomeController {
     @PareFeu
     public String home(@RequestParam(defaultValue = "dashboard") String section,
                        @RequestParam(required = false) String error,
+                       @RequestParam(required = false) Integer demandeId,
                        Model model,
                        HttpSession session){
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
@@ -50,9 +51,12 @@ public class HomeController {
                 
                 // partie nampiko 
                 List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getDepartement().getId());
+                
+                //maka ny demande en attente
+                List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente();
 
         String selectedSection = switch (section) {
-            case "listePostes", "creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listePostes", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "listePostes";
         };
 
@@ -62,6 +66,10 @@ public class HomeController {
 
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
+        model.addAttribute("listeDemandes", listeDemandes);
+        if (demandeId != null && (selectedSection.equals("modifDemande") || selectedSection.equals("voirDemande"))) {
+            model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
+        }
         return "pages/home";
     }
 
@@ -85,6 +93,24 @@ public class HomeController {
         DemandeBesoin demandeBesoin = new DemandeBesoin(nouveauPoste, employeeService.findById((Integer) session.getAttribute("employeeId")).getDepartement(), employeeService.findById((Integer) session.getAttribute("employeeId")), effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(1), typeDemandeService.findById(1));
         demandeBesoinService.create(demandeBesoin);
         return "redirect:/home?section=creerPoste";
+    }
+
+    @PostMapping("/demande/{id}/modifier")
+    @PareFeu(roles = "Manager")
+    public String modifierDemande(@org.springframework.web.bind.annotation.PathVariable Integer id,
+                                  @RequestParam String title,
+                                  @RequestParam BigDecimal budget,
+                                  @RequestParam String startDate,
+                                  @RequestParam String reason,
+                                  @RequestParam int effectif) {
+        DemandeBesoin demande = demandeBesoinService.findById(id);
+        posteService.update(demande.getPoste().getId(), new Poste(title));
+        demande.setEffectif(effectif);
+        demande.setMotif(reason);
+        demande.setBudget(budget);
+        demande.setDateSouhaitee(java.time.LocalDate.parse(startDate));
+        demandeBesoinService.update(id, demande);
+        return "redirect:/home?section=voirDemande&demandeId=" + id;
     }
 
 }

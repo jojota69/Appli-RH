@@ -34,6 +34,18 @@ public class Poste {
         return libelle;
     }
 
+    public String getInitiales() {
+        if (libelle == null || libelle.isBlank()) {
+            return "";
+        }
+
+        StringBuilder initiales = new StringBuilder();
+        for (String mot : libelle.trim().split("\\s+")) {
+            initiales.append(Character.toUpperCase(mot.charAt(0)));
+        }
+        return initiales.toString();
+    }
+
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
