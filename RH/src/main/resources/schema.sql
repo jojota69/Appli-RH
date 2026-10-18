@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS demandeBesoin CASCADE;
+DROP TABLE IF EXISTS typeDemande CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS etatDemande CASCADE;
 DROP TABLE IF EXISTS poste CASCADE;
@@ -37,6 +38,11 @@ CREATE TABLE employee (
     CONSTRAINT fk_employee_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept)
 );
 
+CREATE TABLE typeDemande (
+    id_type SERIAL PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE demandeBesoin (
     id_besoin SERIAL PRIMARY KEY,
     id_poste INT NOT NULL,
@@ -47,8 +53,11 @@ CREATE TABLE demandeBesoin (
     budget NUMERIC(12, 2) NOT NULL,
     date_souhaitee DATE NOT NULL,
     id_etat INT NOT NULL,
+    id_typedemande INT NOT NULL,
     CONSTRAINT fk_demande_poste FOREIGN KEY (id_poste) REFERENCES poste(id_poste),
     CONSTRAINT fk_demande_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
     CONSTRAINT fk_demande_manager FOREIGN KEY (id_manager) REFERENCES employee(id_emp),
-    CONSTRAINT fk_demande_etat FOREIGN KEY (id_etat) REFERENCES etatDemande(id_etat)
+    CONSTRAINT fk_demande_etat FOREIGN KEY (id_etat) REFERENCES etatDemande(id_etat),
+    CONSTRAINT fk_demande_typedemande FOREIGN KEY (id_typedemande) REFERENCES typeDemande(id_type)
 );
+

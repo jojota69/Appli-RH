@@ -35,7 +35,7 @@ public class HomeController {
 
         String selectedSection = switch (section) {
             case "listePostes", "creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
-            default -> "dashboard";
+            default -> "listePostes";
         };
 
         model.addAttribute("section", selectedSection);

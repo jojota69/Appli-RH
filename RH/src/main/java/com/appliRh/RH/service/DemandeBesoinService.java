@@ -44,6 +44,7 @@ public class DemandeBesoinService {
         existing.setBudget(demandeBesoin.getBudget());
         existing.setDateSouhaitee(demandeBesoin.getDateSouhaitee());
         existing.setEtatDemande(demandeBesoin.getEtatDemande());
+        existing.setTypeDemande(demandeBesoin.getTypeDemande());
         return repository.save(existing);
     }
 
