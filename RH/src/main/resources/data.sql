@@ -24,3 +24,8 @@ INSERT INTO employee (id_emp, nom, prenom, email,mot_de_passe, id_role, id_dept)
 (3, 'Bernard', 'Sophie', 'sophie.bernard@rh.local', 'password123', 4, 1),
 (4, 'Petit', 'Lucas', 'lucas.petit@rh.local', 'password123', 1, 2),
 (5, 'Robert', 'Emma', 'emma.robert@rh.local', 'password123', 1, 3);
+
+INSERT INTO etatDemande (id_etat, libelle) VALUES
+(1, 'En attente'),
+(2, 'Approuvee'),
+(3, 'Rejetee');
