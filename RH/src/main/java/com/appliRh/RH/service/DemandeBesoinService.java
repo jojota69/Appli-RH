@@ -29,11 +29,8 @@ public class DemandeBesoinService {
     }
 
     @Transactional(readOnly = true)
-    public List<DemandeBesoin> getDemandeEnAttente(){
-        return repository.findAll().stream()
-                                .filter(demande -> demande.getEtatDemande() != null
-                                                && demande.getEtatDemande().getId().equals(1))
-                                .toList();
+    public List<DemandeBesoin> getDemandeEnAttente(Integer id){
+        return repository.findDemandeDept(id);
     }
 
     @Transactional
