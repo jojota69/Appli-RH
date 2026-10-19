@@ -13,8 +13,8 @@ import com.appliRh.RH.model.Employee;
 import com.appliRh.RH.annotation.PareFeu;
 import com.appliRh.RH.service.EmployeeService;
 import com.appliRh.RH.service.PosteService;
-import com.appliRh.RH.model.Poste;
 import com.appliRh.RH.model.DemandeBesoin;
+import com.appliRh.RH.model.EmployeeFiche;
 import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
@@ -44,6 +44,7 @@ public class HomeController {
     public String home(@RequestParam(defaultValue = "dashboard") String section,
                        @RequestParam(required = false) String error,
                        @RequestParam(required = false) Integer demandeId,
+                       @RequestParam(required = false) Integer selectedEmployeeId,
                        Model model,
                        HttpSession session){
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
@@ -56,7 +57,7 @@ public class HomeController {
                 List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente();
 
         String selectedSection = switch (section) {
-            case "listePostes", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listePostes", "voirPoste", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "listePostes";
         };
 
@@ -69,6 +70,10 @@ public class HomeController {
         model.addAttribute("listeDemandes", listeDemandes);
         if (demandeId != null && (selectedSection.equals("modifDemande") || selectedSection.equals("voirDemande"))) {
             model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
+        }
+        if (selectedEmployeeId != null && selectedSection.equals("voirPoste")) {
+            EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
+            model.addAttribute("ficheSelectionnee", ficheSelectionnee);
         }
         return "pages/home";
     }

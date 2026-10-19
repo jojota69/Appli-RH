@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-	@EntityGraph(attributePaths = {"role", "fiche", "fiche.departement"})
+	@EntityGraph(attributePaths = {"role", "fiche", "fiche.employee", "fiche.poste", "fiche.departement", "fiche.typeContrat"})
 	@Override
 	Optional<Employee> findById(Integer id);
 

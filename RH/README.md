@@ -37,3 +37,7 @@ Les sections `modifDemande` et `voirDemande` permettent respectivement de modifi
 La vue détail utilise désormais `demandeSelectionnee.id` pour accéder à la modification, car la variable `liste` n'existe que dans la boucle d'affichage des demandes.
 
 Les demandes reçues disposent maintenant d'icônes SVG pour la modification et la consultation.
+
+La section `voirPoste` récupère la fiche de l'employé sélectionné avec le paramètre `selectedEmployeeId` et affiche son identité, son poste, son département, son type de contrat, son salaire et sa date de naissance. Les associations de la fiche sont chargées avec l'employé pour permettre leur rendu dans Thymeleaf. Cette section est également déclarée dans le routage Thymeleaf de `home.html`.
+
+Dans la liste des employés, le nom et le prénom sont affichés côte à côte grâce à la mise en page flexible de `.poste-details`, avec retour à la ligne possible lorsque l'espace disponible est insuffisant.
