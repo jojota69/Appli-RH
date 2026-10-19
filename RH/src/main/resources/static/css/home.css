@@ -638,6 +638,10 @@ h1 {
 }
 
 .poste-details {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 8px;
   flex: 1;
 }
 
@@ -648,6 +652,7 @@ h1 {
 }
 
 .poste-details p {
+  flex-basis: 100%;
   margin: 6px 0 0;
   color: var(--muted);
   font: 12px Arial, sans-serif;
