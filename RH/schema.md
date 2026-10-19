@@ -2,7 +2,11 @@
 
 === Bloc 1 ===
 
-employee(<b>id_emp</b>,nom,prenom,email,#id_role,#id_dept)
+employee(<b>id_emp</b>,nom,prenom,email,#id_role,mdp)
+
+typeContrat(<b>id_type</b>,libelle)
+
+employee_fiche(<b>id_fiche</b>,#id_emp,#id_poste,#id_dept,#id_type_contrat,salaire,date_naissance)
 
 role(<b>id_role</b>,libelle)
 
@@ -43,9 +47,6 @@ evaluation(<b>id_eval</b>,#id_cdt,note)
 etatembauche(<b>id_etat</b>,libelle) (na io accepte,refuse,en cours de traitement)
 
 embauche(<b>id_emb</b>,#id_cdt,#id_etat,salaire_prop,#id_poste,#id_etat)
-
-typeContrat(<b>id_type</b>,libelle,duree,nbr_renouv)
-(le nbr_renouv 1 raha CE si CDD , null raha CDI)
 
 === Bloc 4 === 
 
