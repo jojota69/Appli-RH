@@ -54,7 +54,7 @@ public class HomeController {
                 List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getFiche().getDepartement().getId());
                 
                 //maka ny demande en attente
-                List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente();
+                List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
 
         String selectedSection = switch (section) {
             case "listePostes", "voirPoste", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
