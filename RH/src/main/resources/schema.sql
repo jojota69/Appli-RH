@@ -1,7 +1,9 @@
 DROP TABLE IF EXISTS demande_besoin CASCADE;
+DROP TABLE IF EXISTS employee_fiche CASCADE;
 DROP TABLE IF EXISTS type_demande CASCADE;
-DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS type_contrat CASCADE;
 DROP TABLE IF EXISTS etat_demande CASCADE;
+DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS poste CASCADE;
 DROP TABLE IF EXISTS departement CASCADE;
 DROP TABLE IF EXISTS role CASCADE;
@@ -21,6 +23,16 @@ CREATE TABLE poste (
     libelle VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE type_contrat (
+    id_type INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE type_demande (
+    id_type INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE etat_demande (
     id_etat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL
@@ -31,21 +43,34 @@ CREATE TABLE employee (
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    mot_de_passe VARCHAR(255) NOT NULL,
     id_role INT NOT NULL,
-    id_dept INT NOT NULL,
-    CONSTRAINT fk_employee_role FOREIGN KEY (id_role) REFERENCES role(id_role),
-    CONSTRAINT fk_employee_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept)
+    mot_de_passe VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_employee_role
+        FOREIGN KEY (id_role) REFERENCES role(id_role)
 );
 
-CREATE TABLE type_demande (
-    id_type INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    libelle VARCHAR(100) NOT NULL
+CREATE TABLE employee_fiche (
+    id_fiche INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_emp INT NOT NULL,
+    id_poste INT NOT NULL,
+    id_dept INT NOT NULL,
+    id_type_contrat INT NOT NULL,
+    salaire NUMERIC(12, 2) NOT NULL,
+    date_naissance DATE NOT NULL,
+    CONSTRAINT fk_employee_fiche_employee
+        FOREIGN KEY (id_emp) REFERENCES employee(id_emp),
+    CONSTRAINT fk_employee_fiche_poste
+        FOREIGN KEY (id_poste) REFERENCES poste(id_poste),
+    CONSTRAINT fk_employee_fiche_departement
+        FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
+    CONSTRAINT fk_employee_fiche_type_contrat
+        FOREIGN KEY (id_type_contrat) REFERENCES type_contrat(id_type),
+    CONSTRAINT uq_employee_fiche_employee UNIQUE (id_emp)
 );
 
 CREATE TABLE demande_besoin (
     id_besoin INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    id_poste INT NOT NULL,
+    intitule_poste VARCHAR(150) NOT NULL,
     id_dept INT NOT NULL,
     id_manager INT NOT NULL,
     effectif INT NOT NULL,
@@ -53,11 +78,13 @@ CREATE TABLE demande_besoin (
     budget NUMERIC(12, 2) NOT NULL,
     date_souhaitee DATE NOT NULL,
     id_etat INT NOT NULL,
-    id_typedemande INT NOT NULL,
-    CONSTRAINT fk_demande_poste FOREIGN KEY (id_poste) REFERENCES poste(id_poste),
-    CONSTRAINT fk_demande_dept FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
-    CONSTRAINT fk_demande_manager FOREIGN KEY (id_manager) REFERENCES employee(id_emp),
-    CONSTRAINT fk_demande_etat FOREIGN KEY (id_etat) REFERENCES etat_demande(id_etat),
-    CONSTRAINT fk_demande_typedemande FOREIGN KEY (id_typedemande) REFERENCES type_demande(id_type)
+    id_type INT NOT NULL,
+    CONSTRAINT fk_demande_besoin_departement
+        FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
+    CONSTRAINT fk_demande_besoin_manager
+        FOREIGN KEY (id_manager) REFERENCES employee(id_emp),
+    CONSTRAINT fk_demande_besoin_etat
+        FOREIGN KEY (id_etat) REFERENCES etat_demande(id_etat),
+    CONSTRAINT fk_demande_besoin_type
+        FOREIGN KEY (id_type) REFERENCES type_demande(id_type)
 );
-

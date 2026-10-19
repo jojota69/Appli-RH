@@ -22,9 +22,8 @@ public class DemandeBesoin {
     @Column(name = "id_besoin")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_poste", nullable = false)
-    private Poste poste;
+    @Column(name = "intitule_poste", nullable = false, length = 150)
+    private String intitulePoste;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_dept", nullable = false)
@@ -51,17 +50,17 @@ public class DemandeBesoin {
     private EtatDemande etatDemande;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_typedemande", nullable = false)
+    @JoinColumn(name = "id_type", nullable = false)
     private TypeDemande typeDemande;
 
     protected DemandeBesoin() {
     }
 
-    public DemandeBesoin(Poste poste, Departement departement, Employee manager,
+    public DemandeBesoin(String intitulePoste, Departement departement, Employee manager,
                          Integer effectif, String motif, BigDecimal budget,
                          LocalDate dateSouhaitee, EtatDemande etatDemande,
                          TypeDemande typeDemande) {
-        this.poste = poste;
+        this.intitulePoste = intitulePoste;
         this.departement = departement;
         this.manager = manager;
         this.effectif = effectif;
@@ -76,12 +75,12 @@ public class DemandeBesoin {
         return id;
     }
 
-    public Poste getPoste() {
-        return poste;
+    public String getIntitulePoste() {
+        return intitulePoste;
     }
 
-    public void setPoste(Poste poste) {
-        this.poste = poste;
+    public void setIntitulePoste(String intitulePoste) {
+        this.intitulePoste = intitulePoste;
     }
 
     public Departement getDepartement() {

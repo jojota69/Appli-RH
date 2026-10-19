@@ -1,0 +1,113 @@
+package com.appliRh.RH.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "employee_fiche")
+public class EmployeeFiche {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_fiche")
+    private Integer id;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_emp", nullable = false, unique = true)
+    private Employee employee;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_poste", nullable = false)
+    private Poste poste;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_dept", nullable = false)
+    private Departement departement;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_type_contrat", nullable = false)
+    private TypeContrat typeContrat;
+
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal salaire;
+
+    @Column(name = "date_naissance", nullable = false)
+    private LocalDate dateNaissance;
+
+    protected EmployeeFiche() {
+    }
+
+    public EmployeeFiche(Employee employee, Poste poste, Departement departement,
+                         TypeContrat typeContrat, BigDecimal salaire,
+                         LocalDate dateNaissance) {
+        this.employee = employee;
+        this.poste = poste;
+        this.departement = departement;
+        this.typeContrat = typeContrat;
+        this.salaire = salaire;
+        this.dateNaissance = dateNaissance;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Poste getPoste() {
+        return poste;
+    }
+
+    public void setPoste(Poste poste) {
+        this.poste = poste;
+    }
+
+    public Departement getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
+    }
+
+    public TypeContrat getTypeContrat() {
+        return typeContrat;
+    }
+
+    public void setTypeContrat(TypeContrat typeContrat) {
+        this.typeContrat = typeContrat;
+    }
+
+    public BigDecimal getSalaire() {
+        return salaire;
+    }
+
+    public void setSalaire(BigDecimal salaire) {
+        this.salaire = salaire;
+    }
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+}

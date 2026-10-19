@@ -44,7 +44,7 @@ public class DemandeBesoinService {
     @Transactional
     public DemandeBesoin update(Integer id, DemandeBesoin demandeBesoin) {
         DemandeBesoin existing = findById(id);
-        existing.setPoste(demandeBesoin.getPoste());
+        existing.setIntitulePoste(demandeBesoin.getIntitulePoste());
         existing.setDepartement(demandeBesoin.getDepartement());
         existing.setManager(demandeBesoin.getManager());
         existing.setEffectif(demandeBesoin.getEffectif());

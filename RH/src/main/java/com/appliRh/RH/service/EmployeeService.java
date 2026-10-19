@@ -46,7 +46,7 @@ public class EmployeeService {
         existing.setPrenom(employee.getPrenom());
         existing.setEmail(employee.getEmail());
         existing.setRole(employee.getRole());
-        existing.setDepartement(employee.getDepartement());
+        existing.setMotDePasse(employee.getMotDePasse());
         return repository.save(existing);
     }
 

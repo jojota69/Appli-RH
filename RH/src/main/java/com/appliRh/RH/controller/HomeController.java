@@ -50,7 +50,7 @@ public class HomeController {
                 Employee employee = employeeService.findById(employeeId);
                 
                 // partie nampiko 
-                List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getDepartement().getId());
+                List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getFiche().getDepartement().getId());
                 
                 //maka ny demande en attente
                 List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente();
@@ -84,13 +84,13 @@ public class HomeController {
                          @RequestParam int effectif
                          , HttpSession session) {
         try {
-            Poste poste = posteService.findByLibelle(title);
+            posteService.findByLibelle(title);
             return "redirect:/home?section=creerPoste&error=Poste deja existant";
         } catch (EntityNotFoundException e) {
             
         }
-        Poste nouveauPoste = posteService.create(new Poste(title));
-        DemandeBesoin demandeBesoin = new DemandeBesoin(nouveauPoste, employeeService.findById((Integer) session.getAttribute("employeeId")).getDepartement(), employeeService.findById((Integer) session.getAttribute("employeeId")), effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(1), typeDemandeService.findById(1));
+        Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(1), typeDemandeService.findById(1));
         demandeBesoinService.create(demandeBesoin);
         return "redirect:/home?section=creerPoste";
     }
@@ -104,7 +104,7 @@ public class HomeController {
                                   @RequestParam String reason,
                                   @RequestParam int effectif) {
         DemandeBesoin demande = demandeBesoinService.findById(id);
-        posteService.update(demande.getPoste().getId(), new Poste(title));
+        demande.setIntitulePoste(title);
         demande.setEffectif(effectif);
         demande.setMotif(reason);
         demande.setBudget(budget);

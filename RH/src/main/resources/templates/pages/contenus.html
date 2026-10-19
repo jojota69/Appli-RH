@@ -49,7 +49,7 @@
         <input id="title" name="title" type="text" placeholder="Ex. Développeur Java" required>
 
         <label for="department">Département</label>
-        <input id="department" name="department" type="text" th:value="${employeeConnecte.departement.libelle}" readonly>
+        <input id="department" name="department" type="text" th:value="${employeeConnecte.fiche.departement.libelle}" readonly>
 
         <label for="contractType">Type de contrat</label>
         <select id="contractType" name="contractType" required>
@@ -91,9 +91,9 @@
         <div class="postes">
             
             <article class="poste" th:each="liste : ${listeDemandes}">
-                <div class="poste-icon" th:text="${liste.poste.initiales}">AR</div>
+                <div class="poste-icon" th:text="${liste.intitulePoste}">AR</div>
                 <div class="poste-details">
-                    <h2 th:text="${liste.poste.libelle}">Intitulé du poste</h2>
+                    <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
                     <p th:text="${'Manager : ' + liste.manager.prenom + ' ' + liste.manager.nom}">Manager</p>
                     <p th:text="${'Effectif : ' + liste.effectif + ' | Budget : ' + liste.budget + ' | Date souhaitée : ' + liste.dateSouhaitee}">Détails de la demande</p>
                 </div>
@@ -128,7 +128,7 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Demande reçue</p>
-                <h1 th:text="${demandeSelectionnee.poste.libelle}">Détail de la demande</h1>
+                <h1 th:text="${demandeSelectionnee.intitulePoste}">Détail de la demande</h1>
                 <p class="intro" th:text="${'Demande #' + demandeSelectionnee.id}">Demande</p>
             </div>
             <div>
@@ -166,7 +166,7 @@
         </div>
         <form class="panel position-form" method="post" th:action="@{/demande/{id}/modifier(id=${demandeSelectionnee.id})}">
             <label for="title">Intitulé du poste</label>
-            <input id="title" name="title" type="text" th:value="${demandeSelectionnee.poste.libelle}" required>
+            <input id="title" name="title" type="text" th:value="${demandeSelectionnee.intitulePoste}" required>
             <label for="reason">Motif du recrutement</label>
             <textarea id="reason" name="reason" rows="4" th:text="${demandeSelectionnee.motif}"></textarea>
             <label for="budget">Budget demandé</label>

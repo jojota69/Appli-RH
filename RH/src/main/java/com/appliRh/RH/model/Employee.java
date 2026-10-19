@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,19 +36,17 @@ public class Employee {
     @JoinColumn(name = "id_role", nullable = false)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_dept", nullable = false)
-    private Departement departement;
+    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
+    private EmployeeFiche fiche;
 
     protected Employee() {
     }
 
-    public Employee(String nom, String prenom, String email, Role role, Departement departement) {
+    public Employee(String nom, String prenom, String email, Role role) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.role = role;
-        this.departement = departement;
     }
 
     public Integer getId() {
@@ -86,12 +85,12 @@ public class Employee {
         this.role = role;
     }
 
-    public Departement getDepartement() {
-        return departement;
+    public EmployeeFiche getFiche() {
+        return fiche;
     }
 
-    public void setDepartement(Departement departement) {
-        this.departement = departement;
+    public void setFiche(EmployeeFiche fiche) {
+        this.fiche = fiche;
     }
 
     public String getMotDePasse() {
