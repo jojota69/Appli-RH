@@ -79,6 +79,9 @@ CREATE TABLE demande_besoin (
     date_souhaitee DATE NOT NULL,
     id_etat INT NOT NULL,
     id_type INT NOT NULL,
+    id_type_contrat INT NOT NULL,
+    CONSTRAINT fk_demande_besoin_type_contrat
+        FOREIGN KEY (id_type_contrat) REFERENCES type_contrat(id_type),
     CONSTRAINT fk_demande_besoin_departement
         FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
     CONSTRAINT fk_demande_besoin_manager

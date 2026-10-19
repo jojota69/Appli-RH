@@ -53,13 +53,17 @@ public class DemandeBesoin {
     @JoinColumn(name = "id_type", nullable = false)
     private TypeDemande typeDemande;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_type_contrat", nullable = false)
+    private TypeContrat typeContrat;
+
     protected DemandeBesoin() {
     }
 
     public DemandeBesoin(String intitulePoste, Departement departement, Employee manager,
                          Integer effectif, String motif, BigDecimal budget,
                          LocalDate dateSouhaitee, EtatDemande etatDemande,
-                         TypeDemande typeDemande) {
+                         TypeDemande typeDemande, TypeContrat typeContrat) {
         this.intitulePoste = intitulePoste;
         this.departement = departement;
         this.manager = manager;
@@ -69,6 +73,7 @@ public class DemandeBesoin {
         this.dateSouhaitee = dateSouhaitee;
         this.etatDemande = etatDemande;
         this.typeDemande = typeDemande;
+        this.typeContrat = typeContrat;
     }
 
     public Integer getId() {
@@ -145,5 +150,13 @@ public class DemandeBesoin {
 
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
+    }
+
+    public TypeContrat getTypeContrat() {
+        return typeContrat;
+    }
+
+    public void setTypeContrat(TypeContrat typeContrat) {
+        this.typeContrat = typeContrat;
     }
 }

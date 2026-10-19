@@ -18,6 +18,7 @@ import com.appliRh.RH.model.DemandeBesoin;
 import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
+import com.appliRh.RH.service.TypeContratService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,13 +31,15 @@ public class HomeController {
     private final DemandeBesoinService demandeBesoinService;
     private final EtatDemandeService etatDemandeService;
     private final TypeDemandeService typeDemandeService;
+    private final TypeContratService typeContratService;
 
-    public HomeController(EmployeeService employeeService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService) {
+    public HomeController(EmployeeService employeeService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService) {
         this.employeeService = employeeService;
         this.posteService = posteService;
         this.demandeBesoinService = demandeBesoinService;
         this.etatDemandeService = etatDemandeService;
         this.typeDemandeService = typeDemandeService;
+        this.typeContratService = typeContratService;
     }
 
     @GetMapping("/home")
@@ -60,6 +63,7 @@ public class HomeController {
             default -> "listePostes";
         };
 
+        model.addAttribute("listeTypeContrat", typeContratService.findAll());
         model.addAttribute("section", selectedSection);
         model.addAttribute("employeeConnecte", employee);
         model.addAttribute("error", error);
@@ -90,7 +94,7 @@ public class HomeController {
             
         }
         Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
-        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(1));
+        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(1), typeContratService.findByLibelle(contractType));
         demandeBesoinService.create(demandeBesoin);
         return "redirect:/home?section=creerPoste";
     }
@@ -102,13 +106,15 @@ public class HomeController {
                                   @RequestParam BigDecimal budget,
                                   @RequestParam String startDate,
                                   @RequestParam String reason,
-                                  @RequestParam int effectif) {
+                                  @RequestParam int effectif,
+                                  @RequestParam String contractType) {
         DemandeBesoin demande = demandeBesoinService.findById(id);
         demande.setIntitulePoste(title);
         demande.setEffectif(effectif);
         demande.setMotif(reason);
         demande.setBudget(budget);
         demande.setDateSouhaitee(java.time.LocalDate.parse(startDate));
+        demande.setTypeContrat(typeContratService.findByLibelle(contractType));
         demandeBesoinService.update(id, demande);
         return "redirect:/home?section=voirDemande&demandeId=" + id;
     }
