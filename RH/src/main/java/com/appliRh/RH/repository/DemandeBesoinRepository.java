@@ -21,4 +21,9 @@ public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, In
 	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})
 	@Query("SELECT d FROM DemandeBesoin d WHERE d.departement.id = :idDept")
 	List<DemandeBesoin> findDemandeDept(@Param("idDept") Integer idDept);
+
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})
+	@Query("SELECT d FROM DemandeBesoin d WHERE d.departement.id = :idDepartement AND d.etatDemande.id = :idEtat")
+	List<DemandeBesoin> findByDepartementAndEtat(@Param("idDepartement") Integer idDepartement,
+			@Param("idEtat") Integer idEtat);
 }

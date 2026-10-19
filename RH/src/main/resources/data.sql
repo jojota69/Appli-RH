@@ -13,6 +13,7 @@ INSERT INTO departement (libelle) VALUES
 
 INSERT INTO poste (libelle) VALUES
 ('Responsable ressources humaines'),
+('Manager'),
 ('Developpeur logiciel'),
 ('Comptable'),
 ('Charge marketing'),
@@ -25,7 +26,8 @@ INSERT INTO type_contrat (libelle) VALUES
 
 INSERT INTO type_demande (libelle) VALUES
 ('Creation de poste'),
-('Remplacement');
+('Remplacement'),
+('Suppression de poste');
 
 INSERT INTO etat_demande (libelle) VALUES
 ('Valide'),
@@ -52,7 +54,7 @@ INSERT INTO demande_besoin
     (intitule_poste, id_dept, id_manager, effectif, motif, budget,
     date_souhaitee, id_etat, id_type, id_type_contrat)
 VALUES
-    ('Developpeur logiciel', 2, 2, 2,
+    ('Manager', 2, 2, 2,
      'Renforcement de equipe technique', 7000.00,
     '2026-01-15', 1, 1, 1),
     ('Assistant ressources humaines', 1, 2, 1,

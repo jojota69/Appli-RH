@@ -18,6 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	@Query("select e from Employee e join fetch e.role where e.email = :email")
 	Optional<Employee> findByEmail(@Param("email") String email);
 
-	@Query("SELECT e FROM Employee e JOIN FETCH e.role JOIN FETCH e.fiche f WHERE f.departement.id = :idDept")
+	@Query("SELECT e FROM Employee e JOIN FETCH e.role JOIN FETCH e.fiche f JOIN FETCH f.poste WHERE f.departement.id = :idDept")
     List<Employee> findByDepartementId(@Param("idDept") Integer idDept);
 }

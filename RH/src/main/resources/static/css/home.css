@@ -163,6 +163,12 @@ input {
   gap: 24px;
   margin-bottom: 36px;
 }
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .eyebrow {
   margin: 0 0 10px;
   color: var(--coral);

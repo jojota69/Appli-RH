@@ -33,6 +33,11 @@ public class DemandeBesoinService {
         return repository.findDemandeDept(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<DemandeBesoin> DepartementEtat(Integer idDepartement, Integer idEtat) {
+        return repository.findByDepartementAndEtat(idDepartement, idEtat);
+    }
+
     @Transactional
     public DemandeBesoin create(DemandeBesoin demandeBesoin) {
         return repository.save(demandeBesoin);

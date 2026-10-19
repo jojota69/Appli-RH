@@ -32,8 +32,11 @@
             <main class="content">
                 <!-- MANAGER -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager')}" th:switch="${section}">
-                    <div th:case="'listePostes'">
-                        <div th:replace="~{pages/contenus :: listePoste}"></div>
+                    <div th:case="'listeEmployee'">
+                        <div th:replace="~{pages/contenus :: listeEmployee}"></div>
+                    </div>
+                    <div th:case="'listePostesDemandes'">
+                        <div th:replace="~{pages/contenus :: listePostesDemandes}"></div>
                     </div>
                     <div th:case="'voirPoste'">
                         <div th:replace="~{pages/contenus :: voirPoste}"></div>

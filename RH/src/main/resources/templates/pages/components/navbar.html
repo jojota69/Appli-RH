@@ -2,8 +2,8 @@
 
 <nav class="sidebar" aria-label="Navigation principale">
     <!-- <div class="nav-heading">Espace RH</div> -->
-    <a th:classappend="${section == 'listePostes'} ? ' active' : ''" th:href="@{/home(section='listePostes')}">
-        <span class="nav-icon">⌂</span> Liste des postes
+    <a th:classappend="${section == 'listeEmployee'} ? ' active' : ''" th:href="@{/home(section='listeEmployee')}">
+        <span class="nav-icon">⌂</span> Liste des employés
     </a>
     <a th:classappend="${section == 'listeDemandes'} ? ' active' : ''" th:href="@{/home(section='listeDemandes')}">
         <span class="nav-icon">⌂</span> Liste des demandes
