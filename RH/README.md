@@ -32,6 +32,8 @@ La section `listeDemandes` affiche maintenant les demandes reçues avec le poste
 
 Les postes affichent désormais les initiales de chaque mot dans leur icône, par exemple `Administrateur Reseau` devient `AR`.
 
+Les icônes de `listePoste` affichent les initiales du prénom et du nom de l'employé, tandis que les icônes de `listeDemandes` affichent les initiales de chaque mot de l'intitulé du poste, par exemple `Developpeur Junior` devient `DJ`.
+
 Les sections `modifDemande` et `voirDemande` permettent respectivement de modifier et de consulter une demande sélectionnée par son identifiant.
 
 La vue détail utilise désormais `demandeSelectionnee.id` pour accéder à la modification, car la variable `liste` n'existe que dans la boucle d'affichage des demandes.
