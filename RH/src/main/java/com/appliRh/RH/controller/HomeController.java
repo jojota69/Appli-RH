@@ -112,14 +112,14 @@ public class HomeController {
                                   @RequestParam String startDate,
                                   @RequestParam String reason,
                                   @RequestParam int effectif,
-                                  @RequestParam String contractType) {
+                                  @RequestParam int contractType) {
         DemandeBesoin demande = demandeBesoinService.findById(id);
         demande.setIntitulePoste(title);
         demande.setEffectif(effectif);
         demande.setMotif(reason);
         demande.setBudget(budget);
         demande.setDateSouhaitee(java.time.LocalDate.parse(startDate));
-        demande.setTypeContrat(typeContratService.findByLibelle(contractType));
+        demande.setTypeContrat(typeContratService.findById(contractType));
         demandeBesoinService.update(id, demande);
         return "redirect:/home?section=voirDemande&demandeId=" + id;
     }
