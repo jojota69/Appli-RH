@@ -65,6 +65,19 @@ public class Employee {
         return prenom;
     }
 
+    public String getInitiales() {
+        StringBuilder initiales = new StringBuilder();
+        ajouterInitiale(initiales, prenom);
+        ajouterInitiale(initiales, nom);
+        return initiales.toString();
+    }
+
+    private void ajouterInitiale(StringBuilder initiales, String nom) {
+        if (nom != null && !nom.isBlank()) {
+            initiales.append(Character.toUpperCase(nom.trim().charAt(0)));
+        }
+    }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }

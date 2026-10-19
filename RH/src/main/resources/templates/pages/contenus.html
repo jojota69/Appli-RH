@@ -18,7 +18,7 @@
         <div class="postes">
             
             <article class="poste" th:each="liste : ${listeEmployee}">
-                <!-- <div class="poste-icon" th:text="${liste.nom}">IT</div> -->
+                <div class="poste-icon" th:text="${liste.initiales}">AD</div>
                 <div class="poste-details">
                     <h2 th:text="${liste.nom}"></h2>
                     <h2 th:text="${liste.prenom}"></h2>
@@ -126,7 +126,7 @@
         <div class="postes">
             
             <article class="poste" th:each="liste : ${listeDemandes}">
-                <div class="poste-icon" th:text="${liste.intitulePoste}">AR</div>
+                <div class="poste-icon" th:text="${liste.initiales}">DJ</div>
                 <div class="poste-details">
                     <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
                     <p th:text="${'Manager : ' + liste.manager.prenom + ' ' + liste.manager.nom}">Manager</p>

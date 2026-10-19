@@ -84,6 +84,18 @@ public class DemandeBesoin {
         return intitulePoste;
     }
 
+    public String getInitiales() {
+        if (intitulePoste == null || intitulePoste.isBlank()) {
+            return "";
+        }
+
+        StringBuilder initiales = new StringBuilder();
+        for (String mot : intitulePoste.trim().split("\\s+")) {
+            initiales.append(Character.toUpperCase(mot.charAt(0)));
+        }
+        return initiales.toString();
+    }
+
     public void setIntitulePoste(String intitulePoste) {
         this.intitulePoste = intitulePoste;
     }
