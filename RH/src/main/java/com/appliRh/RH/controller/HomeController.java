@@ -90,7 +90,7 @@ public class HomeController {
             
         }
         Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
-        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(1), typeDemandeService.findById(1));
+        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(1));
         demandeBesoinService.create(demandeBesoin);
         return "redirect:/home?section=creerPoste";
     }
