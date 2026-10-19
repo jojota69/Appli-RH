@@ -11,11 +11,11 @@ import java.util.List;
 public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, Integer> {
 
 	@Override
-	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande", "typeContrat"})
 	java.util.Optional<DemandeBesoin> findById(Integer id);
 
 	@Override
-	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande", "typeContrat"})
 	List<DemandeBesoin> findAll();
 
 	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})

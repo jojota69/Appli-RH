@@ -50,6 +50,7 @@ public class DemandeBesoinService {
         existing.setDateSouhaitee(demandeBesoin.getDateSouhaitee());
         existing.setEtatDemande(demandeBesoin.getEtatDemande());
         existing.setTypeDemande(demandeBesoin.getTypeDemande());
+        existing.setTypeContrat(demandeBesoin.getTypeContrat());
         return repository.save(existing);
     }
 

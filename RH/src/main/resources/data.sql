@@ -50,11 +50,11 @@ VALUES
 
 INSERT INTO demande_besoin
     (intitule_poste, id_dept, id_manager, effectif, motif, budget,
-     date_souhaitee, id_etat, id_type)
+    date_souhaitee, id_etat, id_type, id_type_contrat)
 VALUES
     ('Developpeur logiciel', 2, 2, 2,
      'Renforcement de equipe technique', 7000.00,
-     '2026-01-15', 1, 1),
+    '2026-01-15', 1, 1, 1),
     ('Assistant ressources humaines', 1, 2, 1,
      'Remplacement de employe absent', 3000.00,
-     '2026-02-01', 3, 2);
+    '2026-02-01', 3, 2, 2);
