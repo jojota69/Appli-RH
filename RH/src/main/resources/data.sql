@@ -41,7 +41,8 @@ INSERT INTO employee (nom, prenom, email, id_role, mot_de_passe) VALUES
 ('Bernard', 'Sophie', 'sophie.bernard@rh.local', 4, 'password123'),
 ('Petit', 'Lucas', 'lucas.petit@rh.local', 1, 'password123'),
 ('Robert', 'Emma', 'emma.robert@rh.local', 1, 'password123'),
-('Moreau', 'Julien', 'julien.moreau@rh.local', 5, 'password123');
+('Moreau', 'Julien', 'julien.moreau@rh.local', 5, 'password123'),
+('Leroy', 'Karim', 'karim.leroy@rh.local', 2, 'password123');
 
 INSERT INTO employee_fiche
     (id_emp, id_poste, id_dept, id_type_contrat, salaire, date_naissance)
@@ -51,7 +52,8 @@ VALUES
     (3, 5, 1, 2, 3000.00, '1992-01-17'),
     (4, 3, 3, 1, 3800.00, '1986-11-05'),
     (5, 4, 4, 3, 1800.00, '1998-06-30'),
-    (6, 6, 2, 1, 3900.00, '1991-09-14');
+    (6, 6, 2, 1, 3900.00, '1991-09-14'),
+    (7, 2, 3, 1, 3600.00, '1989-03-21');
 
 INSERT INTO demande_besoin
     (intitule_poste, id_dept, id_manager, effectif, motif, budget,

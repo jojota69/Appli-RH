@@ -1,67 +1,54 @@
-<!-- Pour Manager -->
+<th:block th:fragment="nav">
+    <!-- Pour Manager -->
+    <nav class="sidebar" aria-label="Navigation principale"
+         th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager')}">
+        <a th:classappend="${section == 'listeEmployee'} ? ' active' : ''" th:href="@{/home(section='listeEmployee')}">
+            <span class="nav-icon">⌂</span> Liste des employés
+        </a>
+        <a th:classappend="${section == 'listeDemandes'} ? ' active' : ''" th:href="@{/home(section='listeDemandes')}">
+            <span class="nav-icon">⌂</span> Liste des demandes
+        </a>
+        <div class="nav-footer">
+            <div class="nav-heading">Raccourcis</div>
+            <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+        </div>
+    </nav>
 
-<nav class="sidebar" aria-label="Navigation principale">
-    <!-- <div class="nav-heading">Espace RH</div> -->
-    <a th:classappend="${section == 'listeEmployee'} ? ' active' : ''" th:href="@{/home(section='listeEmployee')}">
-        <span class="nav-icon">⌂</span> Liste des employés
-    </a>
-    <a th:classappend="${section == 'listeDemandes'} ? ' active' : ''" th:href="@{/home(section='listeDemandes')}">
-        <span class="nav-icon">⌂</span> Liste des demandes
-    </a>
-    <div class="nav-footer">
-        <div class="nav-heading">Raccourcis</div>
-        <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
-    </div>
-</nav>
+    <!-- Pour RH -->
+    <nav class="sidebar" aria-label="Navigation principale"
+         th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Responsable RH')}">
+        <a th:classappend="${section == 'listeDemandesRH'} ? ' active' : ''" th:href="@{/home(section='listeDemandesRH')}">
+            <span class="nav-icon">⌂</span> Liste des demandes
+        </a>
+        <div class="nav-footer">
+            <div class="nav-heading">Raccourcis</div>
+            <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+        </div>
+    </nav>
 
-<!-- Pour RH -->
-
-<!-- <nav class="sidebar" aria-label="Navigation principale">
-    <div class="nav-heading">Espace RH</div>
-    <a th:classappend="${section == 'dashboard'} ? ' active' : ''" th:href="@{/home(section='dashboard')}">
-        <span class="nav-icon">⌂</span> Tableau de bord
-    </a>
-    <a th:classappend="${section == 'employees'} ? ' active' : ''" th:href="@{/home(section='employees')}">
-        <span class="nav-icon">♙</span> Collaborateurs
-    </a>
-    <a th:classappend="${section == 'recruitment'} ? ' active' : ''" th:href="@{/home(section='recruitment')}">
-        <span class="nav-icon">+</span> Recrutement
-    </a>
-    <a th:classappend="${section == 'contracts'} ? ' active' : ''" th:href="@{/home(section='contracts')}">
-        <span class="nav-icon">▤</span> Contrats
-    </a>
-    <a th:classappend="${section == 'onboarding'} ? ' active' : ''" th:href="@{/home(section='onboarding')}">
-        <span class="nav-icon">✓</span> Onboarding
-    </a>
-    <div class="nav-footer">
-        <div class="nav-heading">Raccourcis</div>
-        <a href="#"><span class="nav-icon">?</span> Centre d'aide</a>
-        <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
-    </div>
-</nav> -->
-
-<!-- Pour Direction -->
-
-<!-- <nav class="sidebar" aria-label="Navigation principale">
-    <div class="nav-heading">Espace RH</div>
-    <a th:classappend="${section == 'dashboard'} ? ' active' : ''" th:href="@{/home(section='dashboard')}">
-        <span class="nav-icon">⌂</span> Tableau de bord
-    </a>
-    <a th:classappend="${section == 'employees'} ? ' active' : ''" th:href="@{/home(section='employees')}">
-        <span class="nav-icon">♙</span> Collaborateurs
-    </a>
-    <a th:classappend="${section == 'recruitment'} ? ' active' : ''" th:href="@{/home(section='recruitment')}">
-        <span class="nav-icon">+</span> Recrutement
-    </a>
-    <a th:classappend="${section == 'contracts'} ? ' active' : ''" th:href="@{/home(section='contracts')}">
-        <span class="nav-icon">▤</span> Contrats
-    </a>
-    <a th:classappend="${section == 'onboarding'} ? ' active' : ''" th:href="@{/home(section='onboarding')}">
-        <span class="nav-icon">✓</span> Onboarding
-    </a>
-    <div class="nav-footer">
-        <div class="nav-heading">Raccourcis</div>
-        <a href="#"><span class="nav-icon">?</span> Centre d'aide</a>
-        <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
-    </div>
-</nav> -->
+    <!-- Pour Administrateur -->
+    <nav class="sidebar" aria-label="Navigation principale"
+         th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}">
+        <div class="nav-heading">Espace administrateur</div>
+        <a th:classappend="${section == 'dashboard'} ? ' active' : ''" th:href="@{/home(section='dashboard')}">
+            <span class="nav-icon">⌂</span> Tableau de bord
+        </a>
+        <a th:classappend="${section == 'employees'} ? ' active' : ''" th:href="@{/home(section='employees')}">
+            <span class="nav-icon">♙</span> Collaborateurs
+        </a>
+        <a th:classappend="${section == 'recruitment'} ? ' active' : ''" th:href="@{/home(section='recruitment')}">
+            <span class="nav-icon">+</span> Recrutement
+        </a>
+        <a th:classappend="${section == 'contracts'} ? ' active' : ''" th:href="@{/home(section='contracts')}">
+            <span class="nav-icon">▤</span> Contrats
+        </a>
+        <a th:classappend="${section == 'onboarding'} ? ' active' : ''" th:href="@{/home(section='onboarding')}">
+            <span class="nav-icon">✓</span> Onboarding
+        </a>
+        <div class="nav-footer">
+            <div class="nav-heading">Raccourcis</div>
+            <a href="#"><span class="nav-icon">?</span> Centre d'aide</a>
+            <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+        </div>
+    </nav>
+</th:block>

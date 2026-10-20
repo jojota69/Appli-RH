@@ -203,6 +203,14 @@ h1 {
   color: var(--white);
   background: var(--ink);
 }
+.button-success {
+  color: var(--white);
+  background: #3c9b70;
+}
+.button-danger {
+  color: var(--white);
+  background: #c95757;
+}
 .metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

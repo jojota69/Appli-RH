@@ -68,7 +68,15 @@
 
                 <!-- RH -->
                 <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Responsable RH')}" th:switch="${section}">
-                    <p>Ho an'ny Responsable RH</p>
+                    <div th:case="listeDemandesRH">
+                        <div th:replace="~{pages/contenus :: listeDemandesRH}"></div>
+                    </div>
+                    <div th:case="voirDemandeRH">
+                        <div th:replace="~{pages/contenus :: voirDemandeRH}"></div>
+                    </div>
+                    <div th:case="*">
+                        <div th:replace="~{pages/contenus :: *}"></div>
+                    </div>
                 </div>
 
                 <!-- RECRUTEUR -->
