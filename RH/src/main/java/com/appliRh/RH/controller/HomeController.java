@@ -2,7 +2,6 @@ package com.appliRh.RH.controller;
 
 import java.util.List;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +19,6 @@ import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
-import com.appliRh.RH.service.EmployeeFicheService;
-import com.appliRh.RH.model.Poste;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,16 +32,14 @@ public class HomeController {
     private final EtatDemandeService etatDemandeService;
     private final TypeDemandeService typeDemandeService;
     private final TypeContratService typeContratService;
-    private final EmployeeFicheService employeeFicheService;
 
-    public HomeController(EmployeeService employeeService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, EmployeeFicheService employeeFicheService ) {
+    public HomeController(EmployeeService employeeService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService) {
         this.employeeService = employeeService;
         this.posteService = posteService;
         this.demandeBesoinService = demandeBesoinService;
         this.etatDemandeService = etatDemandeService;
         this.typeDemandeService = typeDemandeService;
         this.typeContratService = typeContratService;
-        this.employeeFicheService = employeeFicheService;
     }
 
     @GetMapping("/home")
@@ -67,20 +62,9 @@ public class HomeController {
                 List<DemandeBesoin> demandesDuDepartement = responsableRh
                         ? demandeBesoinService.getToutesDemandesEnAttente()
                         : demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
-                List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(
-                        employee.getFiche().getDepartement().getId(), 1);
-                List<Long> nombreParPoste = new ArrayList<>();
-                for (DemandeBesoin demande : listePostesDemandes) {
-                    Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
-                    long count = employeeFicheService.nombre(
-                            employee.getFiche().getDepartement().getId(),
-                            poste.getId());
-                    nombreParPoste.add(count);
-                }
-
         String selectedSection = switch (section) {
             case "listeEmployee", 
-                "listePostesDemandes", 
+                "listePostesActuels",
                 "voirPoste", 
                 "remplacerPoste", 
                 "listeDemandes", 
@@ -100,15 +84,12 @@ public class HomeController {
         model.addAttribute("section", selectedSection);
         model.addAttribute("employeeConnecte", employee);
         model.addAttribute("error", error);
-        model.addAttribute("nombreParPoste", nombreParPoste);
-
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
         model.addAttribute("listeDemandes", demandesDuDepartement);
         model.addAttribute("listeDemandesRH", responsableRh
                 ? demandesDuDepartement
                 : List.of());
-        model.addAttribute("listePostesDemandes", listePostesDemandes);
         if (demandeId != null && (selectedSection.equals("modifDemande")
             || selectedSection.equals("voirDemande")
             || selectedSection.equals("voirDemandeRH"))) {
@@ -188,6 +169,6 @@ public class HomeController {
         DemandeBesoin demande = demandeBesoinService.findById(id);
         DemandeBesoin demandeBesoin = new DemandeBesoin(demande.getIntitulePoste(), manager.getFiche().getDepartement(), manager, demande.getEffectif(), demande.getMotif(), demande.getBudget(), java.time.LocalDate.now(), etatDemandeService.findById(3), typeDemandeService.findById(3), typeContratService.findByLibelle(demande.getTypeContrat().getLibelle()));
         demandeBesoinService.create(demandeBesoin);
-        return "redirect:/home?section=listePostesDemandes";
+        return "redirect:/home?section=listePostesActuels";
     }
 }

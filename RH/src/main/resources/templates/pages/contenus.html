@@ -13,7 +13,7 @@
                 <p class="intro">Consultez les postes disponibles dans votre équipe.</p>
             </div>
             <div class="page-actions">
-                <a class="button button-secondary" th:href="@{/home(section='listePostesDemandes')}">Voir la liste des postes</a>
+                <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Voir la liste des postes</a>
                 <a class="button button-primary" th:href="@{/home(section='creerPoste')}">+ Créer un poste</a>
             </div>
         </div>
@@ -45,29 +45,26 @@
     </section>
 </div>
 
-<!-- Liste des postes demandes -->
-<div th:fragment="listePostesDemandes">
+<!-- Situation actuelle des postes -->
+<div th:fragment="listePostesActuels">
     <section class="content-section">
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Espace manager</p>
                 <h1>Liste des postes</h1>
-                <p class="intro">Consultez les postes validés de votre département.</p>
+                <p class="intro">Consultez la situation actuelle des postes de votre département.</p>
             </div>
-            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
+            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Retour aux employés</a>
         </div>
 
         <div class="postes">
-            <article class="poste" th:each="liste : ${listePostesDemandes}">
-                <div class="poste-icon" th:text="${liste.initiales}">DP</div>
+            <article class="poste" th:each="liste : ${listeEmployee}">
+                <div class="poste-icon" th:text="${liste.initiales}">EM</div>
                 <div class="poste-details">
-                    <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
-                    <p th:text="${'Effectif : ' + nombreParPoste.get(listePostesDemandes.indexOf(liste))+ '/' + liste.effectif}">Détails du poste</p>
+                    <h2 th:text="${liste.fiche.poste.libelle}">Intitulé du poste</h2>
+                    <p th:text="${'Employé : ' + liste.prenom + ' ' + liste.nom}">Employé</p>
                 </div>
-                <a th:href="@{/poste/{id}/supprimer(id=${liste.id})}" th:onclick="return confirm('La demande de suppression sera envoyée au responsable RH.');">
-                    <button class="button button-secondary" type="button">Supprimer</button>
-                </a>
-                <a th:href="@{/home(section='voirDemande', demandeId=${liste.id})}">
+                <a th:href="@{/home(section='voirPoste', selectedEmployeeId=${liste.id})}">
                     <button class="icon-button" type="button" aria-label="Voir le poste" title="Voir le poste">
                         <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
@@ -76,7 +73,7 @@
                     </button>
                 </a>
             </article>
-            <p th:if="${#lists.isEmpty(listePostesDemandes)}">Aucun poste trouvé.</p>
+            <p th:if="${#lists.isEmpty(listeEmployee)}">Aucun poste trouvé dans votre département.</p>
         </div>
     </section>
 </div>
@@ -90,7 +87,7 @@
                 <h1>Détail de l'employé</h1>
                 <p class="intro" th:text="${ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}">Employé sélectionné</p>
             </div>
-            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux postes</a>
+            <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
         </div>
 
         <div class="panel request-details">
@@ -105,7 +102,7 @@
     </section>
     <section class="content-section" th:unless="${ficheSelectionnee != null}">
         <h1>Fiche employé introuvable</h1>
-        <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux postes</a>
+        <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
     </section>
 </div>
 
@@ -118,7 +115,7 @@
             <h1>Créer un poste</h1>
             <p class="intro">Décrivez le besoin de votre équipe.</p>
         </div>
-        <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux postes</a>
+        <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
     </div>
 
     <div class="form-error" th:if="${error != null}" th:text="${error}" role="alert"></div>
@@ -149,7 +146,7 @@
         <input type="number" name="effectif" id="effectif" required>
 
         <div class="form-actions">
-            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Annuler</a>
+            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Annuler</a>
             <button class="button button-primary" type="submit">Enregistrer le poste</button>
         </div>
     </form>
@@ -278,7 +275,7 @@
                 <h1>Remplacer un employé</h1>
                 <p class="intro" th:text="${'Reprise du poste de ' + ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}">Reprise du poste</p>
             </div>
-            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
+            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Retour aux employés</a>
         </div>
 
         <form class="panel position-form" action="/demande" method="post">
@@ -311,14 +308,14 @@
             <input id="replacement-effectif" name="effectif" type="number" value="1" min="1" required>
 
             <div class="form-actions">
-                <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Annuler</a>
+                <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Annuler</a>
                 <button class="button button-primary" type="submit">Enregistrer le remplacement</button>
             </div>
         </form>
     </section>
     <section class="content-section" th:unless="${ficheSelectionnee != null}">
         <h1>Employé introuvable</h1>
-        <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
+        <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Retour aux employés</a>
     </section>
 </div>
 
