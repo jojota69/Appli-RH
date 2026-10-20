@@ -53,6 +53,9 @@
                     <div th:case="'creerPoste'">
                         <div th:replace="~{pages/contenus :: creerPoste}"></div>
                     </div>
+                    <div th:case="'remplacerPoste'">
+                        <div th:replace="~{pages/contenus :: remplacerPoste}"></div>
+                    </div>
                     <div th:case="*">
                         <div th:replace="~{pages/contenus :: *}"></div>
                     </div>

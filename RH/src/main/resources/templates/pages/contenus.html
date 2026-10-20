@@ -36,6 +36,9 @@
                         </svg>
                     </button>
                 </a>
+                <a class="button button-secondary" th:href="@{/home(section='remplacerPoste', selectedEmployeeId=${liste.id})}" aria-label="Remplacer l'employé" title="Remplacer l'employé">
+                    Remplacer
+                </a>
             </article>
 
         </div>
@@ -264,5 +267,57 @@
     <section class="content-section" th:unless="${demandeSelectionnee != null}">
         <h1>Demande introuvable</h1>
         <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Retour aux demandes</a>
+    </section>
+</div>
+
+<div th:fragment="remplacerPoste">
+    <section class="content-section" th:if="${ficheSelectionnee != null}">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Espace manager</p>
+                <h1>Remplacer un employé</h1>
+                <p class="intro" th:text="${'Reprise du poste de ' + ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}">Reprise du poste</p>
+            </div>
+            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
+        </div>
+
+        <form class="panel position-form" action="/demande" method="post">
+            <input type="hidden" name="remplacement" value="true">
+
+            <label for="replacement-title">Intitulé du poste</label>
+            <input id="replacement-title" name="title" type="text" th:value="${ficheSelectionnee.poste.libelle}" required>
+
+            <label for="replacement-department">Département</label>
+            <input id="replacement-department" name="department" type="text" th:value="${ficheSelectionnee.departement.libelle}" readonly>
+
+            <label for="replacement-contractType">Type de contrat</label>
+            <select id="replacement-contractType" name="contractType" required>
+                <option th:each="typeContrat : ${listeTypeContrat}"
+                        th:value="${typeContrat.libelle}"
+                        th:text="${typeContrat.libelle}"
+                        th:selected="${typeContrat.id == ficheSelectionnee.typeContrat.id}"></option>
+            </select>
+
+            <label for="replacement-reason">Motif du recrutement</label>
+            <textarea id="replacement-reason" name="reason" rows="4" th:text="${'Remplacement de ' + ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}"></textarea>
+
+            <label for="replacement-budget">Budget demandé</label>
+            <input id="replacement-budget" name="budget" type="number" step="0.01" th:value="${ficheSelectionnee.salaire}" required>
+
+            <label for="replacement-startDate">Date de début souhaitée</label>
+            <input id="replacement-startDate" name="startDate" type="date" th:value="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}" required>
+
+            <label for="replacement-effectif">Nombre d'effectifs</label>
+            <input id="replacement-effectif" name="effectif" type="number" value="1" min="1" required>
+
+            <div class="form-actions">
+                <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Annuler</a>
+                <button class="button button-primary" type="submit">Enregistrer le remplacement</button>
+            </div>
+        </form>
+    </section>
+    <section class="content-section" th:unless="${ficheSelectionnee != null}">
+        <h1>Employé introuvable</h1>
+        <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
     </section>
 </div>

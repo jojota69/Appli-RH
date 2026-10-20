@@ -46,4 +46,6 @@ Dans la liste des employés, le nom et le prénom sont affichés côte à côte 
 
 La liste des employés affiche également le nom du poste associé à chaque fiche employé.
 
+La section `remplacerPoste` reprend le formulaire de création de poste et préremplit l'intitulé, le département, le type de contrat, le budget et le motif à partir de la fiche de l'employé sélectionné. La demande créée est enregistrée avec le type `Remplacement`.
+
 Les données de démonstration contiennent également le poste `Ingenieur reseau` et l'employé `Julien Moreau`, rattachés au département `Informatique` dans `employee_fiche`.

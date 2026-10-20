@@ -75,7 +75,7 @@ public class HomeController {
                 }
 
         String selectedSection = switch (section) {
-            case "listeEmployee", "listePostesDemandes", "voirPoste", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listeEmployee", "listePostesDemandes", "voirPoste", "remplacerPoste", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
             default -> "listeEmployee";
         };
 
@@ -92,7 +92,7 @@ public class HomeController {
         if (demandeId != null && (selectedSection.equals("modifDemande") || selectedSection.equals("voirDemande"))) {
             model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
         }
-        if (selectedEmployeeId != null && selectedSection.equals("voirPoste")) {
+        if (selectedEmployeeId != null && (selectedSection.equals("voirPoste") || selectedSection.equals("remplacerPoste"))) {
             EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
             model.addAttribute("ficheSelectionnee", ficheSelectionnee);
         }
@@ -107,7 +107,8 @@ public class HomeController {
                          @RequestParam String reason,
                          @RequestParam BigDecimal budget,
                          @RequestParam String startDate,
-                         @RequestParam int effectif
+                         @RequestParam int effectif,
+                         @RequestParam(defaultValue = "false") boolean remplacement
                          , HttpSession session) {
         try {
             posteService.findByLibelle(title);
@@ -116,7 +117,8 @@ public class HomeController {
             
         }
         Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
-        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(1), typeContratService.findByLibelle(contractType));
+        int typeDemandeId = remplacement ? 2 : 1;
+        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(typeDemandeId), typeContratService.findByLibelle(contractType));
         demandeBesoinService.create(demandeBesoin);
         return "redirect:/home?section=creerPoste";
     }
