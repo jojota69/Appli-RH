@@ -25,7 +25,7 @@
                 <div class="poste-details">
                     <h2 th:text="${liste.nom}"></h2>
                     <h2 th:text="${liste.prenom}"></h2>
-                    <!-- <p></p> -->
+                    <p th:text="${liste.fiche.poste.libelle}">Nom du poste</p>
                 </div>
                 <span class="poste-status" th:text="${liste.fiche.poste != null ? liste.fiche.poste.libelle : 'Ouvert'}">Ouvert</span>
                 <a th:classappend="${section == 'voirPoste'} ? ' active' : ''" th:href="@{/home(section='voirPoste', selectedEmployeeId=${liste.id})}">

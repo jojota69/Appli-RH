@@ -17,7 +17,8 @@ INSERT INTO poste (libelle) VALUES
 ('Developpeur logiciel'),
 ('Comptable'),
 ('Charge marketing'),
-('Assistant ressources humaines');
+('Assistant ressources humaines'),
+('Ingenieur reseau');
 
 INSERT INTO type_contrat (libelle) VALUES
 ('Contrat a duree indeterminee'),
@@ -39,7 +40,8 @@ INSERT INTO employee (nom, prenom, email, id_role, mot_de_passe) VALUES
 ('Martin', 'Thomas', 'thomas.martin@rh.local', 2, 'password123'),
 ('Bernard', 'Sophie', 'sophie.bernard@rh.local', 4, 'password123'),
 ('Petit', 'Lucas', 'lucas.petit@rh.local', 1, 'password123'),
-('Robert', 'Emma', 'emma.robert@rh.local', 1, 'password123');
+('Robert', 'Emma', 'emma.robert@rh.local', 1, 'password123'),
+('Moreau', 'Julien', 'julien.moreau@rh.local', 5, 'password123');
 
 INSERT INTO employee_fiche
     (id_emp, id_poste, id_dept, id_type_contrat, salaire, date_naissance)
@@ -48,7 +50,8 @@ VALUES
     (2, 2, 2, 1, 3500.00, '1990-08-23'),
     (3, 5, 1, 2, 3000.00, '1992-01-17'),
     (4, 3, 3, 1, 3800.00, '1986-11-05'),
-    (5, 4, 4, 3, 1800.00, '1998-06-30');
+    (5, 4, 4, 3, 1800.00, '1998-06-30'),
+    (6, 6, 2, 1, 3900.00, '1991-09-14');
 
 INSERT INTO demande_besoin
     (intitule_poste, id_dept, id_manager, effectif, motif, budget,

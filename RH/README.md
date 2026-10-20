@@ -43,3 +43,7 @@ Les demandes reçues disposent maintenant d'icônes SVG pour la modification et 
 La section `voirPoste` récupère la fiche de l'employé sélectionné avec le paramètre `selectedEmployeeId` et affiche son identité, son poste, son département, son type de contrat, son salaire et sa date de naissance. Les associations de la fiche sont chargées avec l'employé pour permettre leur rendu dans Thymeleaf. Cette section est également déclarée dans le routage Thymeleaf de `home.html`.
 
 Dans la liste des employés, le nom et le prénom sont affichés côte à côte grâce à la mise en page flexible de `.poste-details`, avec retour à la ligne possible lorsque l'espace disponible est insuffisant.
+
+La liste des employés affiche également le nom du poste associé à chaque fiche employé.
+
+Les données de démonstration contiennent également le poste `Ingenieur reseau` et l'employé `Julien Moreau`, rattachés au département `Informatique` dans `employee_fiche`.
