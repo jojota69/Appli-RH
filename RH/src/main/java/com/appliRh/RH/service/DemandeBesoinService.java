@@ -12,9 +12,11 @@ import java.util.List;
 public class DemandeBesoinService {
 
     private final DemandeBesoinRepository repository;
+    private final EtatDemandeService etatDemandeService;
 
-    public DemandeBesoinService(DemandeBesoinRepository repository) {
+    public DemandeBesoinService(DemandeBesoinRepository repository, EtatDemandeService etatDemandeService) {
         this.repository = repository;
+        this.etatDemandeService = etatDemandeService;
     }
 
     @Transactional(readOnly = true)
@@ -31,6 +33,11 @@ public class DemandeBesoinService {
     @Transactional(readOnly = true)
     public List<DemandeBesoin> getDemandeEnAttente(Integer id){
         return repository.findDemandeDept(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DemandeBesoin> getToutesDemandesEnAttente() {
+        return repository.findByEtat(3);
     }
 
     @Transactional(readOnly = true)
@@ -57,6 +64,13 @@ public class DemandeBesoinService {
         existing.setTypeDemande(demandeBesoin.getTypeDemande());
         existing.setTypeContrat(demandeBesoin.getTypeContrat());
         return repository.save(existing);
+    }
+
+    @Transactional
+    public DemandeBesoin changerEtat(Integer id, Integer idEtat) {
+        DemandeBesoin demande = findById(id);
+        demande.setEtatDemande(etatDemandeService.findById(idEtat));
+        return repository.save(demande);
     }
 
     @Transactional

@@ -61,8 +61,12 @@ public class HomeController {
                 // partie nampiko 
                 List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getFiche().getDepartement().getId());
                 
-                //maka ny demande en attente
-                List<DemandeBesoin> demandesDuDepartement = demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
+                // Les managers voient les demandes de leur département.
+                // Le Responsable RH voit toutes les demandes en cours de traitement.
+                boolean responsableRh = "Responsable RH".equalsIgnoreCase(employee.getRole().getLibelle());
+                List<DemandeBesoin> demandesDuDepartement = responsableRh
+                        ? demandeBesoinService.getToutesDemandesEnAttente()
+                        : demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
                 List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(
                         employee.getFiche().getDepartement().getId(), 1);
                 List<Long> nombreParPoste = new ArrayList<>();
@@ -89,7 +93,7 @@ public class HomeController {
                 "contracts", 
                 "onboarding",
                 "listeDemandesRH" -> section;
-            default -> "listeEmployee";
+            default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
         model.addAttribute("listeTypeContrat", typeContratService.findAll());
@@ -101,7 +105,9 @@ public class HomeController {
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
         model.addAttribute("listeDemandes", demandesDuDepartement);
-        model.addAttribute("listeDemandesRH", demandesDuDepartement);
+        model.addAttribute("listeDemandesRH", responsableRh
+                ? demandesDuDepartement
+                : List.of());
         model.addAttribute("listePostesDemandes", listePostesDemandes);
         if (demandeId != null && (selectedSection.equals("modifDemande")
             || selectedSection.equals("voirDemande")
@@ -159,6 +165,20 @@ public class HomeController {
         demande.setTypeContrat(typeContratService.findById(contractType));
         demandeBesoinService.update(id, demande);
         return "redirect:/home?section=voirDemande&demandeId=" + id;
+    }
+
+    @PostMapping("/demande/{id}/valider")
+    @PareFeu(roles = "Responsable RH")
+    public String validerDemande(@org.springframework.web.bind.annotation.PathVariable Integer id) {
+        demandeBesoinService.changerEtat(id, 1);
+        return "redirect:/home?section=listeDemandesRH";
+    }
+
+    @PostMapping("/demande/{id}/rejeter")
+    @PareFeu(roles = "Responsable RH")
+    public String rejeterDemande(@org.springframework.web.bind.annotation.PathVariable Integer id) {
+        demandeBesoinService.changerEtat(id, 2);
+        return "redirect:/home?section=listeDemandesRH";
     }
 
     @GetMapping ("/poste/{id}/supprimer")

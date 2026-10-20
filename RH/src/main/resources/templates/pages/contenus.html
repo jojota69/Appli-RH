@@ -335,7 +335,7 @@
 
         <div class="postes">
             
-            <article class="poste" th:each="liste : ${listeDemandes}">
+            <article class="poste" th:each="liste : ${listeDemandesRH}">
                 <div class="poste-icon" th:text="${liste.initiales}">DJ</div>
                 <div class="poste-details">
                     <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
@@ -392,8 +392,12 @@
             <p><strong>Type :</strong> <span th:text="${demandeSelectionnee.typeDemande.libelle}">Type</span></p>
         </div>
         <div class="form-actions request-actions">
-            <button class="button button-success" type="button">Valider</button>
-            <button class="button button-danger" type="button">Rejeter</button>
+            <form method="post" th:action="@{/demande/{id}/valider(id=${demandeSelectionnee.id})}">
+                <button class="button button-success" type="submit">Valider</button>
+            </form>
+            <form method="post" th:action="@{/demande/{id}/rejeter(id=${demandeSelectionnee.id})}">
+                <button class="button button-danger" type="submit">Rejeter</button>
+            </form>
         </div>
     </section>
     <section class="content-section" th:unless="${demandeSelectionnee != null}">
