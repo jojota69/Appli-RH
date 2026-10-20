@@ -110,11 +110,13 @@ public class HomeController {
                          @RequestParam int effectif,
                          @RequestParam(defaultValue = "false") boolean remplacement
                          , HttpSession session) {
-        try {
-            posteService.findByLibelle(title);
-            return "redirect:/home?section=creerPoste&error=Poste deja existant";
-        } catch (EntityNotFoundException e) {
-            
+        if (!remplacement) {
+            try {
+                posteService.findByLibelle(title);
+                return "redirect:/home?section=creerPoste&error=Poste deja existant";
+            } catch (EntityNotFoundException e) {
+                // Le poste peut être réutilisé lorsqu'il s'agit d'un remplacement.
+            }
         }
         Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
         int typeDemandeId = remplacement ? 2 : 1;
