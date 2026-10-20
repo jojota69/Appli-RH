@@ -62,7 +62,7 @@ public class HomeController {
                 List<Employee> listeEmployee = employeeService.getEmployeesByDepartement(employee.getFiche().getDepartement().getId());
                 
                 //maka ny demande en attente
-                List<DemandeBesoin> listeDemandes = demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
+                List<DemandeBesoin> demandesDuDepartement = demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
                 List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(
                         employee.getFiche().getDepartement().getId(), 1);
                 List<Long> nombreParPoste = new ArrayList<>();
@@ -75,7 +75,20 @@ public class HomeController {
                 }
 
         String selectedSection = switch (section) {
-            case "listeEmployee", "listePostesDemandes", "voirPoste", "remplacerPoste", "listeDemandes", "modifDemande", "voirDemande","creerPoste", "employees", "recruitment", "contracts", "onboarding" -> section;
+            case "listeEmployee", 
+                "listePostesDemandes", 
+                "voirPoste", 
+                "remplacerPoste", 
+                "listeDemandes", 
+                "modifDemande", 
+                "voirDemande",
+                "voirDemandeRH",
+                "creerPoste", 
+                "employees", 
+                "recruitment", 
+                "contracts", 
+                "onboarding",
+                "listeDemandesRH" -> section;
             default -> "listeEmployee";
         };
 
@@ -87,9 +100,12 @@ public class HomeController {
 
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
-        model.addAttribute("listeDemandes", listeDemandes);
+        model.addAttribute("listeDemandes", demandesDuDepartement);
+        model.addAttribute("listeDemandesRH", demandesDuDepartement);
         model.addAttribute("listePostesDemandes", listePostesDemandes);
-        if (demandeId != null && (selectedSection.equals("modifDemande") || selectedSection.equals("voirDemande"))) {
+        if (demandeId != null && (selectedSection.equals("modifDemande")
+            || selectedSection.equals("voirDemande")
+            || selectedSection.equals("voirDemandeRH"))) {
             model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
         }
         if (selectedEmployeeId != null && (selectedSection.equals("voirPoste") || selectedSection.equals("remplacerPoste"))) {
