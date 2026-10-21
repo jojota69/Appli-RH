@@ -244,6 +244,8 @@ public class HomeController {
     @PareFeu(roles = "Direction")
     public String validerDemandeDirection(@org.springframework.web.bind.annotation.PathVariable Integer id) {
         demandeBesoinService.changerEtat(id, 1);
+        DemandeBesoin demande = demandeBesoinService.findById(id);
+        posteService.create(new Poste(demande.getIntitulePoste()));
         return "redirect:/home?section=listeDemandesDirection";
     }
 
