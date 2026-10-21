@@ -53,6 +53,7 @@ public class HomeController {
                        @RequestParam(required = false) String error,
                        @RequestParam(required = false) Integer demandeId,
                        @RequestParam(required = false) Integer selectedEmployeeId,
+                       @RequestParam(required = false) Integer demandeBesoinId,
                        Model model,
                        HttpSession session){
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
@@ -118,7 +119,14 @@ public class HomeController {
             || selectedSection.equals("voirDemandeRH"))) {
             model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
         }
-        if (selectedEmployeeId != null && (selectedSection.equals("voirPoste") || selectedSection.equals("remplacerPoste"))) {
+        if (demandeBesoinId != null && selectedSection.equals("voirPoste")) {
+            model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeBesoinId));
+            model.addAttribute("nombrePersonnesPoste",
+                    employeeFicheService.nombre(
+                            demandeBesoinService.findById(demandeBesoinId).getDepartement().getId(),
+                            posteService.findByLibelle(demandeBesoinService.findById(demandeBesoinId).getIntitulePoste()).getId()));
+        }
+        if (selectedEmployeeId != null && selectedSection.equals("remplacerPoste")) {
             EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
             model.addAttribute("ficheSelectionnee", ficheSelectionnee);
             Integer departementId = ficheSelectionnee.getDepartement().getId();
