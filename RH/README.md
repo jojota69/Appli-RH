@@ -50,7 +50,7 @@ La section `remplacerPoste` reprend le formulaire de création de poste et prér
 
 Les données de démonstration contiennent également le poste `Ingenieur reseau` et l'employé `Julien Moreau`, rattachés au département `Informatique` dans `employee_fiche`.
 
-La section `creerPoste` propose un bouton `+` qui ajoute dynamiquement un nouveau formulaire de demande. La logique est isolée dans `src/main/resources/static/js/creer-poste.js` et chaque formulaire conserve sa soumission indépendante vers `/demande`.
+La section `creerPoste` propose un bouton `+` qui ajoute dynamiquement un nouveau formulaire de demande. Tous les formulaires sont regroupés dans une seule soumission vers `/demande`, puis enregistrés comme plusieurs demandes distinctes.
 
 Les boutons `Annuler`, `Enregistrer le poste` et `+` de la section `creerPoste` sont regroupés dans une zone d'actions située à droite, en dehors des formulaires, avec la classe `.position-form-actions`.
 

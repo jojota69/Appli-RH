@@ -62,6 +62,11 @@ public class DemandeBesoinService {
     }
 
     @Transactional
+    public List<DemandeBesoin> createAll(List<DemandeBesoin> demandes) {
+        return repository.saveAll(demandes);
+    }
+
+    @Transactional
     public DemandeBesoin update(Integer id, DemandeBesoin demandeBesoin) {
         DemandeBesoin existing = findById(id);
         existing.setIntitulePoste(demandeBesoin.getIntitulePoste());

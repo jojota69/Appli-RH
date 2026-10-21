@@ -2,6 +2,7 @@ package com.appliRh.RH.controller;
 
 import java.util.List;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,28 +116,55 @@ public class HomeController {
 
     @PostMapping("/demande")
     @PareFeu(roles = "Manager")
-    public String demande(@RequestParam String title,
-                         @RequestParam String department,
-                         @RequestParam String contractType,
-                         @RequestParam String reason,
-                         @RequestParam BigDecimal budget,
-                         @RequestParam String startDate,
-                         @RequestParam int effectif,
+    public String demande(@RequestParam List<String> title,
+                         @RequestParam List<String> department,
+                         @RequestParam List<String> contractType,
+                         @RequestParam List<String> reason,
+                         @RequestParam List<BigDecimal> budget,
+                         @RequestParam List<String> startDate,
+                         @RequestParam List<Integer> effectif,
                          @RequestParam(defaultValue = "false") boolean remplacement
                          , HttpSession session) {
+        if (title.isEmpty()
+                || title.size() != department.size()
+                || title.size() != contractType.size()
+                || title.size() != reason.size()
+                || title.size() != budget.size()
+                || title.size() != startDate.size()
+                || title.size() != effectif.size()) {
+            return "redirect:/home?section=creerPoste&error=Formulaire de poste incomplet";
+        }
+
         if (!remplacement) {
-            try {
-                posteService.findByLibelle(title);
-                return "redirect:/home?section=creerPoste&error=Poste deja existant";
-            } catch (EntityNotFoundException e) {
-                // Le poste peut être réutilisé lorsqu'il s'agit d'un remplacement.
+            List<String> titresDejaUtilises = new ArrayList<>();
+            for (String titre : title) {
+                if (titresDejaUtilises.contains(titre) || posteExiste(titre)) {
+                    return "redirect:/home?section=creerPoste&error=Poste deja existant : " + titre;
+                }
+                titresDejaUtilises.add(titre);
             }
         }
+
         Employee manager = employeeService.findById((Integer) session.getAttribute("employeeId"));
         int typeDemandeId = remplacement ? 2 : 1;
-        DemandeBesoin demandeBesoin = new DemandeBesoin(title, manager.getFiche().getDepartement(), manager, effectif, reason, budget, java.time.LocalDate.parse(startDate), etatDemandeService.findById(3), typeDemandeService.findById(typeDemandeId), typeContratService.findByLibelle(contractType));
-        demandeBesoinService.create(demandeBesoin);
+        List<DemandeBesoin> demandes = new ArrayList<>();
+        for (int i = 0; i < title.size(); i++) {
+            demandes.add(new DemandeBesoin(title.get(i), manager.getFiche().getDepartement(), manager,
+                    effectif.get(i), reason.get(i), budget.get(i), java.time.LocalDate.parse(startDate.get(i)),
+                    etatDemandeService.findById(3), typeDemandeService.findById(typeDemandeId),
+                    typeContratService.findByLibelle(contractType.get(i))));
+        }
+        demandeBesoinService.createAll(demandes);
         return "redirect:/home?section=creerPoste";
+    }
+
+    private boolean posteExiste(String titre) {
+        try {
+            posteService.findByLibelle(titre);
+            return true;
+        } catch (EntityNotFoundException e) {
+            return false;
+        }
     }
 
     @PostMapping("/demande/{id}/modifier")
