@@ -1,5 +1,5 @@
 INSERT INTO role (libelle) VALUES
-('Administrateur'),
+('Direction'),
 ('Manager'),
 ('Responsable RH'),
 ('Recruteur'),
@@ -18,7 +18,8 @@ INSERT INTO poste (libelle) VALUES
 ('Comptable'),
 ('Charge marketing'),
 ('Assistant ressources humaines'),
-('Ingenieur reseau');
+('Ingenieur reseau'),
+('Direction');
 
 INSERT INTO type_contrat (libelle) VALUES
 ('Contrat a duree indeterminee'),
@@ -33,7 +34,8 @@ INSERT INTO type_demande (libelle) VALUES
 INSERT INTO etat_demande (libelle) VALUES
 ('Valide'),
 ('Rejete'),
-('En cours de traitement');
+('En cours de traitement'),
+('Valide RH');
 
 INSERT INTO employee (nom, prenom, email, id_role, mot_de_passe) VALUES
 ('Dupont', 'Alice', 'alice.dupont@rh.local', 3, 'password123'),
@@ -50,8 +52,8 @@ VALUES
     (1, 1, 1, 1, 4200.00, '1988-04-12'),
     (2, 2, 2, 1, 3500.00, '1990-08-23'),
     (3, 5, 1, 2, 3000.00, '1992-01-17'),
-    (4, 3, 3, 1, 3800.00, '1986-11-05'),
-    (5, 4, 4, 3, 1800.00, '1998-06-30'),
+    (4, 8, 3, 1, 3800.00, '1986-11-05'),
+    (5, 8, 4, 3, 1800.00, '1998-06-30'),
     (6, 6, 2, 1, 3900.00, '1991-09-14'),
     (7, 2, 3, 1, 3600.00, '1989-03-21');
 

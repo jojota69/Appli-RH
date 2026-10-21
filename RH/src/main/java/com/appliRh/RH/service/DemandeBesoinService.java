@@ -33,12 +33,19 @@ public class DemandeBesoinService {
 
     @Transactional(readOnly = true)
     public List<DemandeBesoin> getDemandeEnAttente(Integer id){
-        return repository.findDemandeDept(id);
+        return repository.findByDepartementAndEtat(id, 3);
     }
 
     @Transactional(readOnly = true)
     public List<DemandeBesoin> getToutesDemandesEnAttente() {
         return repository.findByEtat(3);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DemandeBesoin> getToutesDemandesEnCoursOuValideRh() {
+        return repository.findByEtatsLibelles(List.of(
+                "en cours de traitement",
+                "valide rh"));
     }
 
     @Transactional(readOnly = true)

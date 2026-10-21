@@ -61,9 +61,17 @@
                     </div>
                 </div>
 
-                <!-- ADMINISTRATEUR -->
-                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Administrateur')}" th:switch="${section}">
-                    <p>Ho an'ny Direction</p>
+                <!-- DIRECTION -->
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Direction')}" th:switch="${section}">
+                    <div th:case="listeDemandesDirection">
+                        <div th:replace="~{pages/contenus :: listeDemandesDirection}"></div>
+                    </div>
+                    <div th:case="voirDemande">
+                        <div th:replace="~{pages/contenus :: voirDemande}"></div>
+                    </div>
+                    <div th:case="*">
+                        <div th:replace="~{pages/contenus :: *}"></div>
+                    </div>
                 </div>
 
                 <!-- RH -->

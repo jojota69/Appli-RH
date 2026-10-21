@@ -63,8 +63,10 @@ public class HomeController {
                 // Les managers voient les demandes de leur département.
                 // Le Responsable RH voit toutes les demandes en cours de traitement.
                 boolean responsableRh = "Responsable RH".equalsIgnoreCase(employee.getRole().getLibelle());
+                boolean direction = "Direction".equalsIgnoreCase(employee.getRole().getLibelle());
                 List<DemandeBesoin> demandesDuDepartement = responsableRh
                         ? demandeBesoinService.getToutesDemandesEnAttente()
+                    : direction ? demandeBesoinService.getToutesDemandesEnCoursOuValideRh()
                         : demandeBesoinService.getDemandeEnAttente(employee.getFiche().getDepartement().getId());
         String selectedSection = switch (section) {
             case "listeEmployee", 
@@ -75,6 +77,7 @@ public class HomeController {
                 "modifDemande", 
                 "voirDemande",
                 "voirDemandeRH",
+                "listeDemandesDirection",
                 "creerPoste", 
                 "employees", 
                 "recruitment", 
@@ -94,6 +97,9 @@ public class HomeController {
         model.addAttribute("listeDemandesRH", responsableRh
                 ? demandesDuDepartement
                 : List.of());
+        model.addAttribute("listeDemandesDirection", direction
+            ? demandesDuDepartement
+            : List.of());
         if (demandeId != null && (selectedSection.equals("modifDemande")
             || selectedSection.equals("voirDemande")
             || selectedSection.equals("voirDemandeRH"))) {
@@ -190,7 +196,7 @@ public class HomeController {
     @PostMapping("/demande/{id}/valider")
     @PareFeu(roles = "Responsable RH")
     public String validerDemande(@org.springframework.web.bind.annotation.PathVariable Integer id) {
-        demandeBesoinService.changerEtat(id, 1);
+        demandeBesoinService.changerEtat(id, 4);
         return "redirect:/home?section=listeDemandesRH";
     }
 
@@ -199,6 +205,20 @@ public class HomeController {
     public String rejeterDemande(@org.springframework.web.bind.annotation.PathVariable Integer id) {
         demandeBesoinService.changerEtat(id, 2);
         return "redirect:/home?section=listeDemandesRH";
+    }
+
+    @PostMapping("/demande/{id}/valider-direction")
+    @PareFeu(roles = "Direction")
+    public String validerDemandeDirection(@org.springframework.web.bind.annotation.PathVariable Integer id) {
+        demandeBesoinService.changerEtat(id, 1);
+        return "redirect:/home?section=listeDemandesDirection";
+    }
+
+    @PostMapping("/demande/{id}/rejeter-direction")
+    @PareFeu(roles = "Direction")
+    public String rejeterDemandeDirection(@org.springframework.web.bind.annotation.PathVariable Integer id) {
+        demandeBesoinService.changerEtat(id, 2);
+        return "redirect:/home?section=listeDemandesDirection";
     }
 
     @GetMapping ("/poste/{id}/supprimer")

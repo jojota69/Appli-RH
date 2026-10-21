@@ -27,10 +27,23 @@ public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, In
 	@Query("SELECT d FROM DemandeBesoin d WHERE d.etatDemande.id = :idEtat")
 	List<DemandeBesoin> findByEtat(@Param("idEtat") Integer idEtat);
 
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande", "typeContrat"})
+	@Query("SELECT d FROM DemandeBesoin d WHERE d.etatDemande.id IN :idsEtat")
+	List<DemandeBesoin> findByEtats(@Param("idsEtat") List<Integer> idsEtat);
+
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande", "typeContrat"})
+	@Query("SELECT d FROM DemandeBesoin d WHERE LOWER(d.etatDemande.libelle) IN :libellesEtat")
+	List<DemandeBesoin> findByEtatsLibelles(@Param("libellesEtat") List<String> libellesEtat);
+
 	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande"})
 	@Query("SELECT d FROM DemandeBesoin d WHERE d.departement.id = :idDepartement AND d.etatDemande.id = :idEtat")
 	List<DemandeBesoin> findByDepartementAndEtat(@Param("idDepartement") Integer idDepartement,
 			@Param("idEtat") Integer idEtat);
+
+	@EntityGraph(attributePaths = {"departement", "manager", "etatDemande", "typeDemande", "typeContrat"})
+	@Query("SELECT d FROM DemandeBesoin d WHERE d.departement.id = :idDepartement AND d.etatDemande.id IN :idsEtat")
+	List<DemandeBesoin> findByDepartementAndEtats(@Param("idDepartement") Integer idDepartement,
+			@Param("idsEtat") List<Integer> idsEtat);
 
 	@Query("SELECT COALESCE(SUM(d.budget), 0) FROM DemandeBesoin d " +
 			"WHERE d.departement.id = :idDepartement AND d.intitulePoste = :intitulePoste")
