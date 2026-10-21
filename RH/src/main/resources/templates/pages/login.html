@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Login</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="app-shell login-shell">
+        <header class="topbar">
+            <a class="brand" th:href="@{/}">
+                <span class="brand-mark">RH</span>
+                <span>
+                    <strong>Appli RH</strong>
+                </span>
+            </a>
+        </header>
+
+        <main class="login-content">
+            <section class="login-intro">
+                <p class="eyebrow">Espace professionnel</p>
+                <h1>Bienvenue dans votre espace RH.</h1>
+                <p>Retrouvez vos équipes, vos recrutements et vos processus au même endroit.</p>
+            </section>
+
+            <form class="login-panel" action="/login" method="post">
+                <h2>Se connecter</h2>
+                <p class="login-subtitle">Accédez à votre tableau de bord</p>
+                <label for="email">Identifiant</label>
+                <input type="text" name="email" id="email" autocomplete="email" required>
+                <label for="motDePasse">Mot de passe</label>
+                <input type="password" name="motDePasse" id="motDePasse" autocomplete="current-password" required>
+                <button class="button button-primary login-button" type="submit">Se connecter <span>→</span></button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

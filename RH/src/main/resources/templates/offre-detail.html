@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${offre.titre + ' - Appli RH'}">Détail de l'offre</title>
+    <link rel="stylesheet" th:href="@{/css/offres-public.css}">
+</head>
+<body>
+    <main class="offers-page detail-page">
+        <a class="back-link" th:href="@{/}">← Retour aux offres</a>
+        <article class="offer-detail">
+            <div class="offer-card-topline">
+                <span class="offer-mark"
+                      th:text="${offre.titre != null and offre.titre.length() >= 2 ? #strings.toUpperCase(offre.titre.substring(0, 2)) : 'OF'}">OF</span>
+                <span class="offer-status" th:text="${offre.statut}">Publiee</span>
+            </div>
+            <h1 th:text="${offre.titre}">Intitulé du poste</h1>
+            <p class="detail-description" th:text="${offre.description}">Description de l'offre</p>
+            <div class="offer-meta">
+                <span th:text="${'Publiée le ' + offre.datePublication}">Date de publication</span>
+                <span th:if="${offre.dateCloture != null}"
+                      th:text="${'Clôture le ' + offre.dateCloture}">Date de clôture</span>
+            </div>
+        </article>
+
+        <section class="application-panel">
+            <h2>Postuler à cette offre</h2>
+            <p class="intro">Envoyez vos coordonnées pour transmettre votre candidature.</p>
+            <p class="form-message form-message-success" th:if="${success != null}" th:text="${success}"></p>
+            <p class="form-message form-message-error" th:if="${error != null}" th:text="${error}"></p>
+
+            <form class="application-form" method="post"
+                  th:action="@{/offres-disponibles/{id}/candidature(id=${offre.id})}">
+                <div class="form-grid">
+                    <label>Nom
+                        <input type="text" name="nom" required>
+                    </label>
+                    <label>Prénom
+                        <input type="text" name="prenom" required>
+                    </label>
+                    <label>Email
+                        <input type="email" name="email" required>
+                    </label>
+                    <label>Téléphone
+                        <input type="tel" name="telephone" required>
+                    </label>
+                </div>
+                <label>Lien vers votre CV (facultatif)
+                    <input type="url" name="cvUrl" placeholder="https://...">
+                </label>
+                <button class="offer-button" type="submit">Envoyer ma candidature</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -20,9 +20,9 @@ public class LoginController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String index() {
-        return "index";
+        return "pages/login";
     }
 
     @PostMapping("/login")
