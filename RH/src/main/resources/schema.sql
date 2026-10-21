@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS entretien CASCADE;
 DROP TABLE IF EXISTS candidature CASCADE;
 DROP TABLE IF EXISTS candidat CASCADE;
 DROP TABLE IF EXISTS offre CASCADE;
+DROP TABLE IF EXISTS etat_offre CASCADE;
 DROP TABLE IF EXISTS employee_fiche CASCADE;
 DROP TABLE IF EXISTS type_demande CASCADE;
 DROP TABLE IF EXISTS type_contrat CASCADE;
@@ -106,6 +107,11 @@ CREATE TABLE budget_alloue (
     UNIQUE (mois, annee)
 );
 
+CREATE TABLE etat_offre (
+    id_etat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE offre (
     id_offre INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_besoin INT NOT NULL,
@@ -114,14 +120,16 @@ CREATE TABLE offre (
     description TEXT NOT NULL,
     date_publication DATE NOT NULL,
     date_cloture DATE,
-    statut VARCHAR(50) NOT NULL,
+    id_etat INT NOT NULL,
     CONSTRAINT uq_offre_demande UNIQUE (id_besoin),
     CONSTRAINT fk_offre_demande
         FOREIGN KEY (id_besoin) REFERENCES demande_besoin(id_besoin),
     CONSTRAINT fk_offre_recruteur
         FOREIGN KEY (id_recruteur) REFERENCES employee(id_emp),
     CONSTRAINT ck_offre_dates
-        CHECK (date_cloture IS NULL OR date_cloture >= date_publication)
+        CHECK (date_cloture IS NULL OR date_cloture >= date_publication),
+    CONSTRAINT fk_offre_etat
+        FOREIGN KEY (id_etat) REFERENCES etat_offre(id_etat)
 );
 
 CREATE TABLE candidat (

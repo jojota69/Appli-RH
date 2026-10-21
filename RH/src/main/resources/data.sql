@@ -74,12 +74,17 @@ VALUES
 INSERT INTO budget_alloue (valeur, mois, annee)
 VALUES (100000.00, 1, 2026);
 
+INSERT INTO etat_offre (libelle) VALUES
+('Publiee'),
+('Fermee'),
+('Suspendue');
+
 INSERT INTO offre
-    (id_besoin, id_recruteur, titre, description, date_publication, date_cloture, statut)
+    (id_besoin, id_recruteur, titre, description, date_publication, date_cloture, id_etat)
 VALUES
     (1, 3, 'Manager technique',
      'Encadrer une equipe technique et accompagner les projets informatiques.',
-     '2026-01-20', NULL, 'Publiee');
+     '2026-01-20', NULL, 1);
 
 INSERT INTO candidat
     (nom, prenom, email, telephone, cv_url)
