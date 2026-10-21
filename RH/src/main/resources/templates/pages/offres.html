@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Offres d'emploi</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" th:href="@{/home}">
+                <span class="brand-mark">RH</span>
+                <span><strong>Appli RH</strong></span>
+            </a>
+            <div class="topbar-actions">
+                <span class="status">
+                    <span class="status-dot"></span>
+                    <span th:text="${employeeConnecte.prenom + ' ' + employeeConnecte.nom}">Utilisateur connecté</span>
+                </span>
+                <span class="avatar"
+                      th:text="${#strings.substring(employeeConnecte.prenom, 0, 1) + #strings.substring(employeeConnecte.nom, 0, 1)}">UC</span>
+                <a th:href="@{/logout}">Déconnexion</a>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <div th:replace="~{pages/components/navbar :: nav}"></div>
+
+            <main class="content">
+                <div th:replace="~{pages/contenus :: listeOffres}"></div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

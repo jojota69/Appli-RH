@@ -55,3 +55,11 @@ La section `creerPoste` propose un bouton `+` qui ajoute dynamiquement un nouvea
 Les boutons `Annuler`, `Enregistrer le poste` et `+` de la section `creerPoste` sont regroupés dans une zone d'actions située à droite, en dehors des formulaires, avec la classe `.position-form-actions`.
 
 Les formulaires supplémentaires de création de poste possèdent un bouton `Supprimer`. Le premier formulaire n'en possède pas, les formulaires sont séparés visuellement et le script empêche la suppression du dernier formulaire restant.
+
+La page `offres.html` reprend le layout principal de `/home` avec le header, la navbar et `home.css`. Elle est accessible via `/offres` pour le rôle Recruteur et affiche l'état initial des offres d'emploi.
+
+La route `/offres` est gérée par `OffreController`, séparément de `HomeController`, tout en conservant la vérification du rôle Recruteur et les données nécessaires à la vue.
+
+Le lien « Offres d'emploi » de la navbar pointe vers `/offres`, et la vue `offres.html` insère désormais le fragment `listeOffres` afin d'afficher les offres récupérées.
+
+Le schéma et les données de démonstration couvrent désormais le bloc Recrutement : `offre`, `candidat`, `candidature`, `entretien` et `evaluation_candidat`. Une offre publiée, deux candidatures, un entretien et une évaluation sont insérés dans `data.sql`.

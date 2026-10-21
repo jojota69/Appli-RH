@@ -67,3 +67,32 @@ VALUES
     ('Assistant ressources humaines', 1, 2, 1,
      'Remplacement de employe absent', 3000.00,
     '2026-02-01', 3, 2, 2);
+
+INSERT INTO offre
+    (id_besoin, id_recruteur, titre, description, date_publication, date_cloture, statut)
+VALUES
+    (1, 3, 'Manager technique',
+     'Encadrer une equipe technique et accompagner les projets informatiques.',
+     '2026-01-20', NULL, 'Publiee');
+
+INSERT INTO candidat
+    (nom, prenom, email, telephone, cv_url)
+VALUES
+    ('Diallo', 'Nina', 'nina.diallo@example.com', '0601020304', '/cv/nina-diallo.pdf'),
+    ('Roux', 'Hugo', 'hugo.roux@example.com', '0605060708', '/cv/hugo-roux.pdf');
+
+INSERT INTO candidature
+    (id_offre, id_candidat, date_candidature, statut)
+VALUES
+    (1, 1, '2026-01-23', 'Preselectionnee'),
+    (1, 2, '2026-01-24', 'Recue');
+
+INSERT INTO entretien
+    (id_candidature, date_entretien, type_entretien, compte_rendu)
+VALUES
+    (1, '2026-01-28 10:00:00', 'Visio', 'Bonne experience en management technique.');
+
+INSERT INTO evaluation_candidat
+    (id_entretien, id_evaluateur, note, commentaire, date_evaluation)
+VALUES
+    (1, 1, 16.50, 'Profil pertinent pour le poste.', '2026-01-28');
