@@ -63,6 +63,11 @@ public class DemandeBesoinService {
         return repository.sumBudgetByDepartement(idDepartement);
     }
 
+    @Transactional(readOnly = true)
+    public BigDecimal getBudgetEngageExcept(Integer idDemande) {
+        return repository.sumBudgetByEtatsExceptDemande(idDemande, List.of(1, 3, 4));
+    }
+
     @Transactional
     public DemandeBesoin create(DemandeBesoin demandeBesoin) {
         return repository.save(demandeBesoin);

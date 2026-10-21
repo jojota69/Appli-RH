@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS poste CASCADE;
 DROP TABLE IF EXISTS departement CASCADE;
 DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS budget_alloue CASCADE;
 
 CREATE TABLE role (
     id_role INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -90,4 +91,12 @@ CREATE TABLE demande_besoin (
         FOREIGN KEY (id_etat) REFERENCES etat_demande(id_etat),
     CONSTRAINT fk_demande_besoin_type
         FOREIGN KEY (id_type) REFERENCES type_demande(id_type)
+);
+
+CREATE TABLE budget_alloue (
+    id_budget SERIAL PRIMARY KEY,
+    valeur NUMERIC(15,2) NOT NULL,
+    mois INTEGER NOT NULL,
+    annee INTEGER NOT NULL,
+    UNIQUE (mois, annee)
 );

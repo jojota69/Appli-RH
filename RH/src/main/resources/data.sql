@@ -67,3 +67,6 @@ VALUES
     ('Assistant ressources humaines', 1, 2, 1,
      'Remplacement de employe absent', 3000.00,
     '2026-02-01', 3, 2, 2);
+
+INSERT INTO budget_alloue (valeur, mois, annee)
+VALUES (100000.00, 1, 2026);

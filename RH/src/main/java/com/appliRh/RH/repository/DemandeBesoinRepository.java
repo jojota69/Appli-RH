@@ -53,4 +53,9 @@ public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, In
 	@Query("SELECT COALESCE(SUM(d.budget), 0) FROM DemandeBesoin d " +
 			"WHERE d.departement.id = :idDepartement")
 	BigDecimal sumBudgetByDepartement(@Param("idDepartement") Integer idDepartement);
+
+	@Query("SELECT COALESCE(SUM(d.budget), 0) FROM DemandeBesoin d " +
+			"WHERE d.id <> :idDemande AND d.etatDemande.id IN :idsEtat")
+	BigDecimal sumBudgetByEtatsExceptDemande(@Param("idDemande") Integer idDemande,
+			@Param("idsEtat") List<Integer> idsEtat);
 }

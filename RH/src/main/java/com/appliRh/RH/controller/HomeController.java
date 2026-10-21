@@ -21,6 +21,7 @@ import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
+import com.appliRh.RH.service.BudgetAlloueService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,8 +36,9 @@ public class HomeController {
     private final EtatDemandeService etatDemandeService;
     private final TypeDemandeService typeDemandeService;
     private final TypeContratService typeContratService;
+    private final BudgetAlloueService budgetAlloueService;
 
-    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService) {
+    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, BudgetAlloueService budgetAlloueService) {
         this.employeeService = employeeService;
         this.employeeFicheService = employeeFicheService;
         this.posteService = posteService;
@@ -44,6 +46,7 @@ public class HomeController {
         this.etatDemandeService = etatDemandeService;
         this.typeDemandeService = typeDemandeService;
         this.typeContratService = typeContratService;
+        this.budgetAlloueService = budgetAlloueService;
     }
 
     @GetMapping("/home")
@@ -196,6 +199,15 @@ public class HomeController {
     @PostMapping("/demande/{id}/valider")
     @PareFeu(roles = "Responsable RH")
     public String validerDemande(@org.springframework.web.bind.annotation.PathVariable Integer id) {
+        DemandeBesoin demande = demandeBesoinService.findById(id);
+        BigDecimal budgetTotal = budgetAlloueService.getBudgetTotal();
+        BigDecimal budgetEngage = demandeBesoinService.getBudgetEngageExcept(id);
+
+        if (budgetEngage.add(demande.getBudget()).compareTo(budgetTotal) > 0) {
+            demandeBesoinService.changerEtat(id, 2);
+            return "redirect:/home?section=listeDemandesRH&error=Budget total de l'entreprise depasse";
+        }
+
         demandeBesoinService.changerEtat(id, 4);
         return "redirect:/home?section=listeDemandesRH";
     }

@@ -23,6 +23,11 @@ etatDemande(<b>id_etat</b>,libelle)
 
 demandeBesoin(<b>id_besoin</b>,intitule de poste, #id_dept,#id_manager, effectif,motif, budget, date souhaitee,#id_etat,#id_type,#id_type_contrat)
 
+### Partie vaovao napina resaka budget 
+
+budgetAlloue(<b>id_budget</b>,valeur,mois,annnee)
+
+
 === Bloc 2 === 
 
 etatOffre(<b>id_etat</b>,libelle) 
