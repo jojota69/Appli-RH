@@ -2,77 +2,81 @@ package com.appliRh.RH.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
-@Entity 
+@Entity
 @Table(name = "offre")
 public class Offre {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_offre")
     private Integer id;
 
-    @Column(name = "id_besoin")
-    private Integer idBesoin;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_besoin", nullable = false, unique = true)
+    private DemandeBesoin besoin;
 
-    @Column(name = "id_recruteur")
-    private Integer idRecruteur;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_recruteur", nullable = false)
+    private Employee recruteur;
 
-    @Column(name = "titre")
+    @Column(nullable = false, length = 150)
     private String titre;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "date_publication")
+    @Column(name = "date_publication", nullable = false)
     private LocalDate datePublication;
 
     @Column(name = "date_cloture")
     private LocalDate dateCloture;
 
-    @Column(name = "statut")
-    private String statut;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_etat", nullable = false)
+    private EtatOffre etat;
 
-    public Offre() {
+    protected Offre() {
     }
 
-    public Offre(Integer idBesoin, Integer idRecruteur, String titre, String description, LocalDate datePublication, LocalDate dateCloture, String statut) {
-        this.idBesoin = idBesoin;
-        this.idRecruteur = idRecruteur;
+    public Offre(DemandeBesoin besoin, Employee recruteur, String titre, String description,
+                 LocalDate datePublication, LocalDate dateCloture, EtatOffre etat) {
+        this.besoin = besoin;
+        this.recruteur = recruteur;
         this.titre = titre;
         this.description = description;
         this.datePublication = datePublication;
         this.dateCloture = dateCloture;
-        this.statut = statut;
+        this.etat = etat;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public DemandeBesoin getBesoin() {
+        return besoin;
     }
 
-    public Integer getIdBesoin() {
-        return idBesoin;
+    public void setBesoin(DemandeBesoin besoin) {
+        this.besoin = besoin;
     }
 
-    public void setIdBesoin(Integer idBesoin) {
-        this.idBesoin = idBesoin;
+    public Employee getRecruteur() {
+        return recruteur;
     }
 
-    public Integer getIdRecruteur() {
-        return idRecruteur;
-    }
-
-    public void setIdRecruteur(Integer idRecruteur) {
-        this.idRecruteur = idRecruteur;
+    public void setRecruteur(Employee recruteur) {
+        this.recruteur = recruteur;
     }
 
     public String getTitre() {
@@ -107,11 +111,23 @@ public class Offre {
         this.dateCloture = dateCloture;
     }
 
-    public String getStatut() {
-        return statut;
+    public EtatOffre getEtat() {
+        return etat;
     }
 
-    public void setStatut(String statut) {
-        this.statut = statut;
+    public void setEtat(EtatOffre etat) {
+        this.etat = etat;
+    }
+
+    public Integer getIdBesoin() {
+        return besoin == null ? null : besoin.getId();
+    }
+
+    public Integer getIdRecruteur() {
+        return recruteur == null ? null : recruteur.getId();
+    }
+
+    public String getStatut() {
+        return etat == null ? null : etat.getLibelle();
     }
 }
