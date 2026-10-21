@@ -3,37 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appli RH - Login</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <title>Appli RH - Offres disponibles</title>
+    <link rel="stylesheet" th:href="@{/css/offres-public.css}">
 </head>
 <body>
-    <div class="app-shell login-shell">
-        <header class="topbar">
-            <a class="brand" th:href="@{/}">
-                <span class="brand-mark">RH</span>
-                <span>
-                    <strong>Appli RH</strong>
-                </span>
+    <main class="offers-page">
+        <header class="public-header">
+            <a class="public-brand" th:href="@{/}">
+                <span class="public-brand-mark">RH</span>
+                <strong>Appli RH</strong>
             </a>
+            <a class="login-button" th:href="@{/login}">Se connecter</a>
         </header>
 
-        <main class="login-content">
-            <section class="login-intro">
-                <p class="eyebrow">Espace professionnel</p>
-                <h1>Bienvenue dans votre espace RH.</h1>
-                <p>Retrouvez vos équipes, vos recrutements et vos processus au même endroit.</p>
-            </section>
+        <header class="offers-header">
+            <div>
+                <p class="eyebrow">Appli RH</p>
+                <h1>Offres disponibles</h1>
+                <p class="intro">Découvrez les opportunités actuellement ouvertes.</p>
+            </div>
+        </header>
 
-            <form class="login-panel" action="/login" method="post">
-                <h2>Se connecter</h2>
-                <p class="login-subtitle">Accédez à votre tableau de bord</p>
-                <label for="email">Identifiant</label>
-                <input type="text" name="email" id="email" autocomplete="email" required>
-                <label for="motDePasse">Mot de passe</label>
-                <input type="password" name="motDePasse" id="motDePasse" autocomplete="current-password" required>
-                <button class="button button-primary login-button" type="submit">Se connecter <span>→</span></button>
-            </form>
-        </main>
-    </div>
+        <section class="offers-grid" aria-label="Offres d'emploi disponibles">
+            <article class="offer-card" th:each="offre : ${listeOffres}">
+                <div class="offer-card-topline">
+                    <span class="offer-mark"
+                          th:text="${offre.titre != null and offre.titre.length() >= 2 ? #strings.toUpperCase(offre.titre.substring(0, 2)) : 'OF'}">OF</span>
+                    <span class="offer-status" th:text="${offre.statut}">Publiee</span>
+                </div>
+                <h2 th:text="${offre.titre}">Intitulé du poste</h2>
+                <p class="offer-description" th:text="${offre.description}">Description de l'offre</p>
+                <div class="offer-meta">
+                    <span th:text="${'Publiée le ' + offre.datePublication}">Date de publication</span>
+                    <span th:if="${offre.dateCloture != null}"
+                          th:text="${'Clôture le ' + offre.dateCloture}">Date de clôture</span>
+                </div>
+                <a class="offer-button" th:href="@{/offres-disponibles/{id}(id=${offre.id})}">Voir</a>
+            </article>
+        </section>
+
+        <p class="empty-state" th:if="${#lists.isEmpty(listeOffres)}">Aucune offre n'est disponible pour le moment.</p>
+    </main>
 </body>
 </html>

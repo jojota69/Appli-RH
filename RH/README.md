@@ -62,4 +62,10 @@ La route `/offres` est gérée par `OffreController`, séparément de `HomeContr
 
 Le lien « Offres d'emploi » de la navbar pointe vers `/offres`, et la vue `offres.html` insère désormais le fragment `listeOffres` afin d'afficher les offres récupérées.
 
+La page publique `/` affiche les offres disponibles sous forme de cards avec un bouton `Voir`. Ce bouton ouvre le détail de l'offre via `/offres-disponibles/{id}`, avec un style dédié reprenant les couleurs de l'application sans le layout ni la navbar de l'espace connecté.
+
+La page publique des offres possède également un header indépendant avec la marque `Appli RH` et un bouton `Se connecter` qui redirige vers `/login`.
+
+La page détail d'une offre contient maintenant un formulaire de candidature avec les coordonnées du candidat et un lien de CV facultatif. La candidature est enregistrée dans `candidat` puis `candidature`, avec contrôle des doublons pour une même offre.
+
 Le schéma et les données de démonstration couvrent désormais le bloc Recrutement : `offre`, `candidat`, `candidature`, `entretien` et `evaluation_candidat`. Une offre publiée, deux candidatures, un entretien et une évaluation sont insérés dans `data.sql`.
