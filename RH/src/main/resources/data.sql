@@ -66,7 +66,10 @@ VALUES
     '2026-01-15', 1, 1, 1),
     ('Assistant ressources humaines', 1, 2, 1,
      'Remplacement de employe absent', 3000.00,
-    '2026-02-01', 3, 2, 2);
+    '2026-02-01', 3, 2, 2),
+    ('Ingenieur reseau', 2, 2, 1,
+     'Nouveau projet de securite informatique', 5000.00,
+    '2026-03-10', 1, 1, 1);
 
 INSERT INTO budget_alloue (valeur, mois, annee)
 VALUES (100000.00, 1, 2026);

@@ -21,6 +21,7 @@ import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
+import com.appliRh.RH.model.Poste;
 import com.appliRh.RH.service.BudgetAlloueService;
 
 import jakarta.servlet.http.HttpSession;
@@ -55,6 +56,7 @@ public class HomeController {
                        @RequestParam(required = false) String error,
                        @RequestParam(required = false) Integer demandeId,
                        @RequestParam(required = false) Integer selectedEmployeeId,
+                       @RequestParam(required = false) Integer demandeBesoinId,
                        Model model,
                        HttpSession session){
                 Integer employeeId = (Integer) session.getAttribute("employeeId");
@@ -90,10 +92,22 @@ public class HomeController {
             default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
+        List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(employee.getFiche().getDepartement().getId(), 1);
+        List<Long> nombreParPoste = new ArrayList<>();
+        for (DemandeBesoin demande : listePostesDemandes) {
+            Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
+            long count = employeeFicheService.nombre(
+                    employee.getFiche().getDepartement().getId(),
+                    poste.getId());
+            nombreParPoste.add(count);
+        }
+
         model.addAttribute("listeTypeContrat", typeContratService.findAll());
         model.addAttribute("section", selectedSection);
         model.addAttribute("employeeConnecte", employee);
         model.addAttribute("error", error);
+        model.addAttribute("nombreParPoste", nombreParPoste);
+        model.addAttribute("listePostesDemandes", listePostesDemandes);
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
         model.addAttribute("listeDemandes", demandesDuDepartement);
@@ -108,7 +122,14 @@ public class HomeController {
             || selectedSection.equals("voirDemandeRH"))) {
             model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeId));
         }
-        if (selectedEmployeeId != null && (selectedSection.equals("voirPoste") || selectedSection.equals("remplacerPoste"))) {
+        if (demandeBesoinId != null && selectedSection.equals("voirPoste")) {
+            model.addAttribute("demandeSelectionnee", demandeBesoinService.findById(demandeBesoinId));
+            model.addAttribute("nombrePersonnesPoste",
+                    employeeFicheService.nombre(
+                            demandeBesoinService.findById(demandeBesoinId).getDepartement().getId(),
+                            posteService.findByLibelle(demandeBesoinService.findById(demandeBesoinId).getIntitulePoste()).getId()));
+        }
+        if (selectedEmployeeId != null && selectedSection.equals("remplacerPoste")) {
             EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
             model.addAttribute("ficheSelectionnee", ficheSelectionnee);
             Integer departementId = ficheSelectionnee.getDepartement().getId();

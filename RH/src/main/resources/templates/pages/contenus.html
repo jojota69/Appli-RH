@@ -52,19 +52,22 @@
             <div>
                 <p class="eyebrow">Espace manager</p>
                 <h1>Liste des postes</h1>
-                <p class="intro">Consultez la situation actuelle des postes de votre département.</p>
+                <p class="intro">Consultez les postes validés de votre département.</p>
             </div>
-            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Retour aux employés</a>
+            <a class="button button-secondary" th:href="@{/home(section='listePostes')}">Retour aux employés</a>
         </div>
 
         <div class="postes">
-            <article class="poste" th:each="liste : ${listeEmployee}">
-                <div class="poste-icon" th:text="${liste.initiales}">EM</div>
+            <article class="poste" th:each="liste : ${listePostesDemandes}">
+                <div class="poste-icon" th:text="${liste.initiales}">DP</div>
                 <div class="poste-details">
-                    <h2 th:text="${liste.fiche.poste.libelle}">Intitulé du poste</h2>
-                    <p th:text="${'Employé : ' + liste.prenom + ' ' + liste.nom}">Employé</p>
+                    <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
+                    <p th:text="${'Effectif : ' + nombreParPoste.get(listePostesDemandes.indexOf(liste))+ '/' + liste.effectif}">Détails du poste</p>
                 </div>
-                <a th:href="@{/home(section='voirPoste', selectedEmployeeId=${liste.id})}">
+                <a th:href="@{/poste/{id}/supprimer(id=${liste.id})}" th:onclick="return confirm('La demande de suppression sera envoyée au responsable RH.');">
+                    <button class="button button-secondary" type="button">Supprimer</button>
+                </a>
+                <a th:href="@{/home(section='voirPoste', demandeBesoinId=${liste.id})}">
                     <button class="icon-button" type="button" aria-label="Voir le poste" title="Voir le poste">
                         <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
@@ -73,33 +76,34 @@
                     </button>
                 </a>
             </article>
-            <p th:if="${#lists.isEmpty(listeEmployee)}">Aucun poste trouvé dans votre département.</p>
+            <p th:if="${#lists.isEmpty(listePostesDemandes)}">Aucun poste trouvé.</p>
         </div>
     </section>
 </div>
 
+
 <!-- Detail poste -->
 <div th:fragment="voirPoste">
-    <section class="content-section" th:if="${ficheSelectionnee != null}">
+    <section class="content-section" th:if="${demandeSelectionnee != null}">
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Espace manager</p>
                 <h1>Détail du poste</h1>
-                <p class="intro" th:text="${ficheSelectionnee.poste.libelle}">Poste sélectionné</p>
+                <p class="intro" th:text="${demandeSelectionnee.intitulePoste}">Poste sélectionné</p>
             </div>
             <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
         </div>
 
         <div class="panel request-details">
-            <p><strong>Poste :</strong> <span th:text="${ficheSelectionnee.poste.libelle}">Poste</span></p>
-            <p><strong>Département :</strong> <span th:text="${ficheSelectionnee.departement.libelle}">Département</span></p>
+            <p><strong>Poste :</strong> <span th:text="${demandeSelectionnee.intitulePoste}">Poste</span></p>
+            <p><strong>Département :</strong> <span th:text="${demandeSelectionnee.departement.libelle}">Département</span></p>
             <p><strong>Nombre de personnes ayant ce poste dans le département :</strong> <span th:text="${nombrePersonnesPoste}">0</span></p>
             <p><strong>Budget alloué au poste :</strong> <span th:text="${#numbers.formatDecimal(budgetPoste, 1, 2)}">0,00</span></p>
-            <p><strong>Budget alloué au département :</strong> <span th:text="${#numbers.formatDecimal(budgetDepartement, 1, 2)}">0,00</span></p>
-            <p><strong>Type de contrat :</strong> <span th:text="${ficheSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
+            <p><strong>Budget alloué au département :</strong> <span th:text="${#numbers.formatDecimal(demandeSelectionnee.budget, 1, 2)}">0,00</span></p>
+            <p><strong>Type de contrat :</strong> <span th:text="${demandeSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
         </div>
     </section>
-    <section class="content-section" th:unless="${ficheSelectionnee != null}">
+    <section class="content-section" th:unless="${demandeSelectionnee != null}">
         <h1>Fiche employé introuvable</h1>
         <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
     </section>
