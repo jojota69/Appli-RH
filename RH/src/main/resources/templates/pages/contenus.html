@@ -466,3 +466,58 @@
         </div>
     </section>
 </div>
+
+<div th:fragment="listeOffres">
+    <section class="content-section">
+        <div class="page-heading">
+            <div>
+                <h1>Liste des offres</h1>
+                <p class="intro">Consultez les offres publiés.</p>
+            </div>
+        </div>
+
+        <div class="postes">
+            <article class="poste" th:each="liste : ${listeOffres}">
+				<!-- Comme il n'y a pas d'initiales directes dans la table, on peut prendre le début du titre ou afficher une valeur par défaut -->
+				<div class="poste-icon" th:text="${liste.titre != null and liste.titre.length() >= 2 ? #strings.toUpperCase(liste.titre.substring(0, 2)) : 'OF'}">OF</div>
+
+				<div class="poste-details">
+					<!-- Remplacement par 'titre' -->
+					<h2 th:text="${liste.titre}">Intitulé du poste</h2>
+
+					<!-- idRecruteur (ou si vous avez fait une relation avec un objet Recruteur, ex: liste.recruteur.nom) -->
+					<p th:text="${'Recruteur ID : ' + liste.idRecruteur}">Recruteur</p>
+
+					<!-- idBesoin, dates et description -->
+					<p th:text="${'Besoin ID : ' + liste.idBesoin + ' | Publication : ' + liste.datePublication + ' | Clôture : ' + liste.dateCloture}">Détails de l'offre</p>
+
+					<!-- Description courte -->
+					<p th:text="${liste.description}">Description</p>
+				</div>
+
+				<!-- Remplacement par 'statut' -->
+				<span class="poste-status" th:text="${liste.statut}">En attente</span>
+
+				<div class="poste-actions">
+					<!-- Utilisation de 'id' (qui correspond à id_offre) -->
+					<a th:classappend="${section == 'modifDemande'} ? ' active' : ''" th:href="@{/home(section='modifDemande', demandeId=${liste.id})}">
+						<button class="icon-button" type="button" aria-label="Modifier l'offre" title="Modifier l'offre">
+							<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M12 20h9"></path>
+								<path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+							</svg>
+						</button>
+					</a>
+					<a th:classappend="${section == 'voirDemande'} ? ' active' : ''" th:href="@{/home(section='voirDemande', demandeId=${liste.id})}">
+						<button class="icon-button" type="button" aria-label="Voir l'offre" title="Voir l'offre">
+							<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+								<circle cx="12" cy="12" r="3"></circle>
+							</svg>
+						</button>
+					</a>
+				</div>
+			</article>
+        </div>
+    </section>
+</div>

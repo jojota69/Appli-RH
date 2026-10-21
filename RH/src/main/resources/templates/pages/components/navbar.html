@@ -38,4 +38,16 @@
         </div>
     </nav>
 
+    <!-- Pour Recruteur -->
+    <nav class="sidebar" aria-label="Navigation principale"
+         th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Recruteur')}">
+        <a th:classappend="${section == 'listeOffres'} ? ' active' : ''" th:href="@{/offres}">
+            <span class="nav-icon">⌂</span> Offres d'emploi
+        </a>
+        <div class="nav-footer">
+            <div class="nav-heading">Raccourcis</div>
+            <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
+        </div>
+    </nav>
+
 </th:block>

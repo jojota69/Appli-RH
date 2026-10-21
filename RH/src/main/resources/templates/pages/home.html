@@ -88,9 +88,15 @@
                 </div>
 
                 <!-- RECRUTEUR -->
-                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Recruteur')}">
-                    <p>Ho an'ny Recruteur</p>
-                </div> 
+                <div th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Recruteur')}" th:switch="${section}">
+                    <div th:case="listeOffres">
+                        <div th:replace="~{pages/contenus :: listeOffres}"></div>
+                    </div>
+                    <div th:case="*">
+                        <div th:replace="~{pages/contenus :: *}"></div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
