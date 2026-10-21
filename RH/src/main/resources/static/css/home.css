@@ -507,6 +507,35 @@ h1 {
   gap: 8px;
   max-width: 720px;
 }
+.position-form-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.position-form-layout #position-forms {
+  flex: 1;
+}
+.position-form + .position-form {
+  margin-top: 24px;
+  border-top: 3px solid var(--teal);
+}
+.position-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.position-form-number {
+  color: var(--muted);
+  font: 700 12px Arial, sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.remove-position-form {
+  padding: 9px 12px;
+}
 .position-form label {
   margin-top: 12px;
   font: 700 11px Arial, sans-serif;
@@ -540,6 +569,24 @@ h1 {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid var(--line);
+}
+.position-form-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 170px;
+  margin-top: 0;
+}
+@media (max-width: 800px) {
+  .position-form-layout {
+    flex-direction: column;
+  }
+  .position-form-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+  }
 }
 @keyframes reveal {
   from {

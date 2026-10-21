@@ -120,7 +120,13 @@
 
     <div class="form-error" th:if="${error != null}" th:text="${error}" role="alert"></div>
 
-    <form class="panel position-form" action="/demande" method="post">
+    <div class="position-form-layout">
+        <div id="position-forms">
+            <form id="position-form-1" class="panel position-form" action="/demande" method="post">
+        <div class="position-form-header">
+            <span class="position-form-number">Poste 1</span>
+        </div>
+
         <label for="title">Intitulé du poste</label>
         <input id="title" name="title" type="text" placeholder="Ex. Développeur Java" required>
 
@@ -145,11 +151,14 @@
         <label for="effectif">Nombre d' Effectif</label>
         <input type="number" name="effectif" id="effectif" required>
 
-        <div class="form-actions">
-            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Annuler</a>
-            <button class="button button-primary" type="submit">Enregistrer le poste</button>
+            </form>
         </div>
-    </form>
+        <div class="position-form-actions">
+            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}" style="text-align: center;">Annuler</a>
+            <button class="button button-primary" type="submit" form="position-form-1">Enregistrer le poste</button>
+            <button class="button button-primary" id="add-position-form" type="button" aria-label="Ajouter un formulaire de poste" title="Ajouter un formulaire de poste">+</button>
+        </div>
+    </div>
 </div>
 
 <!-- Liste des demandes -->

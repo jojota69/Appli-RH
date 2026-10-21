@@ -49,3 +49,9 @@ La liste des employés affiche également le nom du poste associé à chaque fic
 La section `remplacerPoste` reprend le formulaire de création de poste et préremplit l'intitulé, le département, le type de contrat, le budget et le motif à partir de la fiche de l'employé sélectionné. La demande créée est enregistrée avec le type `Remplacement`.
 
 Les données de démonstration contiennent également le poste `Ingenieur reseau` et l'employé `Julien Moreau`, rattachés au département `Informatique` dans `employee_fiche`.
+
+La section `creerPoste` propose un bouton `+` qui ajoute dynamiquement un nouveau formulaire de demande. La logique est isolée dans `src/main/resources/static/js/creer-poste.js` et chaque formulaire conserve sa soumission indépendante vers `/demande`.
+
+Les boutons `Annuler`, `Enregistrer le poste` et `+` de la section `creerPoste` sont regroupés dans une zone d'actions située à droite, en dehors des formulaires, avec la classe `.position-form-actions`.
+
+Les formulaires supplémentaires de création de poste possèdent un bouton `Supprimer`. Le premier formulaire n'en possède pas, les formulaires sont séparés visuellement et le script empêche la suppression du dernier formulaire restant.
