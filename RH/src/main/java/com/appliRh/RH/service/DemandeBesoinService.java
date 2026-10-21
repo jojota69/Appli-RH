@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 public class DemandeBesoinService {
@@ -43,6 +44,16 @@ public class DemandeBesoinService {
     @Transactional(readOnly = true)
     public List<DemandeBesoin> DepartementEtat(Integer idDepartement, Integer idEtat) {
         return repository.findByDepartementAndEtat(idDepartement, idEtat);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getBudgetPoste(Integer idDepartement, String intitulePoste) {
+        return repository.sumBudgetByDepartementAndPoste(idDepartement, intitulePoste);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getBudgetDepartement(Integer idDepartement) {
+        return repository.sumBudgetByDepartement(idDepartement);
     }
 
     @Transactional

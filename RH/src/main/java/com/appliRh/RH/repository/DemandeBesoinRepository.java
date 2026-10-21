@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, Integer> {
 
@@ -30,4 +31,13 @@ public interface DemandeBesoinRepository extends JpaRepository<DemandeBesoin, In
 	@Query("SELECT d FROM DemandeBesoin d WHERE d.departement.id = :idDepartement AND d.etatDemande.id = :idEtat")
 	List<DemandeBesoin> findByDepartementAndEtat(@Param("idDepartement") Integer idDepartement,
 			@Param("idEtat") Integer idEtat);
+
+	@Query("SELECT COALESCE(SUM(d.budget), 0) FROM DemandeBesoin d " +
+			"WHERE d.departement.id = :idDepartement AND d.intitulePoste = :intitulePoste")
+	BigDecimal sumBudgetByDepartementAndPoste(@Param("idDepartement") Integer idDepartement,
+			@Param("intitulePoste") String intitulePoste);
+
+	@Query("SELECT COALESCE(SUM(d.budget), 0) FROM DemandeBesoin d " +
+			"WHERE d.departement.id = :idDepartement")
+	BigDecimal sumBudgetByDepartement(@Param("idDepartement") Integer idDepartement);
 }

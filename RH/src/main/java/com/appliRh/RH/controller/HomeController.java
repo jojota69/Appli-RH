@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.appliRh.RH.model.Employee;
 import com.appliRh.RH.annotation.PareFeu;
 import com.appliRh.RH.service.EmployeeService;
+import com.appliRh.RH.service.EmployeeFicheService;
 import com.appliRh.RH.service.PosteService;
 import com.appliRh.RH.model.DemandeBesoin;
 import com.appliRh.RH.model.EmployeeFiche;
@@ -27,14 +28,16 @@ import jakarta.persistence.EntityNotFoundException;
 public class HomeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeFicheService employeeFicheService;
     private final PosteService posteService;
     private final DemandeBesoinService demandeBesoinService;
     private final EtatDemandeService etatDemandeService;
     private final TypeDemandeService typeDemandeService;
     private final TypeContratService typeContratService;
 
-    public HomeController(EmployeeService employeeService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService) {
+    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService) {
         this.employeeService = employeeService;
+        this.employeeFicheService = employeeFicheService;
         this.posteService = posteService;
         this.demandeBesoinService = demandeBesoinService;
         this.etatDemandeService = etatDemandeService;
@@ -98,6 +101,14 @@ public class HomeController {
         if (selectedEmployeeId != null && (selectedSection.equals("voirPoste") || selectedSection.equals("remplacerPoste"))) {
             EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
             model.addAttribute("ficheSelectionnee", ficheSelectionnee);
+            Integer departementId = ficheSelectionnee.getDepartement().getId();
+            Integer posteId = ficheSelectionnee.getPoste().getId();
+            model.addAttribute("nombrePersonnesPoste",
+                    employeeFicheService.nombre(departementId, posteId));
+            model.addAttribute("budgetPoste",
+                    demandeBesoinService.getBudgetPoste(departementId, ficheSelectionnee.getPoste().getLibelle()));
+            model.addAttribute("budgetDepartement",
+                    demandeBesoinService.getBudgetDepartement(departementId));
         }
         return "pages/home";
     }

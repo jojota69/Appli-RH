@@ -84,20 +84,19 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Espace manager</p>
-                <h1>Détail de l'employé</h1>
-                <p class="intro" th:text="${ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}">Employé sélectionné</p>
+                <h1>Détail du poste</h1>
+                <p class="intro" th:text="${ficheSelectionnee.poste.libelle}">Poste sélectionné</p>
             </div>
             <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
         </div>
 
         <div class="panel request-details">
-            <p><strong>Nom :</strong> <span th:text="${ficheSelectionnee.employee.nom}">Nom</span></p>
-            <p><strong>Prénom :</strong> <span th:text="${ficheSelectionnee.employee.prenom}">Prénom</span></p>
             <p><strong>Poste :</strong> <span th:text="${ficheSelectionnee.poste.libelle}">Poste</span></p>
             <p><strong>Département :</strong> <span th:text="${ficheSelectionnee.departement.libelle}">Département</span></p>
+            <p><strong>Nombre de personnes ayant ce poste dans le département :</strong> <span th:text="${nombrePersonnesPoste}">0</span></p>
+            <p><strong>Budget alloué au poste :</strong> <span th:text="${#numbers.formatDecimal(budgetPoste, 1, 2)}">0,00</span></p>
+            <p><strong>Budget alloué au département :</strong> <span th:text="${#numbers.formatDecimal(budgetDepartement, 1, 2)}">0,00</span></p>
             <p><strong>Type de contrat :</strong> <span th:text="${ficheSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
-            <p><strong>Salaire :</strong> <span th:text="${ficheSelectionnee.salaire}">Salaire</span></p>
-            <p><strong>Date de naissance :</strong> <span th:text="${ficheSelectionnee.dateNaissance}">Date de naissance</span></p>
         </div>
     </section>
     <section class="content-section" th:unless="${ficheSelectionnee != null}">
