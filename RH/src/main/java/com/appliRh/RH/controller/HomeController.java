@@ -21,6 +21,7 @@ import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatDemandeService;
 import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
+import com.appliRh.RH.model.Poste;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityNotFoundException;
@@ -87,10 +88,22 @@ public class HomeController {
             default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
+        List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(employee.getFiche().getDepartement().getId(), 1);
+        List<Long> nombreParPoste = new ArrayList<>();
+        for (DemandeBesoin demande : listePostesDemandes) {
+            Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
+            long count = employeeFicheService.nombre(
+                    employee.getFiche().getDepartement().getId(),
+                    poste.getId());
+            nombreParPoste.add(count);
+        }
+
         model.addAttribute("listeTypeContrat", typeContratService.findAll());
         model.addAttribute("section", selectedSection);
         model.addAttribute("employeeConnecte", employee);
         model.addAttribute("error", error);
+        model.addAttribute("nombreParPoste", nombreParPoste);
+        model.addAttribute("listePostesDemandes", listePostesDemandes);
         //ito lay liste 
         model.addAttribute("listeEmployee", listeEmployee);
         model.addAttribute("listeDemandes", demandesDuDepartement);
