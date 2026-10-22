@@ -104,10 +104,12 @@ public class HomeController {
         List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(employee.getFiche().getDepartement().getId(), 1);
         List<Long> nombreParPoste = new ArrayList<>();
         for (DemandeBesoin demande : listePostesDemandes) {
-            Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
-            long count = employeeFicheService.nombre(
-                    employee.getFiche().getDepartement().getId(),
-                    poste.getId());
+            // Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
+            // long count = employeeFicheService.nombre(
+            //         employee.getFiche().getDepartement().getId(),
+            //         poste.getId());
+            // nombreParPoste.add(count);
+            long count = demande.getEffectif();
             nombreParPoste.add(count);
         }
 
@@ -271,9 +273,9 @@ public class HomeController {
             return "redirect:/home?section=listeDemandesRH&error=Budget total de l'entreprise depasse";
         }
         demandeBesoinService.changerEtat(id, 1);
-        if (!posteService.existsByLibelle(demande.getIntitulePoste())) {
-            posteService.create(new Poste(demande.getIntitulePoste()));
-        }
+        // if (!posteService.existsByLibelle(demande.getIntitulePoste())) {
+        //     posteService.create(new Poste(demande.getIntitulePoste()));
+        // }
         return "redirect:/home?section=listeDemandesDirection";
     }
 
