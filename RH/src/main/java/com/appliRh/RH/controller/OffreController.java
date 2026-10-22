@@ -1,6 +1,11 @@
 package com.appliRh.RH.controller;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,13 @@ import com.appliRh.RH.model.Offre;
 import com.appliRh.RH.service.EmployeeService;
 import com.appliRh.RH.service.CandidatureService;
 import com.appliRh.RH.service.OffreService;
+import com.appliRh.RH.service.EntretienService;
+import com.appliRh.RH.service.EvaluationCandidatService;
+import com.appliRh.RH.model.DemandeBesoin;
+import com.appliRh.RH.service.DemandeBesoinService;
+import com.appliRh.RH.service.EtatOffreService;
+import com.appliRh.RH.model.Candidature;
+import com.appliRh.RH.model.Entretien;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,12 +37,24 @@ public class OffreController {
 	private final EmployeeService employeeService;
     private final OffreService offreService;
     private final CandidatureService candidatureService;
+    private final EntretienService entretienService;
+    private final EvaluationCandidatService evaluationCandidatService;
+    private final DemandeBesoinService demandeBesoinService;
+    private final EtatOffreService etatOffreService;
 
     public OffreController(EmployeeService employeeService, OffreService offreService,
-                           CandidatureService candidatureService) {
+                           CandidatureService candidatureService,
+                           EntretienService entretienService,
+                           EvaluationCandidatService evaluationCandidatService,
+                           DemandeBesoinService demandeBesoinService,
+                           EtatOffreService etatOffreService) {
 		this.employeeService = employeeService;
 		this.offreService = offreService;
         this.candidatureService = candidatureService;
+        this.entretienService = entretienService;
+        this.evaluationCandidatService = evaluationCandidatService;
+        this.demandeBesoinService = demandeBesoinService;
+        this.etatOffreService = etatOffreService;
 	}
 
     @GetMapping("/")
@@ -76,6 +100,7 @@ public class OffreController {
 	@GetMapping("/offres")
 	@PareFeu(roles = "Recruteur")
     public String offres(@RequestParam(defaultValue = "offres") String section,
+            @RequestParam(required = false) Integer offreId,
             Model model, HttpSession session) {
 		Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
         String selectedSection = switch (section) {
@@ -88,8 +113,83 @@ public class OffreController {
 
         List<Offre> listeOffres = offreService.findAll();
         model.addAttribute("listeOffres", listeOffres);
+        List<DemandeBesoin> demandesValidees = demandeBesoinService.findAll().stream()
+            .filter(demande -> demande.getEtatDemande() != null
+                && ("Valide".equalsIgnoreCase(demande.getEtatDemande().getLibelle())
+                || "Valide RH".equalsIgnoreCase(demande.getEtatDemande().getLibelle())))
+            .toList();
+        model.addAttribute("demandesValidees", demandesValidees);
+
+        Offre offreSelectionnee = offreId == null ? null : offreService.findById(offreId).orElse(null);
+        model.addAttribute("offreSelectionnee", offreSelectionnee);
+        if (offreSelectionnee != null) {
+            List<Candidature> candidatures = candidatureService.findByOffreId(offreId);
+            Map<Integer, List<Entretien>> entretiensParCandidature = new HashMap<>();
+            Map<Integer, List<com.appliRh.RH.model.EvaluationCandidat>> evaluationsParEntretien = new HashMap<>();
+            for (Candidature candidature : candidatures) {
+                List<Entretien> entretiens = entretienService.findByCandidatureId(candidature.getId());
+                entretiensParCandidature.put(candidature.getId(), entretiens);
+                for (Entretien entretien : entretiens) {
+                    evaluationsParEntretien.put(entretien.getId(),
+                            evaluationCandidatService.findByEntretienId(entretien.getId()));
+                }
+            }
+            model.addAttribute("listeCandidatures", candidatures);
+            model.addAttribute("entretiensParCandidature", entretiensParCandidature);
+            model.addAttribute("evaluationsParEntretien", evaluationsParEntretien);
+        }
 
 
 		return "pages/offres";
 	}
+
+    @PostMapping("/offres/creer")
+    @PareFeu(roles = "Recruteur")
+    public String creerOffre(@RequestParam Integer demandeId,
+                 @RequestParam String titre,
+                 @RequestParam String description,
+                 @RequestParam(required = false) String dateCloture,
+                 HttpSession session) {
+    DemandeBesoin demande = demandeBesoinService.findById(demandeId);
+    Employee recruteur = employeeService.findById((Integer) session.getAttribute("employeeId"));
+    LocalDate cloture = dateCloture == null || dateCloture.isBlank()
+        ? null : LocalDate.parse(dateCloture);
+    Offre offre = new Offre(demande, recruteur, titre, description,
+        LocalDate.now(), cloture, etatOffreService.findByLibelle("Publiee"));
+    offreService.save(offre);
+    return "redirect:/offres";
+    }
+
+    @PostMapping("/offres/{offreId}/candidatures/{candidatureId}/statut")
+    @PareFeu(roles = "Recruteur")
+    public String changerStatutCandidature(@PathVariable Integer offreId,
+                                           @PathVariable Integer candidatureId,
+                                           @RequestParam String statut) {
+        candidatureService.changerStatut(candidatureId, statut);
+        return "redirect:/offres?offreId=" + offreId;
+    }
+
+    @PostMapping("/candidatures/{candidatureId}/entretiens")
+    @PareFeu(roles = "Recruteur")
+    public String planifierEntretien(@PathVariable Integer candidatureId,
+                                     @RequestParam String dateEntretien,
+                                     @RequestParam String typeEntretien,
+                                     @RequestParam(required = false, defaultValue = "") String compteRendu) {
+        Candidature candidature = candidatureService.findById(candidatureId);
+        entretienService.planifier(candidature, LocalDateTime.parse(dateEntretien),
+                typeEntretien, compteRendu);
+        return "redirect:/offres?offreId=" + candidature.getOffre().getId();
+    }
+
+    @PostMapping("/entretiens/{entretienId}/evaluations")
+    @PareFeu(roles = "Recruteur")
+    public String evaluerCandidat(@PathVariable Integer entretienId,
+                                  @RequestParam BigDecimal note,
+                                  @RequestParam String commentaire,
+                                  HttpSession session) {
+        Entretien entretien = entretienService.findById(entretienId);
+        Employee evaluateur = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        evaluationCandidatService.evaluer(entretien, evaluateur, note, commentaire);
+        return "redirect:/offres?offreId=" + entretien.getCandidature().getOffre().getId();
+    }
 }

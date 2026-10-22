@@ -32,6 +32,9 @@
         <a th:classappend="${section == 'listeDemandesDirection'} ? ' active' : ''" th:href="@{/home(section='listeDemandesDirection')}">
             <span class="nav-icon">⌂</span> Liste des demandes
         </a>
+        <a th:classappend="${section == 'listeDemandesDirectionValidee'} ? ' active' : ''" th:href="@{/home(section='listeDemandesDirectionValidee')}">
+            <span class="nav-icon">⌂</span> Liste des demandes validée
+        </a>
         <div class="nav-footer">
             <div class="nav-heading">Raccourcis</div>
             <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>

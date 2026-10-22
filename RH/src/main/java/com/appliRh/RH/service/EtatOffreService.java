@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
+
+import com.appliRh.RH.model.EtatOffre;
+import com.appliRh.RH.repository.EtatOffreRepository;
 
 @Service
 public class EtatOffreService {
@@ -44,4 +48,9 @@ public class EtatOffreService {
     public void deleteById(Integer id) {
         repository.delete(findById(id));
     }
+    public EtatOffre findByLibelle(String libelle) {
+        return repository.findByLibelleIgnoreCase(libelle)
+                .orElseThrow(() -> new IllegalArgumentException("Etat d'offre introuvable : " + libelle));
+    }
 }
+

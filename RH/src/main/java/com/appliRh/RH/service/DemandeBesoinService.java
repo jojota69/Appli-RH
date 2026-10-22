@@ -49,6 +49,11 @@ public class DemandeBesoinService {
     }
 
     @Transactional(readOnly = true)
+    public List<DemandeBesoin> getDemandesValide() {
+        return repository.findByEtat(1);
+    }
+
+    @Transactional(readOnly = true)
     public List<DemandeBesoin> DepartementEtat(Integer idDepartement, Integer idEtat) {
         return repository.findByDepartementAndEtat(idDepartement, idEtat);
     }
@@ -105,4 +110,6 @@ public class DemandeBesoinService {
     public void deleteById(Integer id) {
         repository.delete(findById(id));
     }
+
+
 }
