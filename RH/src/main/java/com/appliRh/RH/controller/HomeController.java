@@ -96,7 +96,8 @@ public class HomeController {
                 "contracts", 
                 "onboarding",
                 "listeDemandesRH",
-                "listeDemandesDirectionValidee" -> section;
+                "listeDemandesDirectionValidee",
+                "preparerPub" -> section;
             default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
@@ -152,6 +153,10 @@ public class HomeController {
                     demandeBesoinService.getBudgetPoste(departementId, ficheSelectionnee.getPoste().getLibelle()));
             model.addAttribute("budgetDepartement",
                     demandeBesoinService.getBudgetDepartement(departementId));
+        }
+        if (demandeId != null && selectedSection.equals("preparerPub")) { 
+            DemandeBesoin demandeAPublier = demandeBesoinService.findById(demandeId);
+            model.addAttribute("demandeAPublier", demandeAPublier);
         }
         return "pages/home";
     }

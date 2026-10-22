@@ -500,14 +500,11 @@
                             </svg>
                         </button>
                     </a> -->
-                    <a th:classappend="${section == 'voirDemande'} ? ' active' : ''" th:href="@{/home(section='voirDemande', demandeId=${liste.id})}">
-                        <button class="icon-button" type="button" aria-label="Voir la demande" title="Voir la demande">
-                            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
+                    <a class="button button-primary" th:classappend="${section == 'preparerPub'} ? ' active' : ''" 
+                    th:href="@{/home(section='preparerPub', demandeId=${liste.id})}">
+                        Publier
                     </a>
+                    
                 </div>
             </article>
 
@@ -568,4 +565,69 @@
 			</article>
         </div>
     </section>
+</div>
+
+
+<div th:fragment="preparerPub">
+    <div th:fragment="preparerPub">
+    <section class="content-section" th:if="${demandeAPublier != null}">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Préparation publication</p>
+                
+                <p class="intro" th:text="${'Demande #' + demandeAPublier.id}">Demande</p>
+            </div>
+            <a class="button button-secondary" th:href="@{/home(section='listeDemandesDirectionValidee')}">Retour aux demandes</a>
+        </div>
+
+        <form class="panel position-form" th:action="@{/demande/{id}/valider(id=${demandeAPublier.id})}" method="post">
+            <label for="pub-intitulePoste">Intitulé du poste</label>
+            <input id="pub-intitulePoste" name="intitulePoste" type="text" th:value="${demandeAPublier.intitulePoste}" required>
+
+            <label for="pub-manager">Manager</label>
+            <input id="pub-manager" type="text" th:value="${demandeAPublier.manager.prenom + ' ' + demandeAPublier.manager.nom}" readonly>
+            <input type="hidden" name="managerId" th:value="${demandeAPublier.manager.id}">
+
+            <label for="pub-departement">Département</label>
+            <input id="pub-departement" type="text" th:value="${demandeAPublier.departement.libelle}" readonly>
+            <input type="hidden" name="departementId" th:value="${demandeAPublier.departement.id}">
+
+            <label for="pub-effectif">Effectif</label>
+            <input id="pub-effectif" name="effectif" type="number" min="1" th:value="${demandeAPublier.effectif}" required>
+
+            <label for="pub-budget">Budget</label>
+            <input id="pub-budget" name="budget" type="number" step="0.01" th:value="${demandeAPublier.budget}" required>
+
+            <label for="pub-dateSouhaitee">Date souhaitée</label>
+            <input id="pub-dateSouhaitee" name="dateSouhaitee" type="date" th:value="${demandeAPublier.dateSouhaitee}" required>
+
+            <label for="pub-descrpition">Description</label>
+            <textarea id="pub-descrpition" name="description" rows="4"></textarea>
+
+            <label for="pub-typeContrat">Type de contrat</label>
+            <select id="pub-typeContrat" name="typeContrat" required>
+                <option th:each="typeContrat : ${listeTypeContrat}"
+                        th:value="${typeContrat.id}"
+                        th:text="${typeContrat.libelle}"
+                        th:selected="${typeContrat.id == demandeAPublier.typeContrat.id}"></option>
+            </select>
+
+            <div class="form-actions request-actions">
+                <a class="button button-secondary" th:href="@{/home(section='listeDemandesDirectionValidee')}">Annuler</a>
+                <button class="button button-success" type="submit">Publier</button>
+            </div>
+        </form>
+
+        <!-- Formulaire séparé pour le rejet au cas où vous souhaitez le garder -->
+        <div class="form-actions request-actions" style="margin-top: 10px;">
+            <form method="post" th:action="@{/demande/{id}/rejeter(id=${demandeAPublier.id})}">
+                <button class="button button-danger" type="submit">Rejeter</button>
+            </form>
+        </div>
+    </section>
+    <section class="content-section" th:unless="${demandeAPublier != null}">
+        <h1>Demande introuvable</h1>
+        <a class="button button-secondary" th:href="@{/home(section='listeDemandesRH')}">Retour aux demandes</a>
+    </section>
+</div>
 </div>
