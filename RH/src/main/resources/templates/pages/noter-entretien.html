@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noter l'entretien</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" th:href="@{/home}">
+                <span class="brand-mark">RH</span>
+                <span><strong>Appli RH</strong></span>
+            </a>
+            <div class="topbar-actions">
+                <span class="status">
+                    <span class="status-dot"></span>
+                    <span th:text="${employeeConnecte.prenom + ' ' + employeeConnecte.nom}">Utilisateur connecté</span>
+                </span>
+                <a th:href="@{/logout}">Déconnexion</a>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <div th:replace="~{pages/components/navbar :: nav}"></div>
+
+            <main class="content">
+                <section class="content-section">
+                    <div class="page-heading">
+                        <div>
+                            <p class="eyebrow">Évaluation de l'entretien</p>
+                            <h1 th:text="${entretien.candidature.candidat.prenom + ' ' + entretien.candidature.candidat.nom}">
+                                Candidat
+                            </h1>
+                            <p class="intro"
+                               th:text="${entretien.typeEntretien + ' - ' + entretien.dateEntretien}">
+                                Entretien
+                            </p>
+                        </div>
+                        <a class="button button-secondary"
+                           th:href="@{/offres/{offreId}/candidatures(offreId=${entretien.candidature.offre.id})}">
+                            Retour aux candidatures
+                        </a>
+                    </div>
+
+                    <article class="poste">
+                        <div class="poste-details">
+                            <h2>Noter l'entretien</h2>
+                            <p th:text="${entretien.candidature.candidat.email}">email@example.com</p>
+                            <p th:if="${entretien.compteRendu != null and !entretien.compteRendu.isBlank()}"
+                               th:text="${entretien.compteRendu}">
+                                Notes de l'entretien
+                            </p>
+
+                            <form method="post"
+                                  th:action="@{/entretiens/{entretienId}/evaluations(entretienId=${entretien.id})}">
+                                <label>Note sur 20
+                                    <input name="note" type="number" min="0" max="20" step="0.01" required>
+                                </label>
+                                <label>Commentaire
+                                    <input name="commentaire" type="text" placeholder="Votre évaluation" required>
+                                </label>
+                                <button class="button button-primary" type="submit">Enregistrer l'évaluation</button>
+                            </form>
+
+                            <div class="recruitment-history" th:each="evaluation : ${evaluations}">
+                                <p th:text="${'Évaluation : ' + evaluation.note + '/20 - ' + evaluation.commentaire}">
+                                    Évaluation
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

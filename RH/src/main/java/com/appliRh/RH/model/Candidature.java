@@ -25,17 +25,18 @@ public class Candidature {
     @Column(name = "date_candidature", nullable = false)
     private LocalDate dateCandidature;
 
-    @Column(nullable = false, length = 50)
-    private String statut;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_etat", nullable = false)
+    private EtatCandidature etat;
 
     protected Candidature() {
     }
 
-    public Candidature(Offre offre, Candidat candidat, LocalDate dateCandidature, String statut) {
+    public Candidature(Offre offre, Candidat candidat, LocalDate dateCandidature, EtatCandidature etat) {
         this.offre = offre;
         this.candidat = candidat;
         this.dateCandidature = dateCandidature;
-        this.statut = statut;
+        this.etat = etat;
     }
 
     public Integer getId() { return id; }
@@ -45,6 +46,7 @@ public class Candidature {
     public void setCandidat(Candidat candidat) { this.candidat = candidat; }
     public LocalDate getDateCandidature() { return dateCandidature; }
     public void setDateCandidature(LocalDate dateCandidature) { this.dateCandidature = dateCandidature; }
-    public String getStatut() { return statut; }
-    public void setStatut(String statut) { this.statut = statut; }
+    public EtatCandidature getEtat() { return etat; }
+    public void setEtat(EtatCandidature etat) { this.etat = etat; }
+    public String getStatut() { return etat.getLibelle(); }
 }

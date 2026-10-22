@@ -35,7 +35,12 @@
                             <h1 th:text="${offreSelectionnee.titre}">Offre sélectionnée</h1>
                             <p class="intro">Présélection, entretiens, tests et décision finale.</p>
                         </div>
-                        <a class="button button-secondary" th:href="@{/offres}">Retour aux offres</a>
+                            <a class="button button-secondary" th:href="@{/offres}">Retour aux offres</a>
+                            <form method="post"
+                                  th:action="@{/offres/{offreId}/cloturer(offreId=${offreSelectionnee.id})}"
+                                  onsubmit="return confirm('Voulez-vous clôturer cette offre ?');">
+                                <button class="button button-secondary" type="submit">Clôturer l'offre</button>
+                            </form>
                     </div>
 
                     <div class="postes">
@@ -45,46 +50,14 @@
                                 <h2 th:text="${candidature.candidat.prenom + ' ' + candidature.candidat.nom}">Candidat</h2>
                                 <p th:text="${candidature.candidat.email + ' - ' + candidature.candidat.telephone}">Coordonnées</p>
                                 <p th:text="${'Candidature reçue le ' + candidature.dateCandidature}">Date</p>
-                                <span class="poste-status" th:text="${candidature.statut}">Recue</span>
+                                <span class="poste-status" th:text="${candidature.etat.libelle}">Recue</span>
 
                                 <div class="recruitment-actions">
                                     <form method="post" th:action="@{/offres/{offreId}/candidatures/{candidatureId}/statut(offreId=${offreSelectionnee.id}, candidatureId=${candidature.id})}">
-                                        <select name="statut" aria-label="Statut de la candidature">
-                                            <option value="Recue" th:selected="${candidature.statut == 'Recue'}">Reçue</option>
-                                            <option value="Preselectionnee" th:selected="${candidature.statut == 'Preselectionnee'}">Présélectionnée</option>
-                                            <option value="Acceptee" th:selected="${candidature.statut == 'Acceptee'}">Acceptée</option>
-                                            <option value="Refusee" th:selected="${candidature.statut == 'Refusee'}">Refusée</option>
-                                        </select>
-                                        <button class="button button-secondary" type="submit">Enregistrer le statut</button>
-                                    </form>
-
-                                    <form method="post" th:action="@{/candidatures/{candidatureId}/entretiens(candidatureId=${candidature.id})}">
-                                        <label>Date et heure
-                                            <input type="datetime-local" name="dateEntretien" required>
-                                        </label>
-                                        <label>Type
-                                            <select name="typeEntretien" required>
-                                                <option value="Entretien">Entretien</option>
-                                                <option value="Test">Test</option>
-                                            </select>
-                                        </label>
-                                        <input type="text" name="compteRendu" placeholder="Notes ou consignes">
-                                        <button class="button button-primary" type="submit">Planifier</button>
+                                        <input type="hidden" name="statut" value="Refusee">
+                                        <button class="button button-secondary" type="submit">Rejeter</button>
                                     </form>
                                 </div>
-
-                                <div class="recruitment-history" th:each="entretien : ${entretiensParCandidature[candidature.id]}">
-                                    <p th:text="${entretien.typeEntretien + ' - ' + entretien.dateEntretien}">Entretien</p>
-                                    <p th:if="${entretien.compteRendu != null}" th:text="${entretien.compteRendu}">Compte rendu</p>
-                                    <form method="post" th:action="@{/entretiens/{entretienId}/evaluations(entretienId=${entretien.id})}">
-                                        <input name="note" type="number" min="0" max="20" step="0.01" placeholder="Note / 20" required>
-                                        <input name="commentaire" type="text" placeholder="Évaluation" required>
-                                        <button class="button button-secondary" type="submit">Évaluer</button>
-                                    </form>
-                                    <p th:each="evaluation : ${evaluationsParEntretien[entretien.id]}"
-                                       th:text="${'Évaluation : ' + evaluation.note + '/20 - ' + evaluation.commentaire}">Évaluation</p>
-                                </div>
-                            </div>
                         </article>
                         <p th:if="${#lists.isEmpty(listeCandidatures)}">Aucune candidature pour cette offre.</p>
                     </div>

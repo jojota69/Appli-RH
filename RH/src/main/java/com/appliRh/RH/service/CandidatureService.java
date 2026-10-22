@@ -13,17 +13,21 @@ import com.appliRh.RH.model.Candidature;
 import com.appliRh.RH.model.Offre;
 import com.appliRh.RH.repository.CandidatRepository;
 import com.appliRh.RH.repository.CandidatureRepository;
+import com.appliRh.RH.repository.EtatCandidatureRepository;
 
 @Service
 public class CandidatureService {
 
     private final CandidatRepository candidatRepository;
     private final CandidatureRepository candidatureRepository;
+    private final EtatCandidatureRepository etatCandidatureRepository;
 
     public CandidatureService(CandidatRepository candidatRepository,
-                              CandidatureRepository candidatureRepository) {
+                              CandidatureRepository candidatureRepository,
+                              EtatCandidatureRepository etatCandidatureRepository) {
         this.candidatRepository = candidatRepository;
         this.candidatureRepository = candidatureRepository;
+        this.etatCandidatureRepository = etatCandidatureRepository;
     }
 
     @Transactional
@@ -37,8 +41,11 @@ public class CandidatureService {
             throw new IllegalStateException("Vous avez déjà candidaté à cette offre.");
         }
 
-        candidatureRepository.save(
-                new Candidature(offre, candidat, LocalDate.now(), "Recue"));
+        candidatureRepository.save(new Candidature(
+                offre,
+                candidat,
+                LocalDate.now(),
+                trouverEtat("Recue")));
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +62,25 @@ public class CandidatureService {
     @Transactional
     public Candidature changerStatut(Integer id, String statut) {
         Candidature candidature = findById(id);
-        candidature.setStatut(statut);
+        candidature.setEtat(trouverEtat(statut));
         return candidatureRepository.save(candidature);
+    }
+
+    @Transactional
+    public void preselectionnerNonRejetees(Integer offreId) {
+        com.appliRh.RH.model.EtatCandidature etatRefusee = trouverEtat("Refusee");
+        com.appliRh.RH.model.EtatCandidature etatPreselectionnee = trouverEtat("Preselectionnee");
+
+        List<Candidature> candidatures = candidatureRepository.findByOffreId(offreId);
+        candidatures.stream()
+                .filter(candidature -> !candidature.getEtat().getId().equals(etatRefusee.getId()))
+                .forEach(candidature -> candidature.setEtat(etatPreselectionnee));
+        candidatureRepository.saveAll(candidatures);
+    }
+
+    private com.appliRh.RH.model.EtatCandidature trouverEtat(String libelle) {
+        return etatCandidatureRepository.findByLibelle(libelle)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Etat de candidature introuvable : " + libelle));
     }
 }

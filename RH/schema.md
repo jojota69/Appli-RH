@@ -37,7 +37,7 @@ offreEmploie(<b>id_offre</b>,#id_etat,#id_poste)
 
 candidat(<b>id_cdt</b>,nom,prenom)
 
-etatCandidature(<b>id_etat</b>,libelle) (na io retenue , en attente , rejete)
+etat_candidature(<b>id_etat</b>,libelle) (na io retenue , en attente , rejete)
 
 candidature(<b>id_candidature</b>,#id_cdt,#id_offre,#id_etat)  
 (le id_offre an le offreEmploie mba mahamora ny gestion cote metier)

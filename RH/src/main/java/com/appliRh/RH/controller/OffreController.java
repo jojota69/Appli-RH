@@ -175,6 +175,47 @@ public class OffreController {
         return "redirect:/offres/" + offreId + "/candidatures";
     }
 
+    @PostMapping("/offres/{offreId}/cloturer")
+    @PareFeu(roles = "Recruteur")
+    public String cloturerOffre(@PathVariable Integer offreId) {
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        candidatureService.preselectionnerNonRejetees(offreId);
+        offre.setDateCloture(LocalDate.now());
+        offre.setEtat(etatOffreService.findByLibelle("Termine"));
+        offreService.save(offre);
+        return "redirect:/offres/" + offreId + "/entretiens-termine";
+    }
+
+    @GetMapping("/offres/{offreId}/entretiens-termine")
+    @PareFeu(roles = "Recruteur")
+    public String afficherEntretiensTermines(@PathVariable Integer offreId,
+                                             Model model, HttpSession session) {
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        List<Candidature> candidatures = candidatureService.findByOffreId(offreId).stream()
+                .filter(candidature ->
+                        "Preselectionnee".equalsIgnoreCase(candidature.getEtat().getLibelle()))
+                .toList();
+        Map<Integer, List<Entretien>> entretiensParCandidature = new HashMap<>();
+        Map<Integer, List<com.appliRh.RH.model.EvaluationCandidat>> evaluationsParEntretien = new HashMap<>();
+        for (Candidature candidature : candidatures) {
+            List<Entretien> entretiens = entretienService.findByCandidatureId(candidature.getId());
+            entretiensParCandidature.put(candidature.getId(), entretiens);
+            for (Entretien entretien : entretiens) {
+                evaluationsParEntretien.put(entretien.getId(),
+                        evaluationCandidatService.findByEntretienId(entretien.getId()));
+            }
+        }
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("offreSelectionnee", offre);
+        model.addAttribute("listeCandidatures", candidatures);
+        model.addAttribute("entretiensParCandidature", entretiensParCandidature);
+        model.addAttribute("evaluationsParEntretien", evaluationsParEntretien);
+        return "pages/entretien-termine";
+    }
+
     @PostMapping("/candidatures/{candidatureId}/entretiens")
     @PareFeu(roles = "Recruteur")
     public String planifierEntretien(@PathVariable Integer candidatureId,
@@ -182,9 +223,28 @@ public class OffreController {
                                      @RequestParam String typeEntretien,
                                      @RequestParam(required = false, defaultValue = "") String compteRendu) {
         Candidature candidature = candidatureService.findById(candidatureId);
-        entretienService.planifier(candidature, LocalDateTime.parse(dateEntretien),
+        Entretien entretien = entretienService.planifier(candidature, LocalDateTime.parse(dateEntretien),
                 typeEntretien, compteRendu);
-        return "redirect:/offres/" + candidature.getOffre().getId() + "/candidatures";
+        return "redirect:/entretiens/" + entretien.getId() + "/noter";
+    }
+
+    @GetMapping("/entretiens/{entretienId}/noter")
+    @PareFeu(roles = "Recruteur")
+    public String afficherNotationEntretien(@PathVariable Integer entretienId,
+                                            Model model, HttpSession session) {
+        Entretien entretien = entretienService.findById(entretienId);
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("entretien", entretien);
+        model.addAttribute("evaluations", evaluationCandidatService.findByEntretienId(entretienId));
+        return "pages/noter-entretien";
+    }
+
+    @GetMapping("/entretiens/{entretienId}/termine")
+    @PareFeu(roles = "Recruteur")
+    public String afficherEntretienTermine(@PathVariable Integer entretienId) {
+        Entretien entretien = entretienService.findById(entretienId);
+        return "redirect:/offres/" + entretien.getCandidature().getOffre().getId() + "/entretiens-termine";
     }
 
     @PostMapping("/entretiens/{entretienId}/evaluations")
@@ -196,6 +256,6 @@ public class OffreController {
         Entretien entretien = entretienService.findById(entretienId);
         Employee evaluateur = employeeService.findById((Integer) session.getAttribute("employeeId"));
         evaluationCandidatService.evaluer(entretien, evaluateur, note, commentaire);
-        return "redirect:/offres/" + entretien.getCandidature().getOffre().getId() + "/candidatures";
+        return "redirect:/offres/" + entretien.getCandidature().getOffre().getId() + "/entretiens-termine";
     }
 }

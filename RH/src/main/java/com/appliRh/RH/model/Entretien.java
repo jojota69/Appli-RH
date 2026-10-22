@@ -12,7 +12,7 @@ public class Entretien {
     @Column(name = "id_entretien")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_candidature", nullable = false)
     private Candidature candidature;
 

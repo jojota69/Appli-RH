@@ -10,10 +10,10 @@ import com.appliRh.RH.model.Candidature;
 public interface CandidatureRepository extends JpaRepository<Candidature, Integer> {
 
     @Override
-    @EntityGraph(attributePaths = {"candidat", "offre", "offre.etat"})
+    @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     java.util.Optional<Candidature> findById(Integer id);
 
-    @EntityGraph(attributePaths = {"candidat", "offre", "offre.etat"})
+    @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     List<Candidature> findByOffreId(Integer offreId);
 
     boolean existsByOffreIdAndCandidatId(Integer offreId, Integer candidatId);

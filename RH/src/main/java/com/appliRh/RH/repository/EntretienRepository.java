@@ -12,6 +12,8 @@ public interface EntretienRepository extends JpaRepository<Entretien, Integer> {
     @EntityGraph(attributePaths = {"candidature", "candidature.candidat", "candidature.offre"})
     List<Entretien> findByCandidatureId(Integer candidatureId);
 
+    boolean existsByCandidatureId(Integer candidatureId);
+
     @Override
     @EntityGraph(attributePaths = {"candidature", "candidature.candidat", "candidature.offre"})
     java.util.Optional<Entretien> findById(Integer id);

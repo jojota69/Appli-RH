@@ -35,6 +35,10 @@ public class EntretienService {
     @Transactional
     public Entretien planifier(Candidature candidature, LocalDateTime date,
                                String type, String compteRendu) {
+        if (repository.existsByCandidatureId(candidature.getId())) {
+            throw new IllegalStateException(
+                    "Un entretien est déjà planifié pour cette candidature.");
+        }
         return repository.save(new Entretien(candidature, date, type, compteRendu));
     }
 }

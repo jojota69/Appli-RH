@@ -47,6 +47,11 @@
                             </div>
                             <span class="poste-status" th:text="${offre.statut}">Publiee</span>
                             <a class="button button-secondary" th:href="@{/offres/{offreId}/candidatures(offreId=${offre.id})}">Candidatures</a>
+                            <form method="post"
+                                  th:action="@{/offres/{offreId}/cloturer(offreId=${offre.id})}"
+                                  onsubmit="return confirm('Voulez-vous terminer cette offre et afficher les candidatures présélectionnées ?');">
+                                <button class="button button-primary" type="submit">Terminer l'offre</button>
+                            </form>
                         </article>
                     </div>
 

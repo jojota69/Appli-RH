@@ -77,7 +77,8 @@ VALUES (100000.00, 1, 2026);
 INSERT INTO etat_offre (libelle) VALUES
 ('Publiee'),
 ('Fermee'),
-('Suspendue');
+('Suspendue'),
+('Termine');
 
 INSERT INTO offre
     (id_besoin, id_recruteur, titre, description, date_publication, date_cloture, id_etat)
@@ -92,11 +93,17 @@ VALUES
     ('Diallo', 'Nina', 'nina.diallo@example.com', '0601020304', '/cv/nina-diallo.pdf'),
     ('Roux', 'Hugo', 'hugo.roux@example.com', '0605060708', '/cv/hugo-roux.pdf');
 
+INSERT INTO etat_candidature (libelle) VALUES
+('Recue'),
+('Preselectionnee'),
+('Acceptee'),
+('Refusee');
+
 INSERT INTO candidature
-    (id_offre, id_candidat, date_candidature, statut)
+    (id_offre, id_candidat, date_candidature, id_etat)
 VALUES
-    (1, 1, '2026-01-23', 'Preselectionnee'),
-    (1, 2, '2026-01-24', 'Recue');
+    (1, 1, '2026-01-23', 2),
+    (1, 2, '2026-01-24', 1);
 
 INSERT INTO entretien
     (id_candidature, date_entretien, type_entretien, compte_rendu)

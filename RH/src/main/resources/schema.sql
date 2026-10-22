@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS demande_besoin CASCADE;
 DROP TABLE IF EXISTS evaluation_candidat CASCADE;
 DROP TABLE IF EXISTS entretien CASCADE;
 DROP TABLE IF EXISTS candidature CASCADE;
+DROP TABLE IF EXISTS etat_candidature CASCADE;
 DROP TABLE IF EXISTS candidat CASCADE;
 DROP TABLE IF EXISTS offre CASCADE;
 DROP TABLE IF EXISTS etat_offre CASCADE;
@@ -142,17 +143,24 @@ CREATE TABLE candidat (
     cv_url VARCHAR(255)
 );
 
+CREATE TABLE etat_candidature (
+    id_etat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE candidature (
     id_candidature INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_offre INT NOT NULL,
     id_candidat INT NOT NULL,
     date_candidature DATE NOT NULL,
-    statut VARCHAR(50) NOT NULL,
+    id_etat INT NOT NULL,
     CONSTRAINT uq_candidature_offre_candidat UNIQUE (id_offre, id_candidat),
     CONSTRAINT fk_candidature_offre
         FOREIGN KEY (id_offre) REFERENCES offre(id_offre),
     CONSTRAINT fk_candidature_candidat
-        FOREIGN KEY (id_candidat) REFERENCES candidat(id_candidat)
+        FOREIGN KEY (id_candidat) REFERENCES candidat(id_candidat),
+    CONSTRAINT fk_candidature_etat
+        FOREIGN KEY (id_etat) REFERENCES etat_candidature(id_etat)
 );
 
 CREATE TABLE entretien (
@@ -162,7 +170,8 @@ CREATE TABLE entretien (
     type_entretien VARCHAR(50) NOT NULL,
     compte_rendu TEXT,
     CONSTRAINT fk_entretien_candidature
-        FOREIGN KEY (id_candidature) REFERENCES candidature(id_candidature)
+        FOREIGN KEY (id_candidature) REFERENCES candidature(id_candidature),
+    CONSTRAINT uq_entretien_candidature UNIQUE (id_candidature)
 );
 
 CREATE TABLE evaluation_candidat (
