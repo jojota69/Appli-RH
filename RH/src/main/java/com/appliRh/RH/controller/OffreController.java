@@ -100,7 +100,6 @@ public class OffreController {
 	@GetMapping("/offres")
 	@PareFeu(roles = "Recruteur")
     public String offres(@RequestParam(defaultValue = "offres") String section,
-            @RequestParam(required = false) Integer offreId,
             Model model, HttpSession session) {
 		Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
         String selectedSection = switch (section) {
@@ -120,28 +119,35 @@ public class OffreController {
             .toList();
         model.addAttribute("demandesValidees", demandesValidees);
 
-        Offre offreSelectionnee = offreId == null ? null : offreService.findById(offreId).orElse(null);
-        model.addAttribute("offreSelectionnee", offreSelectionnee);
-        if (offreSelectionnee != null) {
-            List<Candidature> candidatures = candidatureService.findByOffreId(offreId);
-            Map<Integer, List<Entretien>> entretiensParCandidature = new HashMap<>();
-            Map<Integer, List<com.appliRh.RH.model.EvaluationCandidat>> evaluationsParEntretien = new HashMap<>();
-            for (Candidature candidature : candidatures) {
-                List<Entretien> entretiens = entretienService.findByCandidatureId(candidature.getId());
-                entretiensParCandidature.put(candidature.getId(), entretiens);
-                for (Entretien entretien : entretiens) {
-                    evaluationsParEntretien.put(entretien.getId(),
-                            evaluationCandidatService.findByEntretienId(entretien.getId()));
-                }
-            }
-            model.addAttribute("listeCandidatures", candidatures);
-            model.addAttribute("entretiensParCandidature", entretiensParCandidature);
-            model.addAttribute("evaluationsParEntretien", evaluationsParEntretien);
-        }
-
-
 		return "pages/offres";
 	}
+
+    @GetMapping("/offres/{offreId}/candidatures")
+    @PareFeu(roles = "Recruteur")
+    public String suiviCandidatures(@PathVariable Integer offreId,
+                                    Model model, HttpSession session) {
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        List<Candidature> candidatures = candidatureService.findByOffreId(offreId);
+        Map<Integer, List<Entretien>> entretiensParCandidature = new HashMap<>();
+        Map<Integer, List<com.appliRh.RH.model.EvaluationCandidat>> evaluationsParEntretien = new HashMap<>();
+        for (Candidature candidature : candidatures) {
+            List<Entretien> entretiens = entretienService.findByCandidatureId(candidature.getId());
+            entretiensParCandidature.put(candidature.getId(), entretiens);
+            for (Entretien entretien : entretiens) {
+                evaluationsParEntretien.put(entretien.getId(),
+                        evaluationCandidatService.findByEntretienId(entretien.getId()));
+            }
+        }
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("section", "listeOffres");
+        model.addAttribute("offreSelectionnee", offre);
+        model.addAttribute("listeCandidatures", candidatures);
+        model.addAttribute("entretiensParCandidature", entretiensParCandidature);
+        model.addAttribute("evaluationsParEntretien", evaluationsParEntretien);
+        return "pages/suivi-candidatures";
+    }
 
     @PostMapping("/offres/creer")
     @PareFeu(roles = "Recruteur")
@@ -166,7 +172,7 @@ public class OffreController {
                                            @PathVariable Integer candidatureId,
                                            @RequestParam String statut) {
         candidatureService.changerStatut(candidatureId, statut);
-        return "redirect:/offres?offreId=" + offreId;
+        return "redirect:/offres/" + offreId + "/candidatures";
     }
 
     @PostMapping("/candidatures/{candidatureId}/entretiens")
@@ -178,7 +184,7 @@ public class OffreController {
         Candidature candidature = candidatureService.findById(candidatureId);
         entretienService.planifier(candidature, LocalDateTime.parse(dateEntretien),
                 typeEntretien, compteRendu);
-        return "redirect:/offres?offreId=" + candidature.getOffre().getId();
+        return "redirect:/offres/" + candidature.getOffre().getId() + "/candidatures";
     }
 
     @PostMapping("/entretiens/{entretienId}/evaluations")
@@ -190,6 +196,6 @@ public class OffreController {
         Entretien entretien = entretienService.findById(entretienId);
         Employee evaluateur = employeeService.findById((Integer) session.getAttribute("employeeId"));
         evaluationCandidatService.evaluer(entretien, evaluateur, note, commentaire);
-        return "redirect:/offres?offreId=" + entretien.getCandidature().getOffre().getId();
+        return "redirect:/offres/" + entretien.getCandidature().getOffre().getId() + "/candidatures";
     }
 }
