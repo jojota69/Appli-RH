@@ -250,8 +250,15 @@ public class HomeController {
     @PostMapping("/demande/{id}/valider-direction")
     @PareFeu(roles = "Direction")
     public String validerDemandeDirection(@org.springframework.web.bind.annotation.PathVariable Integer id) {
-        demandeBesoinService.changerEtat(id, 1);
         DemandeBesoin demande = demandeBesoinService.findById(id);
+        BigDecimal budgetTotal = budgetAlloueService.getBudgetTotal();
+        BigDecimal budgetEngage = demandeBesoinService.getBudgetEngageExcept(id);
+
+        if (budgetEngage.add(demande.getBudget()).compareTo(budgetTotal) > 0) {
+            demandeBesoinService.changerEtat(id, 2);
+            return "redirect:/home?section=listeDemandesRH&error=Budget total de l'entreprise depasse";
+        }
+        demandeBesoinService.changerEtat(id, 1);
         posteService.create(new Poste(demande.getIntitulePoste()));
         List<Employee> recruteur = employeeService.findByRole(4);
         offreService.save(new Offre(demande, recruteur.get(0), demande.getIntitulePoste(), "Description de l'offre", java.time.LocalDate.now(), null, etatOffreService.findById(1)));
