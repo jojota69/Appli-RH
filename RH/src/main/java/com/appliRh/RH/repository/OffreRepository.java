@@ -18,4 +18,7 @@ public interface OffreRepository extends JpaRepository<Offre, Integer> {
     @Override
     @EntityGraph(attributePaths = {"besoin", "recruteur", "etat"})
     Optional<Offre> findById(Integer id);
+
+    @EntityGraph(attributePaths = {"besoin", "recruteur", "etat"})
+    Optional<Offre> findByBesoinId(Integer demandeId);
 }

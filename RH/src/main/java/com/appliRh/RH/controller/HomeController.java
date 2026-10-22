@@ -112,6 +112,8 @@ public class HomeController {
         }
 
         List<DemandeBesoin> listeDemandesDirectionValidee = demandeBesoinService.getDemandesValide();
+        listeDemandesDirectionValidee.removeIf(demande ->
+                offreService.findByDemandeId(demande.getId()).isPresent());
 
         model.addAttribute("listeTypeContrat", typeContratService.findAll());
         model.addAttribute("section", selectedSection);

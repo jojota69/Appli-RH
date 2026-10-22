@@ -22,6 +22,10 @@ public class OffreService {
         return offreRepository.findById(id);
     }
 
+    public Optional<Offre> findByDemandeId(Integer demandeId) {
+        return offreRepository.findByBesoinId(demandeId);
+    }
+
     public Offre save(Offre offre) {
         return offreRepository.save(offre);
     }
