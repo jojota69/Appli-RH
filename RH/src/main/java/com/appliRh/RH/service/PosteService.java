@@ -30,8 +30,14 @@ public class PosteService {
 
     @Transactional(readOnly = true)
     public Poste findByLibelle(String libelle) {
-        return repository.findByLibelle(libelle)
+        return repository.findByLibelleOrderByIdAsc(libelle).stream()
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Poste introuvable : " + libelle));
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByLibelle(String libelle) {
+        return repository.existsByLibelle(libelle);
     }
 
     @Transactional

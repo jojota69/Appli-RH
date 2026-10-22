@@ -269,10 +269,28 @@ public class HomeController {
             return "redirect:/home?section=listeDemandesRH&error=Budget total de l'entreprise depasse";
         }
         demandeBesoinService.changerEtat(id, 1);
-        posteService.create(new Poste(demande.getIntitulePoste()));
-        List<Employee> recruteur = employeeService.findByRole(4);
-        offreService.save(new Offre(demande, recruteur.get(0), demande.getIntitulePoste(), "Description de l'offre", java.time.LocalDate.now(), null, etatOffreService.findById(1)));
+        if (!posteService.existsByLibelle(demande.getIntitulePoste())) {
+            posteService.create(new Poste(demande.getIntitulePoste()));
+        }
         return "redirect:/home?section=listeDemandesDirection";
+    }
+
+    @PostMapping("/publication/{id}/valeurs")
+    @PareFeu(roles = "Direction")
+    public String recupererValeursFormulaire(
+            @org.springframework.web.bind.annotation.PathVariable Integer id,
+            @RequestParam String intitulePoste,
+            @RequestParam Integer managerId,
+            @RequestParam Integer departementId,
+            @RequestParam Integer effectif,
+            @RequestParam BigDecimal budget,
+            @RequestParam java.time.LocalDate dateSouhaitee,
+            @RequestParam String description,
+            @RequestParam Integer typeContrat) {
+        DemandeBesoin demande = demandeBesoinService.findById(id);
+        List<Employee> recruteur = employeeService.findByRole(4);
+        offreService.save(new Offre(demande, recruteur.get(0), demande.getIntitulePoste(), description, java.time.LocalDate.now(), dateSouhaitee.minusDays(3), etatOffreService.findById(1)));
+        return "redirect:/home?section=preparerPub&demandeId=" + id;
     }
 
     @PostMapping("/demande/{id}/rejeter-direction")
