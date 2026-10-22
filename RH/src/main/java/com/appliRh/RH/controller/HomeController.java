@@ -23,6 +23,9 @@ import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
 import com.appliRh.RH.model.Poste;
 import com.appliRh.RH.service.BudgetAlloueService;
+import com.appliRh.RH.service.OffreService;
+import com.appliRh.RH.service.EtatOffreService;
+import com.appliRh.RH.model.Offre;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,9 +40,11 @@ public class HomeController {
     private final EtatDemandeService etatDemandeService;
     private final TypeDemandeService typeDemandeService;
     private final TypeContratService typeContratService;
+    private final OffreService offreService;
     private final BudgetAlloueService budgetAlloueService;
+    private final EtatOffreService etatOffreService;
 
-    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, BudgetAlloueService budgetAlloueService) {
+    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, BudgetAlloueService budgetAlloueService, OffreService offreService, EtatOffreService etatOffreService) {
         this.employeeService = employeeService;
         this.employeeFicheService = employeeFicheService;
         this.posteService = posteService;
@@ -47,7 +52,9 @@ public class HomeController {
         this.etatDemandeService = etatDemandeService;
         this.typeDemandeService = typeDemandeService;
         this.typeContratService = typeContratService;
+        this.offreService = offreService;
         this.budgetAlloueService = budgetAlloueService;
+        this.etatOffreService = etatOffreService;
     }
 
     @GetMapping("/home")
@@ -246,6 +253,8 @@ public class HomeController {
         demandeBesoinService.changerEtat(id, 1);
         DemandeBesoin demande = demandeBesoinService.findById(id);
         posteService.create(new Poste(demande.getIntitulePoste()));
+        List<Employee> recruteur = employeeService.findByRole(4);
+        offreService.save(new Offre(demande, recruteur.get(0), demande.getIntitulePoste(), "Description de l'offre", java.time.LocalDate.now(), null, etatOffreService.findById(1)));
         return "redirect:/home?section=listeDemandesDirection";
     }
 

@@ -58,4 +58,9 @@ public class EmployeeService {
     public List<Employee> getEmployeesByDepartement(Integer id) {
         return repository.findByDepartementId(id);
     }
+
+    @Transactional(readOnly = true)
+    public List<Employee> findByRole(Integer roleId) {
+        return repository.findByRoleId(roleId);
+    }
 }
