@@ -292,7 +292,7 @@ public class HomeController {
         DemandeBesoin demande = demandeBesoinService.findById(id);
         List<Employee> recruteur = employeeService.findByRole(4);
         offreService.save(new Offre(demande, recruteur.get(0), demande.getIntitulePoste(), description, java.time.LocalDate.now(), dateSouhaitee.minusDays(3), etatOffreService.findById(1)));
-        return "redirect:/home?section=preparerPub&demandeId=" + id;
+        return "redirect:/home?section=ListeDemandesDirectionValidee";
     }
 
     @PostMapping("/demande/{id}/rejeter-direction")
