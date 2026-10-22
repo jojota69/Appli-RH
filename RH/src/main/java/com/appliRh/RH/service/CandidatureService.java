@@ -1,9 +1,12 @@
 package com.appliRh.RH.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityNotFoundException;
 
 import com.appliRh.RH.model.Candidat;
 import com.appliRh.RH.model.Candidature;
@@ -36,5 +39,23 @@ public class CandidatureService {
 
         candidatureRepository.save(
                 new Candidature(offre, candidat, LocalDate.now(), "Recue"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Candidature> findByOffreId(Integer offreId) {
+        return candidatureRepository.findByOffreId(offreId);
+    }
+
+    @Transactional(readOnly = true)
+    public Candidature findById(Integer id) {
+        return candidatureRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Candidature introuvable : " + id));
+    }
+
+    @Transactional
+    public Candidature changerStatut(Integer id, String statut) {
+        Candidature candidature = findById(id);
+        candidature.setStatut(statut);
+        return candidatureRepository.save(candidature);
     }
 }

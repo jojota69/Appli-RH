@@ -88,7 +88,8 @@ public class HomeController {
                 "recruitment", 
                 "contracts", 
                 "onboarding",
-                "listeDemandesRH" -> section;
+                "listeDemandesRH",
+                "listeDemandesDirectionValidee" -> section;
             default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
@@ -101,6 +102,8 @@ public class HomeController {
                     poste.getId());
             nombreParPoste.add(count);
         }
+
+        List<DemandeBesoin> listeDemandesDirectionValidee = demandeBesoinService.getDemandesValide();
 
         model.addAttribute("listeTypeContrat", typeContratService.findAll());
         model.addAttribute("section", selectedSection);
@@ -117,6 +120,8 @@ public class HomeController {
         model.addAttribute("listeDemandesDirection", direction
             ? demandesDuDepartement
             : List.of());
+        model.addAttribute("listeDemandesDirectionValidee", listeDemandesDirectionValidee);
+        
         if (demandeId != null && (selectedSection.equals("modifDemande")
             || selectedSection.equals("voirDemande")
             || selectedSection.equals("voirDemandeRH"))) {

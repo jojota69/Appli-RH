@@ -578,6 +578,79 @@ h1 {
   min-width: 170px;
   margin-top: 0;
 }
+.recruitment-actions {
+  display: grid;
+  gap: 12px;
+  flex-basis: 100%;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.recruitment-actions form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.recruitment-actions label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font: 11px Arial, sans-serif;
+}
+.recruitment-actions select,
+.recruitment-actions input {
+  min-width: 150px;
+  padding: 10px 11px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font: 12px Arial, sans-serif;
+}
+.recruitment-history {
+  flex-basis: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  background: #f7f8f5;
+  border-left: 3px solid var(--teal);
+}
+.recruitment-history p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font: 12px/1.5 Arial, sans-serif;
+}
+.recruitment-history form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.recruitment-create-panel {
+  max-width: 760px;
+  margin-top: 24px;
+}
+.recruitment-create-form {
+  display: grid;
+  gap: 14px;
+}
+.recruitment-create-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font: 700 11px Arial, sans-serif;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.recruitment-create-form input,
+.recruitment-create-form select,
+.recruitment-create-form textarea {
+  width: 100%;
+  padding: 11px 12px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font: 13px Arial, sans-serif;
+}
 @media (max-width: 800px) {
   .position-form-layout {
     flex-direction: column;

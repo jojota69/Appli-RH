@@ -68,4 +68,8 @@ La page publique des offres possède également un header indépendant avec la m
 
 La page détail d'une offre contient maintenant un formulaire de candidature avec les coordonnées du candidat et un lien de CV facultatif. La candidature est enregistrée dans `candidat` puis `candidature`, avec contrôle des doublons pour une même offre.
 
+L'espace Recruteur couvre désormais le suivi du bloc 2 : affichage des candidatures par offre, présélection, acceptation ou refus, planification des entretiens et tests, saisie d'une évaluation notée et conservation de l'historique des évaluations.
+
+Le Recruteur peut également transformer une demande validée en offre publiée depuis la page des offres, avec un titre, une description et une date de clôture facultative.
+
 Le schéma et les données de démonstration couvrent désormais le bloc Recrutement : `offre`, `candidat`, `candidature`, `entretien` et `evaluation_candidat`. Une offre publiée, deux candidatures, un entretien et une évaluation sont insérés dans `data.sql`.
