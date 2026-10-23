@@ -175,16 +175,26 @@ public class OffreController {
         return "redirect:/offres/" + offreId + "/candidatures";
     }
 
+    @PostMapping("/offres/{offreId}/terminer")
+    @PareFeu(roles = "Recruteur")
+    public String terminerOffre(@PathVariable Integer offreId) {
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        candidatureService.preselectionnerNonRejetees(offreId);
+        offre.setEtat(etatOffreService.findByLibelle("Termine"));
+        offreService.save(offre);
+        return "redirect:/offres/" + offreId + "/entretiens-termine";
+    }
+
     @PostMapping("/offres/{offreId}/cloturer")
     @PareFeu(roles = "Recruteur")
     public String cloturerOffre(@PathVariable Integer offreId) {
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
-        candidatureService.preselectionnerNonRejetees(offreId);
         offre.setDateCloture(LocalDate.now());
-        offre.setEtat(etatOffreService.findByLibelle("Termine"));
+        offre.setEtat(etatOffreService.findByLibelle("Fermee"));
         offreService.save(offre);
-        return "redirect:/offres/" + offreId + "/entretiens-termine";
+        return "redirect:/offres";
     }
 
     @GetMapping("/offres/{offreId}/entretiens-termine")
