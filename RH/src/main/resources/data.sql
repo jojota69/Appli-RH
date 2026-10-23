@@ -104,26 +104,37 @@ INSERT INTO candidat
     (nom, prenom, email, telephone, cv_url)
 VALUES
     ('Diallo', 'Nina', 'nina.diallo@example.com', '0601020304', '/cv/nina-diallo.pdf'),
-    ('Roux', 'Hugo', 'hugo.roux@example.com', '0605060708', '/cv/hugo-roux.pdf');
+    ('Roux', 'Hugo', 'hugo.roux@example.com', '0605060708', '/cv/hugo-roux.pdf'),
+    ('Morel', 'Clara', 'clara.morel@example.com', '0608091011', '/cv/clara-morel.pdf'),
+    ('Garcia', 'Louis', 'louis.garcia@example.com', '0612131415', '/cv/louis-garcia.pdf'),
+    ('Fofana', 'Sara', 'sara.fofana@example.com', '0616171819', '/cv/sara-fofana.pdf');
 
 INSERT INTO etat_candidature (libelle) VALUES
 ('Recue'),
 ('Preselectionnee'),
 ('Acceptee'),
-('Refusee');
+('Refusee'),
+('Proposee');
 
 INSERT INTO candidature
     (id_offre, id_candidat, date_candidature, id_etat)
 VALUES
     (1, 1, '2026-01-23', 2),
-    (1, 2, '2026-01-24', 1);
+    (1, 2, '2026-01-24', 1),
+    (1, 3, '2026-01-25', 2),
+    (1, 4, '2026-01-26', 2),
+    (1, 5, '2026-01-27', 2);
 
 INSERT INTO entretien
     (id_candidature, date_entretien, type_entretien, compte_rendu)
 VALUES
-    (1, '2026-01-28 10:00:00', 'Visio', 'Bonne experience en management technique.');
+    (1, '2026-01-28 10:00:00', 'Visio', 'Bonne experience en management technique.'),
+    (3, '2026-01-29 09:00:00', 'Visio', 'Tres bonne experience en encadrement.'),
+    (4, '2026-01-29 14:00:00', 'Presentiel', 'Profil interessant, experience correcte.');
 
 INSERT INTO evaluation_candidat
     (id_entretien, id_evaluateur, note, commentaire, date_evaluation)
 VALUES
-    (1, 1, 16.50, 'Profil pertinent pour le poste.', '2026-01-28');
+    (1, 1, 16.50, 'Profil pertinent pour le poste.', '2026-01-28'),
+    (2, 3, 18.50, 'Excellent profil de manager technique.', '2026-01-29'),
+    (3, 3, 13.00, 'Profil correct mais moins experimente.', '2026-01-29');

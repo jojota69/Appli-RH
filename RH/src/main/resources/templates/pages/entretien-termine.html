@@ -91,6 +91,11 @@
                                         Entretien non noté
                                     </p>
                                 </div>
+                                <form method="post"
+                                      th:if="${candidaturesProposables.contains(candidature.id)}"
+                                      th:action="@{/offres/{offreId}/candidatures/{candidatureId}/proposer(offreId=${offreSelectionnee.id}, candidatureId=${candidature.id})}">
+                                    <button class="button button-primary" type="submit">Proposer</button>
+                                </form>
                             </div>
                         </article>
                         <p th:if="${#lists.isEmpty(listeCandidatures)}">

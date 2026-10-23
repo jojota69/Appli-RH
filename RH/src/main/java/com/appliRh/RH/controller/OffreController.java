@@ -2,7 +2,9 @@ package com.appliRh.RH.controller;
 
 import java.util.List;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.math.BigDecimal;
@@ -211,20 +213,67 @@ public class OffreController {
                 .toList();
         Map<Integer, List<Entretien>> entretiensParCandidature = new HashMap<>();
         Map<Integer, List<com.appliRh.RH.model.EvaluationCandidat>> evaluationsParEntretien = new HashMap<>();
+        Map<Integer, BigDecimal> meilleureNoteParCandidature = new HashMap<>();
         for (Candidature candidature : candidatures) {
             List<Entretien> entretiens = entretienService.findByCandidatureId(candidature.getId());
             entretiensParCandidature.put(candidature.getId(), entretiens);
             for (Entretien entretien : entretiens) {
-                evaluationsParEntretien.put(entretien.getId(),
-                        evaluationCandidatService.findByEntretienId(entretien.getId()));
+                List<com.appliRh.RH.model.EvaluationCandidat> evaluations =
+                        evaluationCandidatService.findByEntretienId(entretien.getId());
+                evaluationsParEntretien.put(entretien.getId(), evaluations);
+                evaluations.stream()
+                        .map(com.appliRh.RH.model.EvaluationCandidat::getNote)
+                        .max(BigDecimal::compareTo)
+                        .ifPresent(note -> meilleureNoteParCandidature.merge(
+                                candidature.getId(), note, BigDecimal::max));
             }
         }
+        Set<Integer> candidaturesProposables = meilleureNoteParCandidature.entrySet().stream()
+                .sorted(Map.Entry.<Integer, BigDecimal>comparingByValue().reversed()
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .limit(offre.getBesoin().getEffectif())
+                .map(Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.toCollection(HashSet::new));
         model.addAttribute("employeeConnecte", employee);
         model.addAttribute("offreSelectionnee", offre);
         model.addAttribute("listeCandidatures", candidatures);
         model.addAttribute("entretiensParCandidature", entretiensParCandidature);
         model.addAttribute("evaluationsParEntretien", evaluationsParEntretien);
+        model.addAttribute("candidaturesProposables", candidaturesProposables);
         return "pages/entretien-termine";
+    }
+
+    @PostMapping("/offres/{offreId}/candidatures/{candidatureId}/proposer")
+    @PareFeu(roles = "Recruteur")
+    public String proposerCandidature(@PathVariable Integer offreId,
+                                      @PathVariable Integer candidatureId) {
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        List<Candidature> candidatures = candidatureService.findByOffreId(offreId).stream()
+                .filter(candidature ->
+                        "Preselectionnee".equalsIgnoreCase(candidature.getEtat().getLibelle()))
+                .toList();
+        Map<Integer, BigDecimal> meilleureNoteParCandidature = new HashMap<>();
+        for (Candidature candidature : candidatures) {
+            for (Entretien entretien : entretienService.findByCandidatureId(candidature.getId())) {
+                evaluationCandidatService.findByEntretienId(entretien.getId()).stream()
+                        .map(com.appliRh.RH.model.EvaluationCandidat::getNote)
+                        .max(BigDecimal::compareTo)
+                        .ifPresent(note -> meilleureNoteParCandidature.merge(
+                                candidature.getId(), note, BigDecimal::max));
+            }
+        }
+        Set<Integer> candidaturesProposables = meilleureNoteParCandidature.entrySet().stream()
+                .sorted(Map.Entry.<Integer, BigDecimal>comparingByValue().reversed()
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .limit(offre.getBesoin().getEffectif())
+                .map(Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.toSet());
+        if (!candidaturesProposables.contains(candidatureId)) {
+            throw new IllegalArgumentException("Cette candidature ne fait pas partie des meilleures notes.");
+        }
+        candidatureService.changerStatut(candidatureId, "Proposee");
+        return "redirect:/offres/" + offreId + "/entretiens-termine";
     }
 
     @PostMapping("/candidatures/{candidatureId}/entretiens")
