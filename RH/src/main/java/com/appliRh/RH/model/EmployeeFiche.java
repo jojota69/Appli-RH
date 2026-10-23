@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -36,11 +35,8 @@ public class EmployeeFiche {
     private Departement departement;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_type_contrat", nullable = false)
-    private TypeContrat typeContrat;
-
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal salaire;
+    @JoinColumn(name = "id_contrat", nullable = false)
+    private Contrat contrat;
 
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissance;
@@ -49,13 +45,11 @@ public class EmployeeFiche {
     }
 
     public EmployeeFiche(Employee employee, Poste poste, Departement departement,
-                         TypeContrat typeContrat, BigDecimal salaire,
-                         LocalDate dateNaissance) {
+                         Contrat contrat, LocalDate dateNaissance) {
         this.employee = employee;
         this.poste = poste;
         this.departement = departement;
-        this.typeContrat = typeContrat;
-        this.salaire = salaire;
+        this.contrat = contrat;
         this.dateNaissance = dateNaissance;
     }
 
@@ -87,20 +81,32 @@ public class EmployeeFiche {
         this.departement = departement;
     }
 
+    public Contrat getContrat() {
+        return contrat;
+    }
+
+    public void setContrat(Contrat contrat) {
+        this.contrat = contrat;
+    }
+
     public TypeContrat getTypeContrat() {
-        return typeContrat;
+        return contrat == null ? null : contrat.getTypeContrat();
     }
 
     public void setTypeContrat(TypeContrat typeContrat) {
-        this.typeContrat = typeContrat;
+        if (contrat != null) {
+            contrat.setTypeContrat(typeContrat);
+        }
     }
 
-    public BigDecimal getSalaire() {
-        return salaire;
+    public java.math.BigDecimal getSalaire() {
+        return contrat == null ? null : contrat.getSalaire();
     }
 
-    public void setSalaire(BigDecimal salaire) {
-        this.salaire = salaire;
+    public void setSalaire(java.math.BigDecimal salaire) {
+        if (contrat != null) {
+            contrat.setSalaire(salaire);
+        }
     }
 
     public LocalDate getDateNaissance() {

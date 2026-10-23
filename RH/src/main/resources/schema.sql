@@ -15,6 +15,8 @@ DROP TABLE IF EXISTS poste CASCADE;
 DROP TABLE IF EXISTS departement CASCADE;
 DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS budget_alloue CASCADE;
+DROP TABLE IF EXISTS contrat CASCADE;
+DROP TABLE IF EXISTS etat_contrat CASCADE;
 
 
 CREATE TABLE role (
@@ -58,13 +60,28 @@ CREATE TABLE employee (
         FOREIGN KEY (id_role) REFERENCES role(id_role)
 );
 
+CREATE TABLE etat_contrat(
+    id_etat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    libelle VARCHAR(50)
+);
+
+CREATE TABLE contrat(
+    id_contrat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_type INT NOT NULL,
+    id_etat INT NOT NULL,
+    salaire NUMERIC(12,2) NOT NULL,
+    CONSTRAINT fk_contrat_etat
+        FOREIGN KEY (id_etat) REFERENCES etat_contrat(id_etat),
+    CONSTRAINT fk_contrat_type
+        FOREIGN KEY (id_type) REFERENCES type_contrat(id_type)
+);
+
 CREATE TABLE employee_fiche (
     id_fiche INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_emp INT NOT NULL,
     id_poste INT NOT NULL,
     id_dept INT NOT NULL,
-    id_type_contrat INT NOT NULL,
-    salaire NUMERIC(12, 2) NOT NULL,
+    id_contrat INT NOT NULL,
     date_naissance DATE NOT NULL,
     CONSTRAINT fk_employee_fiche_employee
         FOREIGN KEY (id_emp) REFERENCES employee(id_emp),
@@ -73,7 +90,7 @@ CREATE TABLE employee_fiche (
     CONSTRAINT fk_employee_fiche_departement
         FOREIGN KEY (id_dept) REFERENCES departement(id_dept),
     CONSTRAINT fk_employee_fiche_type_contrat
-        FOREIGN KEY (id_type_contrat) REFERENCES type_contrat(id_type),
+        FOREIGN KEY (id_contrat) REFERENCES contrat(id_contrat),
     CONSTRAINT uq_employee_fiche_employee UNIQUE (id_emp)
 );
 

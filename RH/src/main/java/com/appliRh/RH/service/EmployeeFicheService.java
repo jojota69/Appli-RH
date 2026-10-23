@@ -39,8 +39,7 @@ public class EmployeeFicheService {
         existing.setEmployee(employeeFiche.getEmployee());
         existing.setPoste(employeeFiche.getPoste());
         existing.setDepartement(employeeFiche.getDepartement());
-        existing.setTypeContrat(employeeFiche.getTypeContrat());
-        existing.setSalaire(employeeFiche.getSalaire());
+        existing.setContrat(employeeFiche.getContrat());
         existing.setDateNaissance(employeeFiche.getDateNaissance());
         return repository.save(existing);
     }

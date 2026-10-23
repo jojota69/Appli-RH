@@ -163,6 +163,10 @@ public class HomeController {
             model.addAttribute("budgetDepartement",
                     demandeBesoinService.getBudgetDepartement(departementId));
         }
+        if (selectedEmployeeId != null && selectedSection.equals("voirPoste")) {
+            EmployeeFiche ficheSelectionnee = employeeService.findById(selectedEmployeeId).getFiche();
+            model.addAttribute("ficheSelectionnee", ficheSelectionnee);
+        }
         if (demandeId != null && selectedSection.equals("preparerPub")) { 
             DemandeBesoin demandeAPublier = demandeBesoinService.findById(demandeId);
             model.addAttribute("demandeAPublier", demandeAPublier);

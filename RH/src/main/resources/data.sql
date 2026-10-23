@@ -26,6 +26,19 @@ INSERT INTO type_contrat (libelle) VALUES
 ('Contrat a duree determinee'),
 ('Stage');
 
+INSERT INTO etat_contrat (libelle) VALUES
+('Actif'),
+('Termine');
+
+INSERT INTO contrat (id_type, id_etat, salaire) VALUES
+(1, 1, 4200.00),
+(1, 1, 3500.00),
+(2, 1, 3000.00),
+(1, 1, 3800.00),
+(3, 1, 1800.00),
+(1, 1, 3900.00),
+(1, 1, 3600.00);
+
 INSERT INTO type_demande (libelle) VALUES
 ('Creation de poste'),
 ('Remplacement'),
@@ -47,15 +60,15 @@ INSERT INTO employee (nom, prenom, email, id_role, mot_de_passe) VALUES
 ('Leroy', 'Karim', 'karim.leroy@rh.local', 2, 'password123');
 
 INSERT INTO employee_fiche
-    (id_emp, id_poste, id_dept, id_type_contrat, salaire, date_naissance)
+    (id_emp, id_poste, id_dept, id_contrat, date_naissance)
 VALUES
-    (1, 1, 1, 1, 4200.00, '1988-04-12'),
-    (2, 2, 2, 1, 3500.00, '1990-08-23'),
-    (3, 5, 1, 2, 3000.00, '1992-01-17'),
-    (4, 8, 3, 1, 3800.00, '1986-11-05'),
-    (5, 8, 4, 3, 1800.00, '1998-06-30'),
-    (6, 6, 2, 1, 3900.00, '1991-09-14'),
-    (7, 2, 3, 1, 3600.00, '1989-03-21');
+    (1, 1, 1, 1, '1988-04-12'),
+    (2, 2, 2, 2, '1990-08-23'),
+    (3, 5, 1, 3, '1992-01-17'),
+    (4, 8, 3, 4, '1986-11-05'),
+    (5, 8, 4, 5, '1998-06-30'),
+    (6, 6, 2, 6, '1991-09-14'),
+    (7, 2, 3, 7, '1989-03-21');
 
 INSERT INTO demande_besoin
     (intitule_poste, id_dept, id_manager, effectif, motif, budget,

@@ -84,7 +84,30 @@
 
 <!-- Detail poste -->
 <div th:fragment="voirPoste">
-    <section class="content-section" th:if="${demandeSelectionnee != null}">
+    <section class="content-section" th:if="${ficheSelectionnee != null}">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Espace manager</p>
+                <h1>Fiche employé</h1>
+                <p class="intro" th:text="${ficheSelectionnee.employee.prenom + ' ' + ficheSelectionnee.employee.nom}">Employé sélectionné</p>
+            </div>
+            <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}">Retour aux employés</a>
+        </div>
+
+        <div class="panel request-details">
+            <p><strong>Nom :</strong> <span th:text="${ficheSelectionnee.employee.nom}">Nom</span></p>
+            <p><strong>Prénom :</strong> <span th:text="${ficheSelectionnee.employee.prenom}">Prénom</span></p>
+            <p><strong>Email :</strong> <span th:text="${ficheSelectionnee.employee.email}">Email</span></p>
+            <p><strong>Rôle :</strong> <span th:text="${ficheSelectionnee.employee.role.libelle}">Rôle</span></p>
+            <p><strong>Poste :</strong> <span th:text="${ficheSelectionnee.poste.libelle}">Poste</span></p>
+            <p><strong>Département :</strong> <span th:text="${ficheSelectionnee.departement.libelle}">Département</span></p>
+            <p><strong>Type de contrat :</strong> <span th:text="${ficheSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
+            <p><strong>État du contrat :</strong> <span th:text="${ficheSelectionnee.contrat.etat.libelle}">État du contrat</span></p>
+            <p><strong>Salaire :</strong> <span th:text="${#numbers.formatDecimal(ficheSelectionnee.salaire, 1, 2)}">0,00</span></p>
+            <p><strong>Date de naissance :</strong> <span th:text="${ficheSelectionnee.dateNaissance}">Date</span></p>
+        </div>
+    </section>
+    <section class="content-section" th:if="${ficheSelectionnee == null and demandeSelectionnee != null}">
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Espace manager</p>
@@ -103,7 +126,7 @@
             <p><strong>Type de contrat :</strong> <span th:text="${demandeSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
         </div>
     </section>
-    <section class="content-section" th:unless="${demandeSelectionnee != null}">
+    <section class="content-section" th:if="${ficheSelectionnee == null and demandeSelectionnee == null}">
         <h1>Fiche employé introuvable</h1>
         <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Retour aux postes</a>
     </section>
@@ -631,5 +654,4 @@
     </section>
 </div>
 </div>
-
 
