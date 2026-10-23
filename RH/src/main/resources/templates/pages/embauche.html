@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Offres disponibles</title>
+    <link rel="stylesheet" th:href="@{/css/offres-public.css}">
+</head>
+<body>
+    <main class="offers-page">
+        <header class="public-header">
+            <a class="public-brand" th:href="@{/}">
+                <span class="public-brand-mark">RH</span>
+                <strong>Appli RH</strong>
+            </a>
+            <a class="login-button" th:href="@{/}">Voir liste des offres</a>
+        </header>
+
+        <header class="offers-header">
+            <div>
+                <p class="eyebrow">Appli RH</p>
+                <h1>Liste des offres d'embauche</h1>
+            </div>
+        </header>
+
+        <section class="offers-section" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+            <!-- Formulaire d'email stylé -->
+            <div style="background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <form action="" method="post" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <label for="email" style="font-weight: 500; color: #333;">Votre email :</label>
+                    <input type="email" name="email" id="email" placeholder="votre@email.com" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 200px;">
+                    <input type="submit" value="Valider" style="padding: 8px 16px; background-color: #0f172a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                </form>
+            </div>
+
+            <!-- Grille de cartes propre (sans superposition) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                
+                <!-- Article 1 -->
+                <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); aspect-ratio: 1 / 1;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <span style="background: #fee2e2; color: #991b1b; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 14px;">DE</span>
+                            <span style="background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 500;">Publiée</span>
+                        </div>
+                        <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Développeur Full Stack</h2>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0;">Développement des applications Java et Angular.</p>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 12px; margin-bottom: 16px;">Publiée le 15/10/2026</div>
+                        <a href="/offres-disponibles/1" style="display: block; text-align: center; background-color: #0f172a; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 500;">Voir</a>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); aspect-ratio: 1 / 1;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <span style="background: #fee2e2; color: #991b1b; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 14px;">CH</span>
+                            <span style="background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 500;">Publiée</span>
+                        </div>
+                        <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Chef de Projet RH</h2>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0;">Pilotage des projets de transformation digitale RH.</p>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 12px; margin-bottom: 16px;">Publiée le 18/10/2026</div>
+                        <a href="/offres-disponibles/2" style="display: block; text-align: center; background-color: #0f172a; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 500;">Voir</a>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); aspect-ratio: 1 / 1;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <span style="background: #fee2e2; color: #991b1b; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 14px;">AS</span>
+                            <span style="background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 500;">Publiée</span>
+                        </div>
+                        <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Assistant RH</h2>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0;">Gestion administrative du personnel et suivi des dossiers.</p>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 12px; margin-bottom: 16px;">Publiée le 20/10/2026</div>
+                        <a href="/offres-disponibles/3" style="display: block; text-align: center; background-color: #0f172a; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 500;">Voir</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- <p class="empty-state" th:if="${#lists.isEmpty(listeOffres)}">Aucune offre n'est disponible pour le moment.</p> -->
+    </main>
+</body>
+</html>

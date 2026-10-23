@@ -269,3 +269,31 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+/* Conteneur en grille pour aligner les cartes côte à côte */
+.offers-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* Style de la carte carrée */
+.square-card {
+    aspect-ratio: 1 / 1;          /* Force le ratio carré */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+/* Limite la description pour éviter de déborder du carré */
+.square-card .offer-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
