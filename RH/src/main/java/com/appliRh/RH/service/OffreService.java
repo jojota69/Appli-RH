@@ -18,6 +18,10 @@ public class OffreService {
         return offreRepository.findAll();
     }
 
+    public List<Offre> findAllNonTerminees() {
+        return offreRepository.findByEtatLibelleNotIgnoreCase("Termine");
+    }
+
     public Optional<Offre> findById(Integer id) {
         return offreRepository.findById(id);
     }

@@ -15,6 +15,9 @@ public interface OffreRepository extends JpaRepository<Offre, Integer> {
     @EntityGraph(attributePaths = {"besoin", "recruteur", "etat"})
     List<Offre> findAll();
 
+    @EntityGraph(attributePaths = {"besoin", "recruteur", "etat"})
+    List<Offre> findByEtatLibelleNotIgnoreCase(String libelle);
+
     @Override
     @EntityGraph(attributePaths = {"besoin", "recruteur", "etat"})
     Optional<Offre> findById(Integer id);
