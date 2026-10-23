@@ -59,7 +59,7 @@ public class OffreController {
 
     @GetMapping("/")
     public String offresDisponibles(Model model) {
-        model.addAttribute("listeOffres", offreService.findAll());
+        model.addAttribute("listeOffres", offreService.findAllNonTerminees());
         return "index";
     }
 
