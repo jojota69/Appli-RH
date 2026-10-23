@@ -54,19 +54,23 @@
                                 </p>
                                 <span class="poste-status" th:text="${candidature.etat.libelle}">Preselectionnee</span>
 
-                                <form method="post"
+                                <form class="entretien-form" method="post"
                                       th:if="${#lists.isEmpty(entretiensParCandidature[candidature.id])}"
                                       th:action="@{/candidatures/{candidatureId}/entretiens(candidatureId=${candidature.id})}">
-                                    <label>Date et heure
-                                        <input type="datetime-local" name="dateEntretien" required>
-                                    </label>
-                                    <label>Type
-                                        <select name="typeEntretien" required>
-                                            <option value="Entretien">Entretien</option>
-                                            <option value="Test">Test</option>
-                                        </select>
-                                    </label>
-                                    <input type="text" name="compteRendu" placeholder="Notes ou consignes">
+                                    <div class="entretien-form-fields">
+                                        <label>Date et heure
+                                            <input type="datetime-local" name="dateEntretien" required>
+                                        </label>
+                                        <label>Type
+                                            <select name="typeEntretien" required>
+                                                <option value="Entretien">Entretien</option>
+                                                <option value="Test">Test</option>
+                                            </select>
+                                        </label>
+                                        <label>Notes ou consignes
+                                            <input type="text" name="compteRendu" placeholder="Notes ou consignes">
+                                        </label>
+                                    </div>
                                     <button class="button button-primary" type="submit">Planifier l'entretien</button>
                                 </form>
 

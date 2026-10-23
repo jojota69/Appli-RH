@@ -78,9 +78,17 @@ public class CandidatureService {
         candidatureRepository.saveAll(candidatures);
     }
 
+    @Transactional 
+    public List<Candidature> getCandidaturesPreselectionne(){
+        return candidatureRepository.findByEtatId(2);
+    }
+
     private com.appliRh.RH.model.EtatCandidature trouverEtat(String libelle) {
         return etatCandidatureRepository.findByLibelle(libelle)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Etat de candidature introuvable : " + libelle));
     }
+
+
+
 }

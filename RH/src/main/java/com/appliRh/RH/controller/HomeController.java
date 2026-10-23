@@ -15,6 +15,8 @@ import com.appliRh.RH.annotation.PareFeu;
 import com.appliRh.RH.service.EmployeeService;
 import com.appliRh.RH.service.EmployeeFicheService;
 import com.appliRh.RH.service.PosteService;
+import com.appliRh.RH.model.Candidat;
+import com.appliRh.RH.model.Candidature;
 import com.appliRh.RH.model.DemandeBesoin;
 import com.appliRh.RH.model.EmployeeFiche;
 import com.appliRh.RH.service.DemandeBesoinService;
@@ -23,6 +25,7 @@ import com.appliRh.RH.service.TypeDemandeService;
 import com.appliRh.RH.service.TypeContratService;
 import com.appliRh.RH.model.Poste;
 import com.appliRh.RH.service.BudgetAlloueService;
+import com.appliRh.RH.service.CandidatureService;
 import com.appliRh.RH.service.OffreService;
 import com.appliRh.RH.service.EtatOffreService;
 import com.appliRh.RH.model.Offre;
@@ -43,8 +46,9 @@ public class HomeController {
     private final OffreService offreService;
     private final BudgetAlloueService budgetAlloueService;
     private final EtatOffreService etatOffreService;
+    private CandidatureService candidatureService;
 
-    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, BudgetAlloueService budgetAlloueService, OffreService offreService, EtatOffreService etatOffreService) {
+    public HomeController(EmployeeService employeeService, EmployeeFicheService employeeFicheService, PosteService posteService, DemandeBesoinService demandeBesoinService, EtatDemandeService etatDemandeService, TypeDemandeService typeDemandeService, TypeContratService typeContratService, BudgetAlloueService budgetAlloueService, OffreService offreService, EtatOffreService etatOffreService, CandidatureService candidatureService) {
         this.employeeService = employeeService;
         this.employeeFicheService = employeeFicheService;
         this.posteService = posteService;
@@ -55,6 +59,7 @@ public class HomeController {
         this.offreService = offreService;
         this.budgetAlloueService = budgetAlloueService;
         this.etatOffreService = etatOffreService;
+        this.candidatureService = candidatureService;
     }
 
     @GetMapping("/home")
@@ -97,7 +102,8 @@ public class HomeController {
                 "onboarding",
                 "listeDemandesRH",
                 "listeDemandesDirectionValidee",
-                "preparerPub" -> section;
+                "preparerPub",
+                "listeCandidatsPreselectionne" -> section;
             default -> responsableRh ? "listeDemandesRH" : "listeEmployee";
         };
 
@@ -133,7 +139,6 @@ public class HomeController {
             ? demandesDuDepartement
             : List.of());
         model.addAttribute("listeDemandesDirectionValidee", listeDemandesDirectionValidee);
-        
         if (demandeId != null && (selectedSection.equals("modifDemande")
             || selectedSection.equals("voirDemande")
             || selectedSection.equals("voirDemandeRH"))) {
@@ -162,6 +167,7 @@ public class HomeController {
             DemandeBesoin demandeAPublier = demandeBesoinService.findById(demandeId);
             model.addAttribute("demandeAPublier", demandeAPublier);
         }
+
         return "pages/home";
     }
 

@@ -854,3 +854,45 @@ h1 {
     margin-left: 58px;
   }
 }
+
+.entretien-form {
+  flex-basis: 100%;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+}
+
+.entretien-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.entretien-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font: 700 11px Arial, sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.entretien-form input,
+.entretien-form select {
+  width: 100%;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font: 13px Arial, sans-serif;
+  outline: 0;
+}
+
+.entretien-form input:focus,
+.entretien-form select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(59, 167, 154, 0.13);
+}
