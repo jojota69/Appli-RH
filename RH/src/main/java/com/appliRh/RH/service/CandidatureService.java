@@ -78,6 +78,19 @@ public class CandidatureService {
         candidatureRepository.saveAll(candidatures);
     }
 
+    @Transactional
+    public void preselectionnerRecues(Integer offreId) {
+        com.appliRh.RH.model.EtatCandidature etatRecue = trouverEtat("Recue");
+        com.appliRh.RH.model.EtatCandidature etatPreselectionnee = trouverEtat("Preselectionnee");
+
+        List<Candidature> candidatures = candidatureRepository.findByOffreId(offreId);
+        candidatures.stream()
+                .filter(candidature -> candidature.getEtat() != null
+                        && candidature.getEtat().getId().equals(etatRecue.getId()))
+                .forEach(candidature -> candidature.setEtat(etatPreselectionnee));
+        candidatureRepository.saveAll(candidatures);
+    }
+
     @Transactional 
     public List<Candidature> getCandidaturesPreselectionne(){
         return candidatureRepository.findByEtatId(2);

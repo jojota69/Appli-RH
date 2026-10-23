@@ -191,6 +191,7 @@ public class OffreController {
     public String cloturerOffre(@PathVariable Integer offreId) {
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        candidatureService.preselectionnerRecues(offreId);
         offre.setDateCloture(LocalDate.now());
         offre.setEtat(etatOffreService.findByLibelle("Fermee"));
         offreService.save(offre);
