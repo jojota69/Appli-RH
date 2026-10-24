@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Formulaire d'embauche</title>
+    <link rel="stylesheet" th:href="@{/css/offres-public.css}">
+</head>
+<body>
+    <main class="offers-page">
+        <header class="public-header">
+            <a class="public-brand" th:href="@{/}">
+                <span class="public-brand-mark">RH</span>
+                <strong>Appli RH</strong>
+            </a>
+            <a class="login-button" onclick="history.back();">Retour aux offres</a>
+        </header>
+
+        <header class="offers-header">
+            <div>
+                <p class="eyebrow">Dossier d'embauche</p>
+                <h1>Informations du salarié</h1>
+                <p class="intro">Renseignez les informations nécessaires à la préparation du contrat.</p>
+            </div>
+        </header>
+
+        <section class="application-panel">
+            <form class="application-form" th:action="@{/offre/formulaire-embauche/{offreId}/enregistrer(offreId=${offre.id})}" method="post">
+                <div class="form-grid">
+                    <input type="hidden" name="candidatureId" th:value="${candidature.id}">
+                    <label for="nom">
+                        Nom
+                        <input id="nom" name="nom" type="text" autocomplete="family-name" th:value="${candidature.candidat.nom}" readonly>
+                    </label>
+                    <label for="prenom">
+                        Prénom
+                        <input id="prenom" name="prenom" type="text" autocomplete="given-name" th:value="${candidature.candidat.prenom}" readonly>
+                    </label>
+                    <label for="telephone">
+                        Téléphone
+                        <input id="telephone" name="telephone" type="tel" autocomplete="tel" th:value="${candidature.candidat.telephone}" readonly>
+                    </label>
+                    <label for="email">
+                        Email
+                        <input id="email" name="email" type="email" autocomplete="email" th:value="${candidature.candidat.email}" readonly>
+                    </label>
+                    <label for="typeContrat" th:if="${typeContrat != 'Contrat a duree indeterminee'}">
+                        Type de contrat
+                        <input type="text" name="typeContrat" id="typeContrat" th:value="${typeContrat}" readonly>
+                    </label>
+                    <label for="dateFinContrat">
+                        Date de fin de contrat
+                        <input id="dateFinContrat" name="dateFinContrat" type="date">
+                    </label>
+                    <label for="salaireParMois">
+                        Salaire par mois
+                        <input id="salaireParMois" name="salaireParMois" type="number" min="0" step="0.01" inputmode="decimal" required>
+                    </label>
+                </div>
+
+                <button class="offer-button" type="submit">Enregistrer les informations</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

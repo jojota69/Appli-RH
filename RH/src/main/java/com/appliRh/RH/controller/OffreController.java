@@ -318,4 +318,35 @@ public class OffreController {
         evaluationCandidatService.evaluer(entretien, evaluateur, note, commentaire);
         return "redirect:/offres/" + entretien.getCandidature().getOffre().getId() + "/entretiens-termine";
     }
+
+    @GetMapping("/offre/{offreId}/formulaire-embauche/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String formulaireEmbauche(@PathVariable Integer offreId,
+                                      @PathVariable Integer candidatureId,
+                                      Model model, HttpSession session) {
+        Candidature candidature = candidatureService.findById(candidatureId);
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        DemandeBesoin demande = demandeBesoinService.findById(offre.getBesoin().getId());
+        model.addAttribute("typeContrat", demande.getTypeContrat().getLibelle());
+        model.addAttribute("candidature", candidature);
+        model.addAttribute("offre", offre);
+        return "pages/formulaire-embauche";
+    }
+
+    @PostMapping("/offre/formulaire-embauche/{offreId}/enregistrer")
+    @PareFeu(roles = "Recruteur")
+    public String enregistrerFormulaireEmbauche(@RequestParam Integer candidatureId,
+                                                @RequestParam String typeContrat,
+                                                @RequestParam String dateFinContrat,
+                                                @RequestParam BigDecimal salaireParMois,
+                                                @PathVariable Integer offreId,
+                                                Model model, HttpSession session) {
+        Candidature candidature = candidatureService.findById(candidatureId);
+        Offre offre = offreService.findById(offreId)
+                .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        DemandeBesoin demande = demandeBesoinService.findById(offre.getBesoin().getId());
+        // Enregistrer les informations d'embauche
+        return "redirect:/offre/" + offre.getId() + "/formulaire-embauche/" + candidatureId;
+    }
 }

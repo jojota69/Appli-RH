@@ -205,3 +205,18 @@ CREATE TABLE evaluation_candidat (
     CONSTRAINT ck_evaluation_note
         CHECK (note >= 0 AND note <= 20)
 );
+
+CREATE TABLE candidature_contrat(
+    id_candidat_contrat INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_candidature INT NOT NULL,
+    id_type_contrat INT NOT NULL,
+    date_debut DATE NOT NULL,
+    date_fin DATE,
+    salaire NUMERIC(12,2) NOT NULL,
+    CONSTRAINT fk_candidat_contrat_candidature
+        FOREIGN KEY (id_candidature) REFERENCES candidature(id_candidature),
+    CONSTRAINT fk_candidat_contrat_type_contrat
+        FOREIGN KEY (id_type_contrat) REFERENCES type_contrat(id_type),
+    CONSTRAINT ck_candidat_contrat_dates
+        CHECK (date_fin IS NULL OR date_fin >= date_debut)
+);

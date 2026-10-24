@@ -29,7 +29,5 @@ public class EmbaucheController {
 
         return "pages/embauche";
     }
-    
-
 }
 
