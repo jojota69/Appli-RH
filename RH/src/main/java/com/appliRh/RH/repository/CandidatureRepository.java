@@ -10,7 +10,11 @@ import com.appliRh.RH.model.Candidature;
 public interface CandidatureRepository extends JpaRepository<Candidature, Integer> {
 
     @Override
-    @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
+    @EntityGraph(attributePaths = {
+            "candidat", "etat",
+            "offre", "offre.etat",
+            "offre.besoin", "offre.besoin.departement"
+    })
     java.util.Optional<Candidature> findById(Integer id);
 
     @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})

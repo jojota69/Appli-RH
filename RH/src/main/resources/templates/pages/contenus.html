@@ -103,6 +103,8 @@
             <p><strong>Département :</strong> <span th:text="${ficheSelectionnee.departement.libelle}">Département</span></p>
             <p><strong>Type de contrat :</strong> <span th:text="${ficheSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
             <p><strong>État du contrat :</strong> <span th:text="${ficheSelectionnee.contrat.etat.libelle}">État du contrat</span></p>
+            <p><strong>Date de début :</strong> <span th:text="${ficheSelectionnee.dateDebut}">Date</span></p>
+            <p th:if="${ficheSelectionnee.dateFin != null}"><strong>Date de fin :</strong> <span th:text="${ficheSelectionnee.dateFin}">Date</span></p>
             <p><strong>Salaire :</strong> <span th:text="${#numbers.formatDecimal(ficheSelectionnee.salaire, 1, 2)}">0,00</span></p>
             <p><strong>Date de naissance :</strong> <span th:text="${ficheSelectionnee.dateNaissance}">Date</span></p>
         </div>

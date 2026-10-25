@@ -109,6 +109,26 @@ public class EmployeeFiche {
         }
     }
 
+    public LocalDate getDateDebut() {
+        return contrat == null ? null : contrat.getDateDebut();
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        if (contrat != null) {
+            contrat.setDateDebut(dateDebut);
+        }
+    }
+
+    public LocalDate getDateFin() {
+        return contrat == null ? null : contrat.getDateFin();
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        if (contrat != null) {
+            contrat.setDateFin(dateFin);
+        }
+    }
+
     public LocalDate getDateNaissance() {
         return dateNaissance;
     }

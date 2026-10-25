@@ -30,14 +30,14 @@ INSERT INTO etat_contrat (libelle) VALUES
 ('Actif'),
 ('Termine');
 
-INSERT INTO contrat (id_type, id_etat, salaire) VALUES
-(1, 1, 4200.00),
-(1, 1, 3500.00),
-(2, 1, 3000.00),
-(1, 1, 3800.00),
-(3, 1, 1800.00),
-(1, 1, 3900.00),
-(1, 1, 3600.00);
+INSERT INTO contrat (id_type, id_etat, salaire, date_debut, date_fin) VALUES
+(1, 1, 4200.00, '2020-01-15', NULL),
+(1, 1, 3500.00, '2021-03-01', NULL),
+(2, 1, 3000.00, '2025-06-01', '2026-05-31'),
+(1, 1, 3800.00, '2019-09-01', NULL),
+(3, 1, 1800.00, '2025-09-01', '2026-02-28'),
+(1, 1, 3900.00, '2022-04-12', NULL),
+(1, 1, 3600.00, '2023-01-10', NULL);
 
 INSERT INTO type_demande (libelle) VALUES
 ('Creation de poste'),

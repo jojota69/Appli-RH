@@ -53,6 +53,14 @@ public class Employee {
         this.role = role;
     }
 
+    public Employee(String nom, String prenom, String email, Role role, String motDePasse) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.role = role;
+        this.motDePasse = motDePasse;
+    }
+
     public Integer getId() {
         return id;
     }

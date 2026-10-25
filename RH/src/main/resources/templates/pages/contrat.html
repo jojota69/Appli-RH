@@ -25,46 +25,47 @@
         </header>
 
         <section class="application-panel">
-            <div class="application-form">
+            <form class="application-form" th:action="@{/contrat/enregistrer}" method="post">
                 <div class="form-grid">
+                    <input type="hidden" name="idCandidature" th:value="${candidature.id}">
                     <label for="nom">
                         Nom
-                        <input id="nom" type="text" th:value="${candidat.nom}" readonly>
+                        <input id="nom" name="nom" type="text" th:value="${candidat.nom}" readonly>
                     </label>
                     <label for="prenom">
                         Prénom
-                        <input id="prenom" type="text" th:value="${candidat.prenom}" readonly>
+                        <input id="prenom" name="prenom" type="text" th:value="${candidat.prenom}" readonly>
                     </label>
                     <label for="telephone">
                         Téléphone
-                        <input id="telephone" type="tel" th:value="${candidat.telephone}" readonly>
+                        <input id="telephone" name="telephone" type="tel" th:value="${candidat.telephone}" readonly>
                     </label>
                     <label for="email">
                         Email
-                        <input id="email" type="email" th:value="${candidat.email}" readonly>
+                        <input id="email" name="email" type="email" th:value="${candidat.email}" readonly>
                     </label>
                     <label for="typeContrat">
                         Type de contrat
-                        <input id="typeContrat" type="text" th:value="${contrat.typeContrat.libelle}" readonly>
+                        <input id="typeContrat" name="typeContrat" type="text" th:value="${contrat.typeContrat.libelle}" readonly>
                     </label>
                     <label for="dateDebut">
                         Date de début de contrat
-                        <input id="dateDebut" type="text" th:value="${contrat.dateDebut}" readonly>
+                        <input id="dateDebut" name="dateDebut" type="text" th:value="${contrat.dateDebut}" readonly>
                     </label>
                     <label for="dateFin" th:if="${contrat.typeContrat.libelle != 'Contrat a duree indeterminee'}">
                         Date de fin de contrat
-                        <input id="dateFin" type="text"
-                               th:value="${contrat.dateFin != null ? contrat.dateFin : '—'}"
+                        <input id="dateFin" name="dateFin" type="text"
+                               th:value="${contrat.dateFin != null ? contrat.dateFin : ''}"
                                readonly>
                     </label>
                     <label for="salaire">
                         Salaire par mois
-                        <input id="salaire" type="text" th:value="${contrat.salaire}" readonly>
+                        <input id="salaire" name="salaire" type="text" th:value="${contrat.salaire}" readonly>
                     </label>
                 </div>
 
-                <button class="offer-button" type="button">Accepter</button>
-            </div>
+                <button class="offer-button" type="submit">Accepter</button>
+            </form>
         </section>
     </main>
 </body>
