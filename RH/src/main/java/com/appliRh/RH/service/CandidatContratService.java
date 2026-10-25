@@ -29,6 +29,13 @@ public class CandidatContratService {
                         "Contrat candidat introuvable : " + id));
     }
 
+    @Transactional(readOnly = true)
+    public CandidatContrat findByIdCandidature(Integer idCandidature) {
+        return repository.findByCandidatureId(idCandidature)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Contrat candidat introuvable pour la candidature : " + idCandidature));
+    }
+
     @Transactional
     public CandidatContrat create(CandidatContrat candidatContrat) {
         return repository.save(candidatContrat);
