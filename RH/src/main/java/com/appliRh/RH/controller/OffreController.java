@@ -353,14 +353,18 @@ public class OffreController {
                                                 @PathVariable Integer offreId,
                                                 Model model, HttpSession session) {
         Candidature candidature = candidatureService.findById(candidatureId);
-        TypeContrat contrat = typeContratService.findByLibelle(typeContrat);
+        TypeContrat type = typeContratService.findByLibelle(typeContrat);
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
-        DemandeBesoin demande = demandeBesoinService.findById(offre.getBesoin().getId());
-        if (dateFinContrat == null) {
-            dateFinContrat = LocalDate.of(9999, 12, 30).toString();
-        }
-        candidatContratService.create(new CandidatContrat(candidature, contrat, offre.getBesoin().getDateSouhaitee(), java.time.LocalDate.parse(dateFinContrat), salaireParMois));
+        LocalDate dateFin = (dateFinContrat == null || dateFinContrat.isBlank())
+                ? null
+                : LocalDate.parse(dateFinContrat);
+        candidatContratService.create(new CandidatContrat(
+                candidature,
+                type,
+                offre.getBesoin().getDateSouhaitee(),
+                dateFin,
+                salaireParMois));
         candidatureService.changerStatut(candidatureId, "Proposee");
         return "redirect:/offres/" + offreId + "/entretiens-termine";
     }

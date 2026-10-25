@@ -71,6 +71,8 @@ CREATE TABLE contrat(
     id_type INT NOT NULL,
     id_etat INT NOT NULL,
     salaire NUMERIC(12,2) NOT NULL,
+    date_debut DATE NOT NULL,
+    date_fin DATE,
     CONSTRAINT fk_contrat_etat
         FOREIGN KEY (id_etat) REFERENCES etat_contrat(id_etat),
     CONSTRAINT fk_contrat_type

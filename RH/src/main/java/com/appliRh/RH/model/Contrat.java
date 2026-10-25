@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "contrat")
@@ -32,13 +33,22 @@ public class Contrat {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal salaire;
 
+    @Column(name = "date_debut", nullable = false)
+    private LocalDate dateDebut;
+
+    @Column(name = "date_fin")
+    private LocalDate dateFin;
+
     protected Contrat() {
     }
 
-    public Contrat(TypeContrat typeContrat, EtatContrat etat, BigDecimal salaire) {
+    public Contrat(TypeContrat typeContrat, EtatContrat etat, BigDecimal salaire,
+                   LocalDate dateDebut, LocalDate dateFin) {
         this.typeContrat = typeContrat;
         this.etat = etat;
         this.salaire = salaire;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 
     public Integer getId() {
@@ -67,5 +77,21 @@ public class Contrat {
 
     public void setSalaire(BigDecimal salaire) {
         this.salaire = salaire;
+    }
+
+    public LocalDate getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public LocalDate getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
     }
 }

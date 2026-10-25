@@ -32,7 +32,10 @@ public class ApiController {
         if (candidat == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidat introuvable avec l'email : " + email);
         }
-        
-        return candidatureService.findByIdCandidat(candidat.getId());
+        List<Candidature> propositions = candidatureService.findByIdCandidat(candidat.getId());
+        List<Candidature> filteredPropositions = propositions.stream()
+                .filter(candidature -> candidature.getEtat().getLibelle().equals("Proposee"))
+                .toList();
+        return filteredPropositions;
     }
 }
