@@ -28,8 +28,12 @@ import com.appliRh.RH.service.EvaluationCandidatService;
 import com.appliRh.RH.model.DemandeBesoin;
 import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatOffreService;
+import com.appliRh.RH.model.CandidatContrat;
 import com.appliRh.RH.model.Candidature;
 import com.appliRh.RH.model.Entretien;
+import com.appliRh.RH.model.TypeContrat;
+import com.appliRh.RH.service.TypeContratService;
+import com.appliRh.RH.service.CandidatContratService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -43,13 +47,17 @@ public class OffreController {
     private final EvaluationCandidatService evaluationCandidatService;
     private final DemandeBesoinService demandeBesoinService;
     private final EtatOffreService etatOffreService;
+    private final CandidatContratService candidatContratService;
+    private final TypeContratService typeContratService;
 
     public OffreController(EmployeeService employeeService, OffreService offreService,
                            CandidatureService candidatureService,
                            EntretienService entretienService,
                            EvaluationCandidatService evaluationCandidatService,
                            DemandeBesoinService demandeBesoinService,
-                           EtatOffreService etatOffreService) {
+                           EtatOffreService etatOffreService,
+                           TypeContratService typeContratService,
+                           CandidatContratService candidatContratService) {
 		this.employeeService = employeeService;
 		this.offreService = offreService;
         this.candidatureService = candidatureService;
@@ -57,6 +65,8 @@ public class OffreController {
         this.evaluationCandidatService = evaluationCandidatService;
         this.demandeBesoinService = demandeBesoinService;
         this.etatOffreService = etatOffreService;
+        this.typeContratService = typeContratService;
+        this.candidatContratService = candidatContratService;
 	}
 
     @GetMapping("/")
@@ -338,15 +348,20 @@ public class OffreController {
     @PareFeu(roles = "Recruteur")
     public String enregistrerFormulaireEmbauche(@RequestParam Integer candidatureId,
                                                 @RequestParam String typeContrat,
-                                                @RequestParam String dateFinContrat,
+                                                @RequestParam(name = "dateFinContrat", required = false) String dateFinContrat,
                                                 @RequestParam BigDecimal salaireParMois,
                                                 @PathVariable Integer offreId,
                                                 Model model, HttpSession session) {
         Candidature candidature = candidatureService.findById(candidatureId);
+        TypeContrat contrat = typeContratService.findByLibelle(typeContrat);
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
         DemandeBesoin demande = demandeBesoinService.findById(offre.getBesoin().getId());
-        // Enregistrer les informations d'embauche
-        return "redirect:/offre/" + offre.getId() + "/formulaire-embauche/" + candidatureId;
+        if (dateFinContrat == null) {
+            dateFinContrat = LocalDate.of(9999, 12, 30).toString();
+        }
+        candidatContratService.create(new CandidatContrat(candidature, contrat, offre.getBesoin().getDateSouhaitee(), java.time.LocalDate.parse(dateFinContrat), salaireParMois));
+        candidatureService.changerStatut(candidatureId, "Proposee");
+        return "redirect:/offres/" + offreId + "/entretiens-termine";
     }
 }

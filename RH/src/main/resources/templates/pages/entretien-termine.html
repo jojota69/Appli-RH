@@ -34,8 +34,8 @@
                             <p class="intro">Candidatures présélectionnées et planification des entretiens.</p>
                         </div>
                         <a class="button button-secondary"
-                           th:href="@{/offres/{offreId}/candidatures(offreId=${offreSelectionnee.id})}">
-                            Candidatures
+                           th:href="@{/offres}">
+                            Retour aux offres
                         </a>
                     </div>
 
@@ -91,7 +91,7 @@
                                         Entretien non noté
                                     </p>
                                 </div>
-                                <a th:href="@{/offre/{offreId}/formulaire-embauche/{candidatureId}(offreId=${offreSelectionnee.id}, candidatureId=${candidature.id})}"><button class="button button-primary">Proposer</button></a>
+                                <a th:if="${!#lists.isEmpty(entretiensParCandidature[candidature.id])}" th:href="@{/offre/{offreId}/formulaire-embauche/{candidatureId}(offreId=${offreSelectionnee.id}, candidatureId=${candidature.id})}"><button class="button button-primary">Proposer</button></a>
                             </div>
                         </article>
                         <p th:if="${#lists.isEmpty(listeCandidatures)}">

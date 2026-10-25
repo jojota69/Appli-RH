@@ -44,11 +44,11 @@
                         Email
                         <input id="email" name="email" type="email" autocomplete="email" th:value="${candidature.candidat.email}" readonly>
                     </label>
-                    <label for="typeContrat" th:if="${typeContrat != 'Contrat a duree indeterminee'}">
+                    <label for="typeContrat">
                         Type de contrat
                         <input type="text" name="typeContrat" id="typeContrat" th:value="${typeContrat}" readonly>
                     </label>
-                    <label for="dateFinContrat">
+                    <label for="dateFinContrat" th:if="${typeContrat != 'Contrat a duree indeterminee'}">
                         Date de fin de contrat
                         <input id="dateFinContrat" name="dateFinContrat" type="date">
                     </label>
