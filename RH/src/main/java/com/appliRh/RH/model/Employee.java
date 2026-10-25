@@ -1,5 +1,7 @@
 package com.appliRh.RH.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,7 @@ public class Employee {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
+    @JsonIgnore
     @Column(name = "mot_de_passe", nullable = false, length = 255)
     private String motDePasse;
 
@@ -36,6 +39,7 @@ public class Employee {
     @JoinColumn(name = "id_role", nullable = false)
     private Role role;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
     private EmployeeFiche fiche;
 

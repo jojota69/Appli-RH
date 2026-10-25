@@ -26,6 +26,10 @@ public class CandidatService {
         return repository.findAll();
     }
 
-    
+    @Transactional(readOnly = true)
+    public Candidat findByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Candidat introuvable avec l'email : " + email));
+    }
 
 }

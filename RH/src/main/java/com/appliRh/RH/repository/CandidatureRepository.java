@@ -16,6 +16,15 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Intege
     @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     List<Candidature> findByOffreId(Integer offreId);
 
+    @EntityGraph(attributePaths = {
+            "candidat", "etat",
+            "offre", "offre.etat",
+            "offre.besoin", "offre.besoin.departement", "offre.besoin.manager", "offre.besoin.manager.role",
+            "offre.besoin.etatDemande", "offre.besoin.typeDemande", "offre.besoin.typeContrat",
+            "offre.recruteur", "offre.recruteur.role"
+    })
+    List<Candidature> findByCandidatId(Integer candidatId);
+
     @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     List<Candidature> findByEtatId(Integer idEtat);
 

@@ -54,6 +54,11 @@ public class CandidatureService {
     }
 
     @Transactional(readOnly = true)
+    public List<Candidature> findByIdCandidat(Integer candidatId) {
+        return candidatureRepository.findByCandidatId(candidatId);
+    }
+
+    @Transactional(readOnly = true)
     public Candidature findById(Integer id) {
         return candidatureRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Candidature introuvable : " + id));
