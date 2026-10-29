@@ -14,6 +14,7 @@ import com.appliRh.RH.model.Offre;
 import com.appliRh.RH.repository.CandidatRepository;
 import com.appliRh.RH.repository.CandidatureRepository;
 import com.appliRh.RH.repository.EtatCandidatureRepository;
+import com.appliRh.RH.repository.EntretienRepository;
 
 @Service
 public class CandidatureService {
@@ -21,13 +22,16 @@ public class CandidatureService {
     private final CandidatRepository candidatRepository;
     private final CandidatureRepository candidatureRepository;
     private final EtatCandidatureRepository etatCandidatureRepository;
+    private final EntretienRepository entretienRepository;
 
     public CandidatureService(CandidatRepository candidatRepository,
                               CandidatureRepository candidatureRepository,
-                              EtatCandidatureRepository etatCandidatureRepository) {
+                              EtatCandidatureRepository etatCandidatureRepository,
+                              EntretienRepository entretienRepository) {
         this.candidatRepository = candidatRepository;
         this.candidatureRepository = candidatureRepository;
         this.etatCandidatureRepository = etatCandidatureRepository;
+        this.entretienRepository = entretienRepository;
     }
 
     @Transactional
@@ -69,6 +73,29 @@ public class CandidatureService {
         Candidature candidature = findById(id);
         candidature.setEtat(trouverEtat(statut));
         return candidatureRepository.save(candidature);
+    }
+
+    @Transactional
+    public boolean refuserCandidaturesApresQuota(Integer offreId, int effectif) {
+        long candidaturesAcceptees =
+                candidatureRepository.countByOffreIdAndEtatLibelle(offreId, "Acceptee");
+        if (candidaturesAcceptees < effectif) {
+            return false;
+        }
+
+        com.appliRh.RH.model.EtatCandidature etatPreselectionnee =
+                trouverEtat("Preselectionnee");
+        com.appliRh.RH.model.EtatCandidature etatRefusee =
+                trouverEtat("Refusee");
+
+        List<Candidature> candidatures = candidatureRepository.findByOffreId(offreId);
+        candidatures.stream()
+                .filter(candidature -> candidature.getEtat().getId()
+                        .equals(etatPreselectionnee.getId()))
+                .filter(candidature -> entretienRepository.existsByCandidatureId(candidature.getId()))
+                .forEach(candidature -> candidature.setEtat(etatRefusee));
+        candidatureRepository.saveAll(candidatures);
+        return true;
     }
 
     @Transactional

@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.appliRh.RH.model.Candidature;
+import com.appliRh.RH.model.Offre;
 import com.appliRh.RH.service.CandidatureService;
 import com.appliRh.RH.service.CandidatContratService;
 import com.appliRh.RH.model.CandidatContrat;
@@ -27,6 +28,8 @@ import com.appliRh.RH.service.TypeContratService;
 import com.appliRh.RH.service.EtatContratService;
 import com.appliRh.RH.model.EmployeeFiche;
 import com.appliRh.RH.service.EmployeeFicheService;
+import com.appliRh.RH.service.OffreService;
+import com.appliRh.RH.service.EtatOffreService;
 
 @Controller 
 public class EmbaucheController {
@@ -40,8 +43,10 @@ public class EmbaucheController {
     private final EtatContratService etatContratService;
     private final EmployeeFicheService employeeFicheService;
     private final ContratService contratService;
+    private final OffreService offreService;
+    private final EtatOffreService etatOffreService;
 
-    public EmbaucheController(CandidatureService candidatureService, CandidatContratService candidatContratService, EmployeeService employeeService, RoleService roleService, PosteService posteService, ContratService contratService, TypeContratService typeContratService, EtatContratService etatContratService, EmployeeFicheService employeeFicheService) {
+    public EmbaucheController(CandidatureService candidatureService, CandidatContratService candidatContratService, EmployeeService employeeService, RoleService roleService, PosteService posteService, ContratService contratService, TypeContratService typeContratService, EtatContratService etatContratService, EmployeeFicheService employeeFicheService, OffreService offreService, EtatOffreService etatOffreService) {
         this.candidatureService = candidatureService;
         this.candidatContratService = candidatContratService;
         this.employeeService = employeeService;
@@ -51,6 +56,8 @@ public class EmbaucheController {
         this.typeContratService = typeContratService;
         this.etatContratService = etatContratService;
         this.employeeFicheService = employeeFicheService;
+        this.offreService = offreService;
+        this.etatOffreService = etatOffreService;
     }
 
     @GetMapping("/embauche")
@@ -100,6 +107,15 @@ public class EmbaucheController {
         EmployeeFiche employeeFiche = new EmployeeFiche(employee, poste, departement, contrat, java.time.LocalDate.now());
         employeeFicheService.create(employeeFiche);
         candidatureService.changerStatut(idCandidature, "Acceptee");
+        boolean quotaAtteint = candidatureService.refuserCandidaturesApresQuota(
+                candidature.getOffre().getId(),
+                candidature.getOffre().getBesoin().getEffectif());
+        if (quotaAtteint) {
+            Offre offre = candidature.getOffre();
+            offre.setDateCloture(LocalDate.now());
+            offre.setEtat(etatOffreService.findByLibelle("Termine"));
+            offreService.save(offre);
+        }
         return "redirect:/embauche?section=listeOffresEmbauche";
     }
 }

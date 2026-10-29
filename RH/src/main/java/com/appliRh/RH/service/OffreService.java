@@ -19,7 +19,7 @@ public class OffreService {
     }
 
     public List<Offre> findAllNonTerminees() {
-        return offreRepository.findByEtatLibelleNotIgnoreCase("Termine");
+        return offreRepository.findAllActives();
     }
 
     public Optional<Offre> findById(Integer id) {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.appliRh.RH.model.Candidature;
 
@@ -31,6 +33,11 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Intege
 
     @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     List<Candidature> findByEtatId(Integer idEtat);
+
+    @Query("SELECT COUNT(c) FROM Candidature c " +
+           "WHERE c.offre.id = :offreId AND LOWER(c.etat.libelle) = LOWER(:etat)")
+    long countByOffreIdAndEtatLibelle(@Param("offreId") Integer offreId,
+                                      @Param("etat") String etat);
 
     boolean existsByOffreIdAndCandidatId(Integer offreId, Integer candidatId);
 }

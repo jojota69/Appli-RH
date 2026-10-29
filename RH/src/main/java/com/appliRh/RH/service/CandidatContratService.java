@@ -31,13 +31,23 @@ public class CandidatContratService {
 
     @Transactional(readOnly = true)
     public CandidatContrat findByIdCandidature(Integer idCandidature) {
-        return repository.findByCandidatureId(idCandidature)
+        return repository.findByCandidatureIdOrderByIdDesc(idCandidature).stream()
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Contrat candidat introuvable pour la candidature : " + idCandidature));
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsByCandidatureId(Integer idCandidature) {
+        return repository.existsByCandidatureId(idCandidature);
+    }
+
     @Transactional
     public CandidatContrat create(CandidatContrat candidatContrat) {
+        if (!repository.findByCandidatureIdOrderByIdDesc(candidatContrat.getCandidature().getId())
+                .isEmpty()) {
+            return findByIdCandidature(candidatContrat.getCandidature().getId());
+        }
         return repository.save(candidatContrat);
     }
 

@@ -355,6 +355,9 @@ public class OffreController {
                                                 @PathVariable Integer offreId,
                                                 Model model, HttpSession session) {
         Candidature candidature = candidatureService.findById(candidatureId);
+        if (candidatContratService.existsByCandidatureId(candidatureId)) {
+            return "redirect:/offres/" + offreId + "/entretiens-termine";
+        }
         TypeContrat type = typeContratService.findByLibelle(typeContrat);
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
