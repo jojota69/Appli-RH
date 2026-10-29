@@ -25,6 +25,7 @@
         </header>
 
         <section class="application-panel">
+            <p th:if="${error}" th:text="${error}" role="alert"></p>
             <form class="application-form" th:action="@{/offre/formulaire-embauche/{offreId}/enregistrer(offreId=${offre.id})}" method="post">
                 <div class="form-grid">
                     <input type="hidden" name="candidatureId" th:value="${candidature.id}">
@@ -54,7 +55,10 @@
                     </label>
                     <label for="salaireParMois">
                         Salaire par mois
-                        <input id="salaireParMois" name="salaireParMois" type="number" min="0" step="0.01" inputmode="decimal" required>
+                        <input id="salaireParMois" name="salaireParMois" type="number" min="0" step="0.01" inputmode="decimal" required
+                               th:attr="max=${budgetPoste}">
+                        <small th:if="${budgetPoste != null}"
+                               th:text="${'Budget maximum par salarié : ' + budgetPoste}"></small>
                     </label>
                 </div>
 

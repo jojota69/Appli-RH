@@ -8,6 +8,7 @@ import java.util.Set;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -339,6 +340,7 @@ public class OffreController {
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
         DemandeBesoin demande = demandeBesoinService.findById(offre.getBesoin().getId());
         model.addAttribute("typeContrat", demande.getTypeContrat().getLibelle());
+        model.addAttribute("budgetPoste", calculerBudgetSalaireMaximum(demande));
         model.addAttribute("candidature", candidature);
         model.addAttribute("offre", offre);
         return "pages/formulaire-embauche";
@@ -356,6 +358,17 @@ public class OffreController {
         TypeContrat type = typeContratService.findByLibelle(typeContrat);
         Offre offre = offreService.findById(offreId)
                 .orElseThrow(() -> new IllegalArgumentException("Offre introuvable : " + offreId));
+        BigDecimal budgetPoste = calculerBudgetSalaireMaximum(offre.getBesoin());
+        if (salaireParMois.compareTo(budgetPoste) > 0) {
+            model.addAttribute("typeContrat", type.getLibelle());
+            model.addAttribute("budgetPoste", budgetPoste);
+            model.addAttribute("candidature", candidature);
+            model.addAttribute("offre", offre);
+            model.addAttribute("error",
+                    "Le salaire proposé ne peut pas dépasser le budget maximum par salarié ("
+                            + budgetPoste + ").");
+            return "pages/formulaire-embauche";
+        }
         LocalDate dateFin = (dateFinContrat == null || dateFinContrat.isBlank())
                 ? null
                 : LocalDate.parse(dateFinContrat);
@@ -367,5 +380,13 @@ public class OffreController {
                 salaireParMois));
         candidatureService.changerStatut(candidatureId, "Proposee");
         return "redirect:/offres/" + offreId + "/entretiens-termine";
+    }
+
+    private BigDecimal calculerBudgetSalaireMaximum(DemandeBesoin demande) {
+        if (demande.getEffectif() == null || demande.getEffectif() <= 0) {
+            throw new IllegalStateException("L'effectif du poste doit être supérieur à zéro.");
+        }
+        return demande.getBudget()
+                .divide(BigDecimal.valueOf(demande.getEffectif()), 2, RoundingMode.DOWN);
     }
 }
