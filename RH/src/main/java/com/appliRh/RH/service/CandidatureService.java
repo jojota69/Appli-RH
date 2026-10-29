@@ -128,6 +128,11 @@ public class CandidatureService {
         return candidatureRepository.findByEtatId(2);
     }
 
+    @Transactional(readOnly = true)
+    public List<Candidature> findByEtatLibelle(String libelle) {
+        return candidatureRepository.findByEtatLibelleIgnoreCase(libelle);
+    }
+
     private com.appliRh.RH.model.EtatCandidature trouverEtat(String libelle) {
         return etatCandidatureRepository.findByLibelle(libelle)
                 .orElseThrow(() -> new EntityNotFoundException(

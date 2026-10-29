@@ -84,6 +84,16 @@ public class EmbaucheController {
         return "pages/contrat";
     }
 
+    @GetMapping ("/contrat/proposer/{id}")
+    public String proposerContrat(@PathVariable Integer id, Model model) {
+        Candidature candidature = candidatureService.findById(id);
+        model.addAttribute("candidat", candidature.getCandidat());
+        CandidatContrat contrat = candidatContratService.findByIdCandidature(candidature.getId());
+        model.addAttribute("contrat", contrat);
+        model.addAttribute("candidature", candidature);
+        return "pages/proposition";
+    }
+
     @PostMapping("/contrat/enregistrer")
     public String enregistrerContrat(@RequestParam Integer idCandidature,
                                      @RequestParam String nom,
@@ -116,6 +126,24 @@ public class EmbaucheController {
             offre.setEtat(etatOffreService.findByLibelle("Termine"));
             offreService.save(offre);
         }
+        return "redirect:/embauche?section=listeOffresEmbauche";
+    }
+
+    @PostMapping("/contrat/proposer")
+    public String proposerContrat(@RequestParam Integer idCandidature,
+                                     @RequestParam String nom,
+                                     @RequestParam String prenom,
+                                     @RequestParam String telephone,
+                                     @RequestParam String email,
+                                     @RequestParam String typeContrat,
+                                     @RequestParam LocalDate dateDebut,
+                                     @RequestParam(required = false) LocalDate dateFin,
+                                     @RequestParam BigDecimal salaire) {
+        Candidature candidature = candidatureService.findById(idCandidature);
+        CandidatContrat contrat = candidatContratService.findByIdCandidature(candidature.getId());
+        contrat.setSalaire(salaire);
+        candidatContratService.update(contrat.getId(), contrat);
+        candidatureService.changerStatut(idCandidature, "Negociation");
         return "redirect:/embauche?section=listeOffresEmbauche";
     }
 }

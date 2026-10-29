@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Proposition de contrat</title>
+    <link rel="stylesheet" th:href="@{/css/offres-public.css}">
+</head>
+<body>
+    <main class="offers-page">
+        <header class="public-header">
+            <a class="public-brand" th:href="@{/}">
+                <span class="public-brand-mark">RH</span>
+                <strong>Appli RH</strong>
+            </a>
+            <a class="login-button" th:href="@{/contrat/{candidatureId}(candidatureId=${candidature.id})}">Retour au contrat</a>
+        </header>
+
+        <header class="offers-header">
+            <div>
+                <p class="eyebrow">Proposer un nouveau contrat</p>
+                <h1>Informations du contrat</h1>
+                <p class="intro">Vérifiez les détails de la proposition avant d'accepter.</p>
+            </div>
+        </header>
+
+        <section class="application-panel">
+            <form class="application-form" th:action="@{/contrat/proposer}" method="post">
+                <div class="form-grid">
+                    <input type="hidden" name="idCandidature" th:value="${candidature.id}">
+                    <label for="nom">
+                        Nom
+                        <input id="nom" name="nom" type="text" th:value="${candidat.nom}" readonly>
+                    </label>
+                    <label for="prenom">
+                        Prénom
+                        <input id="prenom" name="prenom" type="text" th:value="${candidat.prenom}" readonly>
+                    </label>
+                    <label for="telephone">
+                        Téléphone
+                        <input id="telephone" name="telephone" type="tel" th:value="${candidat.telephone}" readonly>
+                    </label>
+                    <label for="email">
+                        Email
+                        <input id="email" name="email" type="email" th:value="${candidat.email}" readonly>
+                    </label>
+                    <label for="typeContrat">
+                        Type de contrat
+                        <input id="typeContrat" name="typeContrat" type="text" th:value="${contrat.typeContrat.libelle}" readonly>
+                    </label>
+                    <label for="dateDebut">
+                        Date de début de contrat
+                        <input id="dateDebut" name="dateDebut" type="text" th:value="${contrat.dateDebut}" readonly>
+                    </label>
+                    <label for="dateFin" th:if="${contrat.typeContrat.libelle != 'Contrat a duree indeterminee'}">
+                        Date de fin de contrat
+                        <input id="dateFin" name="dateFin" type="text"
+                               th:value="${contrat.dateFin != null ? contrat.dateFin : ''}"
+                               readonly>
+                    </label>
+                    <label for="salaire">
+                        Salaire par mois
+                        <input id="salaire" name="salaire" type="text" th:value="${contrat.salaire}">
+                    </label>
+                </div>
+
+                <button class="offer-button" type="submit">Proposer</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

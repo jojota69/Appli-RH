@@ -214,7 +214,8 @@ INSERT INTO etat_candidature (libelle) VALUES
 ('Preselectionnee'),
 ('Acceptee'),
 ('Refusee'),
-('Proposee');
+('Proposee'),
+('Negociation');
 
 INSERT INTO candidature
 (

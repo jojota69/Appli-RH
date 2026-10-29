@@ -135,6 +135,17 @@ public class OffreController {
 		return "pages/offres";
 	}
 
+    @GetMapping("/offres/propositions")
+    @PareFeu(roles = "Recruteur")
+    public String propositions(Model model, HttpSession session) {
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        List<Candidature> candidaturesProposees = candidatureService.findByEtatLibelle("Negociation");
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("section", "listePropositions");
+        model.addAttribute("listeCandidatures", candidaturesProposees);
+        return "pages/propositions";
+    }
+
     @GetMapping("/offres/{offreId}/candidatures")
     @PareFeu(roles = "Recruteur")
     public String suiviCandidatures(@PathVariable Integer offreId,

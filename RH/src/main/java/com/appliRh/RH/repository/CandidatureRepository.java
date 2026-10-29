@@ -34,6 +34,9 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Intege
     @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
     List<Candidature> findByEtatId(Integer idEtat);
 
+    @EntityGraph(attributePaths = {"candidat", "etat", "offre", "offre.etat"})
+    List<Candidature> findByEtatLibelleIgnoreCase(String libelle);
+
     @Query("SELECT COUNT(c) FROM Candidature c " +
            "WHERE c.offre.id = :offreId AND LOWER(c.etat.libelle) = LOWER(:etat)")
     long countByOffreIdAndEtatLibelle(@Param("offreId") Integer offreId,

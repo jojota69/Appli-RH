@@ -47,6 +47,9 @@
         <a th:classappend="${section == 'listeOffres'} ? ' active' : ''" th:href="@{/offres}">
             <span class="nav-icon">⌂</span> Offres d'emploi
         </a>
+        <a th:classappend="${section == 'listePropositions'} ? ' active' : ''" th:href="@{/offres/propositions}">
+            <span class="nav-icon">⌂</span> Propositions
+        </a>
         <div class="nav-footer">
             <div class="nav-heading">Raccourcis</div>
             <a th:href="@{/}"><span class="nav-icon">↪</span> Se déconnecter</a>
