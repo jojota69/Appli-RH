@@ -9,8 +9,8 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Espace manager</p>
-                <h1>Liste des Employés</h1>
-                <p class="intro">Consultez les postes disponibles dans votre équipe.</p>
+                <h1>Liste des employés</h1>
+                <p class="intro">Consultez les employés et les postes occupés dans votre équipe.</p>
             </div>
             <div class="page-actions">
                 <a class="button button-secondary" th:href="@{/home(section='listePostesActuels')}">Voir la liste des postes</a>
@@ -29,7 +29,7 @@
                 </div>
                 <span class="poste-status" th:text="${liste.fiche.poste != null ? liste.fiche.poste.libelle : 'Ouvert'}">Ouvert</span>
                 <a th:classappend="${section == 'voirPoste'} ? ' active' : ''" th:href="@{/home(section='voirPoste', selectedEmployeeId=${liste.id})}">
-                    <button class="icon-button" type="button" aria-label="Voir la demande" title="Voir la demande">
+                    <button class="icon-button" type="button" aria-label="Voir la fiche employé" title="Voir la fiche employé">
                         <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
@@ -62,7 +62,7 @@
                 <div class="poste-icon" th:text="${liste.initiales}">DP</div>
                 <div class="poste-details">
                     <h2 th:text="${liste.intitulePoste}">Intitulé du poste</h2>
-                    <p th:text="${'Effectif : ' + nombreParPoste.get(listePostesDemandes.indexOf(liste))+ '/' + liste.effectif}">Détails du poste</p>
+                    <p th:text="${'Effectif : ' + nombreParPoste.get(liste.id) + '/' + liste.effectif}">Détails du poste</p>
                 </div>
                 <a th:href="@{/poste/{id}/supprimer(id=${liste.id})}" th:onclick="return confirm('La demande de suppression sera envoyée au responsable RH.');">
                     <button class="button button-secondary" type="button">Supprimer</button>
@@ -123,8 +123,7 @@
             <p><strong>Poste :</strong> <span th:text="${demandeSelectionnee.intitulePoste}">Poste</span></p>
             <p><strong>Département :</strong> <span th:text="${demandeSelectionnee.departement.libelle}">Département</span></p>
             <p><strong>Nombre de personnes ayant ce poste dans le département :</strong> <span th:text="${nombrePersonnesPoste}">0</span></p>
-            <p><strong>Budget alloué au poste :</strong> <span th:text="${#numbers.formatDecimal(budgetPoste, 1, 2)}">0,00</span></p>
-            <p><strong>Budget alloué au département :</strong> <span th:text="${#numbers.formatDecimal(demandeSelectionnee.budget, 1, 2)}">0,00</span></p>
+            <p><strong>Budget total du poste :</strong> <span th:text="${#numbers.formatDecimal(demandeSelectionnee.budget, 1, 2)}">0,00</span></p>
             <p><strong>Type de contrat :</strong> <span th:text="${demandeSelectionnee.typeContrat.libelle}">Type de contrat</span></p>
         </div>
     </section>
@@ -176,14 +175,14 @@
         <label for="startDate">Date de début souhaitée</label>
         <input type="date" name="startDate" id="startDate" required>
 
-        <label for="effectif">Nombre d' Effectif</label>
-        <input type="number" name="effectif" id="effectif" required>
+        <label for="effectif">Effectif demandé</label>
+        <input type="number" name="effectif" id="effectif" min="1" required>
 
             </div>
         </div>
         <div class="position-form-actions">
             <a class="button button-secondary" th:href="@{/home(section='listeEmployee')}" style="text-align: center;">Annuler</a>
-            <button class="button button-primary" type="submit">Enregistrer les postes</button>
+            <button class="button button-primary" type="submit">Enregistrer la demande</button>
             <button class="button button-primary" id="add-position-form" type="button" aria-label="Ajouter un formulaire de poste" title="Ajouter un formulaire de poste">+</button>
         </div>
     </form>
@@ -248,14 +247,14 @@
                          th:href="@{/home(section=${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Direction') ? 'listeDemandesDirection' : 'listeDemandes'})}">Retour aux demandes</a>
                      <a class="button button-secondary"
                          th:if="${#strings.equalsIgnoreCase(employeeConnecte.role.libelle, 'Manager')}"
-                         th:href="@{/home(section='modifDemande', demandeId=${demandeSelectionnee.id})}">Modifier demande</a>
+                         th:href="@{/home(section='modifDemande', demandeId=${demandeSelectionnee.id})}">Modifier la demande</a>
             </div>
         </div>
         <div class="panel request-details">
             <p><strong>Manager :</strong> <span th:text="${demandeSelectionnee.manager.prenom + ' ' + demandeSelectionnee.manager.nom}">Manager</span></p>
             <p><strong>Département :</strong> <span th:text="${demandeSelectionnee.departement.libelle}">Département</span></p>
             <p><strong>Effectif :</strong> <span th:text="${demandeSelectionnee.effectif}">1</span></p>
-            <p><strong>Budget :</strong> <span th:text="${demandeSelectionnee.budget}">0</span></p>
+            <p><strong>Budget demandé :</strong> <span th:text="${demandeSelectionnee.budget}">0</span></p>
             <p><strong>Date souhaitée :</strong> <span th:text="${demandeSelectionnee.dateSouhaitee}">Date</span></p>
             <p><strong>Motif :</strong> <span th:text="${demandeSelectionnee.motif}">Motif</span></p>
             <p><strong>État :</strong> <span th:text="${demandeSelectionnee.etatDemande.libelle}">État</span></p>
@@ -302,8 +301,8 @@
             <input id="budget" name="budget" type="number" step="0.01" th:value="${demandeSelectionnee.budget}" required>
             <label for="startDate">Date de début souhaitée</label>
             <input id="startDate" name="startDate" type="date" th:value="${demandeSelectionnee.dateSouhaitee}" required>
-            <label for="effectif">Nombre d'effectifs</label>
-            <input id="effectif" name="effectif" type="number" th:value="${demandeSelectionnee.effectif}" required>
+            <label for="effectif">Effectif demandé</label>
+            <input id="effectif" name="effectif" type="number" min="1" th:value="${demandeSelectionnee.effectif}" required>
             <div class="form-actions">
                 <a class="button button-secondary" th:href="@{/home(section='listeDemandes')}">Annuler</a>
                 <button class="button button-primary" type="submit">Enregistrer les modifications</button>
@@ -353,7 +352,7 @@
             <label for="replacement-startDate">Date de début souhaitée</label>
             <input id="replacement-startDate" name="startDate" type="date" th:value="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}" required>
 
-            <label for="replacement-effectif">Nombre d'effectifs</label>
+            <label for="replacement-effectif">Effectif demandé</label>
             <input id="replacement-effectif" name="effectif" type="number" value="1" min="1" required>
 
             <div class="form-actions">
@@ -430,7 +429,7 @@
             <p><strong>Manager :</strong> <span th:text="${demandeSelectionnee.manager.prenom + ' ' + demandeSelectionnee.manager.nom}">Manager</span></p>
             <p><strong>Département :</strong> <span th:text="${demandeSelectionnee.departement.libelle}">Département</span></p>
             <p><strong>Effectif :</strong> <span th:text="${demandeSelectionnee.effectif}">1</span></p>
-            <p><strong>Budget :</strong> <span th:text="${demandeSelectionnee.budget}">0</span></p>
+            <p><strong>Budget demandé :</strong> <span th:text="${demandeSelectionnee.budget}">0</span></p>
             <p><strong>Date souhaitée :</strong> <span th:text="${demandeSelectionnee.dateSouhaitee}">Date</span></p>
             <p><strong>Motif :</strong> <span th:text="${demandeSelectionnee.motif}">Motif</span></p>
             <p><strong>État :</strong> <span th:text="${demandeSelectionnee.etatDemande.libelle}">État</span></p>
@@ -457,7 +456,7 @@
         <div class="page-heading">
             <div>
                 <h1>Liste des demandes</h1>
-                <p class="intro">Consultez les demandes en cours de traitement ou validees par les RH.</p>
+                <p class="intro">Consultez les demandes en cours de traitement ou validées par les RH.</p>
             </div>
         </div>
 
@@ -501,7 +500,7 @@
         <div class="page-heading">
             <div>
                 <h1>Liste des demandes</h1>
-                <p class="intro">Consultez les demandes en cours de traitement ou validees par les RH.</p>
+                <p class="intro">Consultez les demandes en cours de traitement ou validées par les RH.</p>
             </div>
         </div>
 
@@ -542,50 +541,23 @@
         <div class="page-heading">
             <div>
                 <h1>Liste des offres</h1>
-                <p class="intro">Consultez les offres publiés.</p>
+                <p class="intro">Consultez les offres publiées.</p>
             </div>
         </div>
 
         <div class="postes">
             <article class="poste" th:each="liste : ${listeOffres}">
-				<!-- Comme il n'y a pas d'initiales directes dans la table, on peut prendre le début du titre ou afficher une valeur par défaut -->
 				<div class="poste-icon" th:text="${liste.titre != null and liste.titre.length() >= 2 ? #strings.toUpperCase(liste.titre.substring(0, 2)) : 'OF'}">OF</div>
 
 				<div class="poste-details">
-					<!-- Remplacement par 'titre' -->
 					<h2 th:text="${liste.titre}">Intitulé du poste</h2>
-
-					<!-- idRecruteur (ou si vous avez fait une relation avec un objet Recruteur, ex: liste.recruteur.nom) -->
-					<p th:text="${'Recruteur ID : ' + liste.idRecruteur}">Recruteur</p>
-
-					<!-- idBesoin, dates et description -->
-					<p th:text="${'Besoin ID : ' + liste.idBesoin + ' | Publication : ' + liste.datePublication + ' | Clôture : ' + liste.dateCloture}">Détails de l'offre</p>
-
-					<!-- Description courte -->
+					<p th:text="${'Date de publication : ' + liste.datePublication + ' | Date de clôture : ' + liste.dateCloture}">Dates de l'offre</p>
 					<p th:text="${liste.description}">Description</p>
 				</div>
 
-				<!-- Remplacement par 'statut' -->
 				<span class="poste-status" th:text="${liste.statut}">En attente</span>
 
 				<div class="poste-actions">
-					<!-- Utilisation de 'id' (qui correspond à id_offre) -->
-					<a th:classappend="${section == 'modifDemande'} ? ' active' : ''" th:href="@{/home(section='modifDemande', demandeId=${liste.id})}">
-						<button class="icon-button" type="button" aria-label="Modifier l'offre" title="Modifier l'offre">
-							<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-								<path d="M12 20h9"></path>
-								<path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-							</svg>
-						</button>
-					</a>
-					<a th:classappend="${section == 'voirDemande'} ? ' active' : ''" th:href="@{/home(section='voirDemande', demandeId=${liste.id})}">
-						<button class="icon-button" type="button" aria-label="Voir l'offre" title="Voir l'offre">
-							<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-								<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
-								<circle cx="12" cy="12" r="3"></circle>
-							</svg>
-						</button>
-					</a>
 				</div>
 			</article>
         </div>
@@ -594,12 +566,11 @@
 
 
 <div th:fragment="preparerPub">
-    <div th:fragment="preparerPub">
     <section class="content-section" th:if="${demandeAPublier != null}">
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Préparation publication</p>
-                
+                <h1>Publier une offre</h1>
                 <p class="intro" th:text="${'Demande #' + demandeAPublier.id}">Demande</p>
             </div>
             <a class="button button-secondary" th:href="@{/home(section='listeDemandesDirectionValidee')}">Retour aux demandes</a>
@@ -620,14 +591,14 @@
             <label for="pub-effectif">Effectif</label>
             <input id="pub-effectif" name="effectif" type="number" min="1" th:value="${demandeAPublier.effectif}" readonly>
 
-            <label for="pub-budget">Budget</label>
+            <label for="pub-budget">Budget total</label>
             <input id="pub-budget" name="budget" type="number" step="0.01" th:value="${demandeAPublier.budget}" readonly>
 
             <label for="pub-dateSouhaitee">Date souhaitée</label>
             <input id="pub-dateSouhaitee" name="dateSouhaitee" type="date" th:value="${demandeAPublier.dateSouhaitee}" readonly>
 
-            <label for="pub-descrpition">Description</label>
-            <textarea id="pub-descrpition" name="description" rows="4"></textarea>
+            <label for="pub-description">Description de l'offre</label>
+            <textarea id="pub-description" name="description" rows="4" required></textarea>
 
             <label for="pub-typeContrat">Type de contrat</label>
             <select id="pub-typeContrat" name="typeContrat" required>
@@ -654,7 +625,6 @@
         <h1>Demande introuvable</h1>
         <a class="button button-secondary" th:href="@{/home(section='listeDemandesRH')}">Retour aux demandes</a>
     </section>
-</div>
 </div>
 
 <div th:fragment="listeOffresEmbauche">
@@ -702,4 +672,3 @@
         <a class="offer-button" href="/offres-disponibles/3">Voir</a>
     </article>
 </div>
-

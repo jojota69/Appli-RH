@@ -3,6 +3,8 @@ package com.appliRh.RH.controller;
 import java.util.List;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -108,15 +110,16 @@ public class HomeController {
         };
 
         List<DemandeBesoin> listePostesDemandes = demandeBesoinService.DepartementEtat(employee.getFiche().getDepartement().getId(), 1);
-        List<Long> nombreParPoste = new ArrayList<>();
+        Map<Integer, Long> nombreParPoste = new HashMap<>();
         for (DemandeBesoin demande : listePostesDemandes) {
-            // Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
-            // long count = employeeFicheService.nombre(
-            //         employee.getFiche().getDepartement().getId(),
-            //         poste.getId());
-            // nombreParPoste.add(count);
-            long count = demande.getEffectif();
-            nombreParPoste.add(count);
+            long count = 0;
+            if (posteService.existsByLibelle(demande.getIntitulePoste())) {
+                Poste poste = posteService.findByLibelle(demande.getIntitulePoste());
+                count = employeeFicheService.nombre(
+                        demande.getDepartement().getId(),
+                        poste.getId());
+            }
+            nombreParPoste.put(demande.getId(), count);
         }
 
         List<DemandeBesoin> listeDemandesDirectionValidee = demandeBesoinService.getDemandesValide();

@@ -90,12 +90,10 @@ public class EmbaucheController {
         Employee employee = new Employee(nom, prenom, email, roleService.findById(5), "password123");
         employeeService.create(employee);
         Candidature candidature = candidatureService.findById(idCandidature);
-        Poste poste = new Poste(candidature.getOffre().getTitre());
-        try {
-            posteService.findByLibelle(poste.getLibelle());
-        } catch (Exception e) {
-            posteService.create(poste);
-        }
+        String libellePoste = candidature.getOffre().getTitre();
+        Poste poste = posteService.existsByLibelle(libellePoste)
+                ? posteService.findByLibelle(libellePoste)
+                : posteService.create(new Poste(libellePoste));
         Contrat contrat = new Contrat(typeContratService.findByLibelle(typeContrat), etatContratService.findById(1), salaire, dateDebut, dateFin);
         contratService.create(contrat);
         Departement departement = candidature.getOffre().getBesoin().getDepartement();
@@ -105,4 +103,3 @@ public class EmbaucheController {
         return "redirect:/embauche?section=listeOffresEmbauche";
     }
 }
-
