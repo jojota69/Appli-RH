@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appli RH - Détail de la candidature</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" th:href="@{/home}">
+                <span class="brand-mark">RH</span>
+                <span><strong>Appli RH</strong></span>
+            </a>
+            <div class="topbar-actions">
+                <span class="status">
+                    <span class="status-dot"></span>
+                    <span th:text="${employeeConnecte.prenom + ' ' + employeeConnecte.nom}">Utilisateur connecté</span>
+                </span>
+                <span class="avatar"
+                      th:text="${#strings.substring(employeeConnecte.prenom, 0, 1) + #strings.substring(employeeConnecte.nom, 0, 1)}">UC</span>
+                <a th:href="@{/logout}">Déconnexion</a>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <div th:replace="~{pages/components/navbar :: nav}"></div>
+
+            <main class="content">
+                <section class="content-section">
+                    <div class="page-heading">
+                        <div>
+                            <p class="eyebrow">Bloc 2 - Recrutement</p>
+                            <h1>Détail de la candidature</h1>
+                            <p class="intro">Consultez les informations du candidat et de l'offre concernée.</p>
+                        </div>
+                        <a class="button button-secondary" th:href="@{/offres/propositions}">
+                            Retour aux propositions
+                        </a>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <section class="panel">
+                            <div class="panel-heading">
+                                <h2>Informations du candidat</h2>
+                            </div>
+                            <div class="person-row">
+                                <div>
+                                    <strong th:text="${candidature.candidat.prenom + ' ' + candidature.candidat.nom}">
+                                        Nom du candidat
+                                    </strong>
+                                    <span th:text="${candidature.candidat.email}">email@exemple.com</span>
+                                </div>
+                            </div>
+                            <div class="task-row">
+                                <div>
+                                    <strong>Téléphone</strong>
+                                    <span th:text="${candidature.candidat.telephone}">Téléphone du candidat</span>
+                                </div>
+                            </div>
+                            <div class="task-row" th:if="${candidature.candidat.cvUrl != null and !#strings.isEmpty(candidature.candidat.cvUrl)}">
+                                <div>
+                                    <strong>Curriculum vitae</strong>
+                                    <a th:href="${candidature.candidat.cvUrl}" target="_blank" rel="noopener">
+                                        Consulter le CV
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-heading">
+                                <h2>Informations de la candidature</h2>
+                                <span class="poste-status" th:text="${candidature.etat.libelle}">En négociation</span>
+                            </div>
+                            <div class="task-row">
+                                <div>
+                                    <strong>Offre</strong>
+                                    <span th:text="${candidature.offre.titre}">Intitulé de l'offre</span>
+                                </div>
+                            </div>
+                            <div class="task-row">
+                                <div>
+                                    <strong>Date de candidature</strong>
+                                    <span th:text="${candidature.dateCandidature}">Date de candidature</span>
+                                </div>
+                            </div>
+                            <div class="task-row">
+                                <div>
+                                    <strong>Description de l'offre</strong>
+                                    <span th:text="${candidature.offre.description}">Description de l'offre</span>
+                                </div>
+                            </div>
+                            <div class="task-row">
+                                <div>
+                                    <strong>Salaire proposé par le candidat</strong>
+                                    <span th:text="${contrat.salaire}">salaire proposé</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <button class="button button-primary"
+                            th:onclick="'window.location.href=\'' + @{/negociation/accepter/{candidatureId}(candidatureId=${candidature.id})} + '\';'">
+                        Accepter l'offre de négociation
+                    </button>
+
+                    <button class="button button-danger"
+                            th:onclick="'window.location.href=\'' + @{/negociation/refuser/{candidatureId}(candidatureId=${candidature.id})} + '\';'">
+                        Refuser l'offre de négociation
+                    </button>
+
+                    <button class="button button-secondary"
+                            th:onclick="'window.location.href=\'' + @{/negociation/nouvelle-offre/{candidatureId}(candidatureId=${candidature.id})} + '\';'">
+                        Proposer une nouvelle offre
+                    </button>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

@@ -55,6 +55,14 @@
                                 <p th:text="${'Candidature reçue le ' + candidature.dateCandidature}">Date</p>
                             </div>
                             <span class="poste-status" th:text="${candidature.etat.libelle}">Proposee</span>
+                            <a th:href="@{/negociation/fiche/{candidatureId}(candidatureId=${candidature.id})}" class="poste-action">
+                                <button class="icon-button" type="button" aria-label="Voir le contrat" title="Voir les informations détaillées de la candidature">
+                                    <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </a>
                         </article>
                         <p th:if="${#lists.isEmpty(listeCandidatures)}">
                             Aucune candidature proposée pour le moment.

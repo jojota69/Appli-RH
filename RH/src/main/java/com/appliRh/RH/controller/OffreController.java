@@ -20,21 +20,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.appliRh.RH.annotation.PareFeu;
 import com.appliRh.RH.model.Employee;
+import com.appliRh.RH.model.EmployeeFiche;
 import com.appliRh.RH.model.Offre;
+import com.appliRh.RH.model.Poste;
 import com.appliRh.RH.service.EmployeeService;
 import com.appliRh.RH.service.CandidatureService;
 import com.appliRh.RH.service.OffreService;
 import com.appliRh.RH.service.EntretienService;
 import com.appliRh.RH.service.EvaluationCandidatService;
 import com.appliRh.RH.model.DemandeBesoin;
+import com.appliRh.RH.model.Departement;
 import com.appliRh.RH.service.DemandeBesoinService;
 import com.appliRh.RH.service.EtatOffreService;
 import com.appliRh.RH.model.CandidatContrat;
 import com.appliRh.RH.model.Candidature;
+import com.appliRh.RH.model.Contrat;
 import com.appliRh.RH.model.Entretien;
 import com.appliRh.RH.model.TypeContrat;
 import com.appliRh.RH.service.TypeContratService;
 import com.appliRh.RH.service.CandidatContratService;
+import com.appliRh.RH.service.PosteService;
+import com.appliRh.RH.service.ContratService;
+import com.appliRh.RH.service.EmployeeFicheService;
+import com.appliRh.RH.service.RoleService;
+import com.appliRh.RH.service.EtatContratService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -50,7 +59,12 @@ public class OffreController {
     private final EtatOffreService etatOffreService;
     private final CandidatContratService candidatContratService;
     private final TypeContratService typeContratService;
-
+    private final EmployeeFicheService employeeFicheService;
+    private final PosteService posteService;
+    private final ContratService contratService;
+    private final RoleService roleService;
+    private final EtatContratService etatContratService;
+    
     public OffreController(EmployeeService employeeService, OffreService offreService,
                            CandidatureService candidatureService,
                            EntretienService entretienService,
@@ -58,7 +72,12 @@ public class OffreController {
                            DemandeBesoinService demandeBesoinService,
                            EtatOffreService etatOffreService,
                            TypeContratService typeContratService,
-                           CandidatContratService candidatContratService) {
+                           CandidatContratService candidatContratService,
+                           EmployeeFicheService employeeFicheService,
+                           PosteService posteService,
+                           ContratService contratService,
+                           EtatContratService etatContratService,
+                           RoleService roleService) {
 		this.employeeService = employeeService;
 		this.offreService = offreService;
         this.candidatureService = candidatureService;
@@ -68,6 +87,11 @@ public class OffreController {
         this.etatOffreService = etatOffreService;
         this.typeContratService = typeContratService;
         this.candidatContratService = candidatContratService;
+        this.employeeFicheService = employeeFicheService;
+        this.posteService = posteService;
+        this.contratService = contratService;
+        this.roleService = roleService;
+        this.etatContratService = etatContratService;
 	}
 
     @GetMapping("/")
@@ -394,6 +418,97 @@ public class OffreController {
                 salaireParMois));
         candidatureService.changerStatut(candidatureId, "Proposee");
         return "redirect:/offres/" + offreId + "/entretiens-termine";
+    }
+
+    @GetMapping("/negociation/fiche/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String afficherFicheContrat(@PathVariable Integer candidatureId,
+                                      Model model, HttpSession session) {
+        CandidatContrat contrat = candidatContratService.findByIdCandidature(candidatureId);
+        if (contrat == null) {
+            throw new IllegalArgumentException("Aucun contrat trouvé pour la candidature : " + candidatureId);
+        }
+        Candidature candidature = contrat.getCandidature();
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("contrat", contrat);
+        model.addAttribute("candidature", candidature);
+        return "pages/fiche-candidature";
+    }
+
+    @GetMapping("/negociation/accepter/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String accepterCandidature(@PathVariable Integer candidatureId) {
+        Candidature candidature = candidatureService.findById(candidatureId);
+        CandidatContrat contratCondidature = candidatContratService.findByIdCandidature(candidatureId);
+        String nom = candidature.getCandidat().getNom();
+        String prenom = candidature.getCandidat().getPrenom();
+        String email = candidature.getCandidat().getEmail();
+        BigDecimal salaire = contratCondidature.getSalaire();
+        if (salaire.compareTo(calculerBudgetSalaireMaximum(candidature.getOffre().getBesoin())) > 0) {
+            throw new IllegalArgumentException("Le salaire proposé dépasse le budget maximum par salarié.");
+        }
+        LocalDate dateDebut = contratCondidature.getDateDebut();
+        LocalDate dateFin = contratCondidature.getDateFin();
+        Employee employee = new Employee(nom, prenom, email, roleService.findById(5), "password123");
+        employeeService.create(employee);
+        String libellePoste = candidature.getOffre().getTitre();
+        Poste poste = posteService.existsByLibelle(libellePoste)
+                ? posteService.findByLibelle(libellePoste)
+                : posteService.create(new Poste(libellePoste));
+        Contrat contrat = new Contrat(typeContratService.findByLibelle(contratCondidature.getTypeContrat().getLibelle()), etatContratService.findById(1), salaire, dateDebut, dateFin);
+        contratService.create(contrat);
+        Departement departement = candidature.getOffre().getBesoin().getDepartement();
+        EmployeeFiche employeeFiche = new EmployeeFiche(employee, poste, departement, contrat, java.time.LocalDate.now());
+        employeeFicheService.create(employeeFiche);
+        candidatureService.changerStatut(candidatureId, "Acceptee");
+        boolean quotaAtteint = candidatureService.refuserCandidaturesApresQuota(
+                candidature.getOffre().getId(),
+                candidature.getOffre().getBesoin().getEffectif());
+        if (quotaAtteint) {
+            Offre offre = candidature.getOffre();
+            offre.setDateCloture(LocalDate.now());
+            offre.setEtat(etatOffreService.findByLibelle("Termine"));
+            offreService.save(offre);
+        }
+        return "redirect:/offres/propositions";
+    }
+
+    @GetMapping("/negociation/refuser/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String refuserCandidature(@PathVariable Integer candidatureId) {
+        candidatureService.changerStatut(candidatureId, "Refusee");
+        return "redirect:/offres/propositions";
+    }
+
+    @GetMapping("/negociation/nouvelle-offre/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String proposerNouvelleOffre(@PathVariable Integer candidatureId, Model model, HttpSession session) {
+        Candidature candidature = candidatureService.findById(candidatureId);
+        Employee employee = employeeService.findById((Integer) session.getAttribute("employeeId"));
+        model.addAttribute("employeeConnecte", employee);
+        model.addAttribute("candidature", candidature);
+        model.addAttribute("budgetPoste", calculerBudgetSalaireMaximum(candidature.getOffre().getBesoin()));
+        model.addAttribute("contrat", candidatContratService.findByIdCandidature(candidatureId));
+        return "pages/nouvelle-offre";
+    }
+
+    @PostMapping("/negociation/proposer/{candidatureId}")
+    @PareFeu(roles = "Recruteur")
+    public String proposerOffre(@PathVariable Integer candidatureId, @RequestParam String typeContrat,
+                                @RequestParam BigDecimal salaire) {
+        CandidatContrat candidatContrat = candidatContratService.findByIdCandidature(candidatureId);
+        if (candidatContrat == null) {
+            return "redirect:/negociation/nouvelle-offre/" + candidatureId;
+        } else {
+            candidatContrat.setTypeContrat(candidatContrat.getTypeContrat());
+            candidatContrat.setDateDebut(candidatContrat.getDateDebut());
+            candidatContrat.setDateFin(candidatContrat.getDateFin());
+            candidatContrat.setSalaire(salaire);
+        }
+        candidatContratService.update(candidatContrat.getId(), candidatContrat);
+        candidatureService.changerStatut(candidatureId, "Proposee");
+        return "redirect:/offres/propositions";
     }
 
     private BigDecimal calculerBudgetSalaireMaximum(DemandeBesoin demande) {

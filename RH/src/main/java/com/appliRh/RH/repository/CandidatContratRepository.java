@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CandidatContratRepository extends JpaRepository<CandidatContrat, Integer> {
 
-    @EntityGraph(attributePaths = {"typeContrat"})
+    @EntityGraph(attributePaths = {"typeContrat", "candidature", "candidature.candidat", "candidature.etat", "candidature.offre", "candidature.offre.etat"})
     List<CandidatContrat> findByCandidatureIdOrderByIdDesc(Integer idCandidature);
 
     boolean existsByCandidatureId(Integer idCandidature);
